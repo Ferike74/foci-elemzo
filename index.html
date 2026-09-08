@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sportfogadás Elemző Agent | Prémium Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .glass-panel {
+            background: rgba(10, 15, 30, 0.20); /* Extrém áttetszőség, szinte tiszta üveg hatás */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white font-sans antialiased flex flex-col justify-between">
+
+    <!-- Fő keret -->
+    <div class="relative z-10 flex flex-col min-h-screen p-4 md:p-6 max-w-7xl mx-auto w-full">
+        
+        <!-- Fejléc / Navigáció -->
+        <header class="glass-panel rounded-full px-6 py-3 flex items-center justify-between shadow-2xl mb-6">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl">⚽</span>
+                <span class="font-extrabold tracking-wider text-lg bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent drop-shadow">EURÓPAI LIGÁK FOCI ELEMZÉSE</span>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <span id="user-status" class="text-xs text-gray-200 hidden md:inline drop-shadow"></span>
+                <button onclick="openAuthModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-5 py-2 rounded-full shadow-lg shadow-red-600/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
+                    3 Nap Ingyenes Próba
+                </button>
+            </div>
+        </header>
+
+        <!-- Ligák Választó Sáv -->
+        <div class="glass-panel rounded-2xl p-3 flex items-center space-x-2 overflow-x-auto scrollbar-none mb-6 shadow-xl">
+            <button onclick="switchLeague('premier')" class="league-btn px-4 py-2 rounded-xl text-xs font-bold uppercase transition bg-red-600/80 text-white shadow" data-league="premier">Premier League</button>
+            <button onclick="switchLeague('bundesliga')" class="league-btn px-4 py-2 rounded-xl text-xs font-bold uppercase transition bg-white/10 hover:bg-white/20 text-gray-200" data-league="bundesliga">DE Bundesliga</button>
+            <button onclick="switchLeague('seriea')" class="league-btn px-4 py-2 rounded-xl text-xs font-bold uppercase transition bg-white/10 hover:bg-white/20 text-gray-200" data-league="seriea">IT Serie A</button>
+            <button onclick="switchLeague('ligue1')" class="league-btn px-4 py-2 rounded-xl text-xs font-bold uppercase transition bg-white/10 hover:bg-white/20 text-gray-200" data-league="ligue1">FR Ligue 1</button>
+            <button onclick="switchLeague('laliga')" class="league-btn px-4 py-2 rounded-xl text-xs font-bold uppercase transition bg-white/10 hover:bg-white/20 text-gray-200" data-league="laliga">ES La Liga</button>
+            <button onclick="switchLeague('portugal')" class="league-btn px-4 py-2 rounded-xl text-xs font-bold uppercase transition bg-white/10 hover:bg-white/20 text-gray-200" data-league="portugal">PT Liga Portugal</button>
+            <button onclick="switchLeague('superlig')" class="league-btn px-4 py-2 rounded-xl text-xs font-bold uppercase transition bg-white/10 hover:bg-white/20 text-gray-200" data-league="superlig">TR Süper Lig</button>
+        </div>
+
+        <!-- Al-meccs választó -->
+        <div class="mb-4 flex items-center space-x-3">
+            <span class="text-xs uppercase tracking-widest text-red-400 font-bold drop-shadow-md" id="current-league-label">Bundesliga — Aktív Elemzések (1 meccs)</span>
+            <div class="bg-red-600 text-white text-xs px-3 py-1 rounded-full font-semibold shadow cursor-pointer animate-pulse">
+                Bayern München – Borussia Dortmund
+            </div>
+        </div>
+
+        <!-- Fő Elemzési Kártya -->
+        <main class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl flex-1 flex flex-col justify-between">
+            <div>
+                <!-- Meccs Fejléc -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/20 pb-4 mb-6">
+                    <div>
+                        <span class="text-xs text-red-400 uppercase font-bold tracking-wider drop-shadow">Bundesliga Csúcsrangadó</span>
+                        <h1 class="text-2xl md:text-3xl font-black mt-1 drop-shadow-md" id="match-title">Bayern München – Borussia Dortmund</h1>
+                    </div>
+                    <div class="mt-2 md:mt-0 text-sm text-white bg-black/20 px-4 py-1.5 rounded-xl border border-white/20 backdrop-blur-sm" id="match-time">
+                        Ma 18:30 (CEST)
+                    </div>
+                </div>
+
+                <!-- 4 Statisztikai Metrika Kártya -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-black/20 border border-green-500/60 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
+                        <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Bayern Győzelem (Fair Odds)</div>
+                        <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-odds">58.4% (1.71)</div>
+                    </div>
+                    <div class="bg-black/20 border border-green-500/60 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
+                        <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Várható Gólok (xG Átlag)</div>
+                        <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-xg">~3.45 xG</div>
+                    </div>
+                    <div class="bg-black/20 border border-green-500/60 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
+                        <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Lesek: Több Mint 2.5</div>
+                        <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-corners">76.2% (1.31)</div>
+                    </div>
+                    <div class="bg-black/20 border border-green-500/60 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
+                        <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Szimulációs Minőség</div>
+                        <div class="text-2xl font-black text-white mt-1 drop-shadow-md">100 000 Futás</div>
+                    </div>
+                </div>
+
+                <!-- Elemzés leírás -->
+                <p class="text-sm text-white bg-black/20 p-4 rounded-xl border border-white/20 mb-6 backdrop-blur-sm drop-shadow" id="match-desc">
+                    A Der Klassiker volumetriája agresszív letámadást és kiélezett szélső párharcokat mutat az Allianz Arena katlanjában.
+                </p>
+            </div>
+
+            <!-- Zárt Odds Mátrix Banner -->
+            <div onclick="openAuthModal()" class="bg-gradient-to-r from-red-950/50 via-black/40 to-red-950/50 border border-red-500/60 rounded-2xl p-5 text-center cursor-pointer hover:border-red-400 transition shadow-2xl backdrop-blur-md">
+                <div class="text-amber-400 font-bold text-sm flex items-center justify-center space-x-2 mb-1 drop-shadow">
+                    <span>🔒</span>
+                    <span>TELJES ODDS MÁTRIX ZÁROLVA</span>
+                </div>
+                <p class="text-xs text-white drop-shadow">Regisztrálj most és tekintsd meg mind a 40+ kielemzett fogadási piacot a 3 napos ingyenes próbaidőszakkal!</p>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-6 text-center text-xs text-gray-200 pb-2 drop-shadow">
+            &copy; 2026 Sportfogadás Elemző Agent. Minden jog fenntartva.
+        </footer>
+    </div>
+
+    <!-- Regisztrációs / Bejelentkezési Modal -->
+    <div id="auth-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-white/30 shadow-2xl">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-xl font-bold">&times;</button>
+            
+            <div class="text-center mb-6">
+                <span class="text-3xl">⚽</span>
+                <h3 class="text-xl font-extrabold mt-2 drop-shadow">Kezdd el a 3 napos próbaidőszakot</h3>
+                <p class="text-xs text-gray-200 mt-1 drop-shadow">Hozzáférés az összes mesterséges intelligencia által generált elemzéshez és odds mátrixhoz.</p>
+            </div>
+
+            <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Email cím</label>
+                    <input type="email" id="email" required class="w-full bg-black/40 border border-white/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-400" placeholder="pelda@email.hu">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Jelszó</label>
+                    <input type="password" id="password" required class="w-full bg-black/40 border border-white/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-400" placeholder="••••••••">
+                </div>
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-red-600/40 transition text-sm uppercase tracking-wider">
+                    Fiók létrehozása / Belépés
+                </button>
+            </form>
+            <div id="auth-message" class="text-center text-xs mt-4"></div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://gyozibfurwsbdutwmgrl.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_sz4cCjpwZ6pFNK8J-3d80Q_T8GfpSUy';
+        
+        let supabaseClient = null;
+        try {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        } catch (e) {
+            console.error("Supabase hiba:", e);
+        }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (supabaseClient) {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (session) {
+                    document.getElementById('user-status').innerText = `Bejelentkezve: ${session.user.email}`;
+                }
+            }
+        });
+
+        function openAuthModal() {
+            document.getElementById('auth-modal').classList.remove('hidden');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
+        }
+
+        async function handleAuth(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const msgEl = document.getElementById('auth-message');
+
+            msgEl.innerHTML = '<span class="text-gray-200">Folyamatban...</span>';
+
+            let { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            
+            if (error) {
+                let signUpRes = await supabaseClient.auth.signUp({ email, password });
+                if (signUpRes.error) {
+                    msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${signUpRes.error.message}</span>`;
+                } else {
+                    msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres regisztráció és 3 napos próba aktiválva! Most már beléphetsz.</span>';
+                }
+            } else {
+                msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres bejelentkezés! Átirányítás...</span>';
+                setTimeout(() => {
+                    closeAuthModal();
+                    location.reload();
+                }, 1500);
+            }
+        }
+
+        const matchData = {
+            premier: { title: "Arsenal – Manchester City", time: "Ma 21:00 (CEST)", odds: "51.2% (1.95)", xG: "~2.90 xG", corners: "68.4% (1.45)", desc: "A Premier League rangadója komoly taktikai csatát és magas presszinget ígér az Emirates Stadionban." },
+            bundesliga: { title: "Bayern München – Borussia Dortmund", time: "Ma 18:30 (CEST)", odds: "58.4% (1.71)", xG: "~3.45 xG", corners: "76.2% (1.31)", desc: "A Der Klassiker volumetriája agresszív letámadást és kiélezett szélső párharcokat mutat az Allianz Arena katlanjában." },
+            seriea: { title: "Inter Milan – Juventus", time: "Holnap 20:45 (CEST)", odds: "54.0% (1.85)", xG: "~2.40 xG", corners: "62.0% (1.55)", desc: "Taktikai olasz rangadó, ahol a védekezési stabilitás és a pontrúgások dönthetnek." },
+            ligue1: { title: "Paris Saint-Germain – Marseille", time: "Vasárnap 21:00 (CEST)", odds: "65.0% (1.54)", xG: "~3.80 xG", corners: "81.0% (1.25)", desc: "Le Classique: gólzáporos mérkőzésre számítunk a hazaiak támadófocija miatt." },
+            laliga: { title: "Real Madrid – Barcelona", time: "Vasárnap 16:15 (CEST)", odds: "49.0% (2.04)", xG: "~3.20 xG", corners: "74.0% (1.35)", desc: "El Clásico: a világ szeme ezen a mérkőzésen, maximális tempó várható." },
+            portugal: { title: "Benfica – Sporting CP", time: "Hétfő 21:15 (CEST)", odds: "52.0% (1.92)", xG: "~2.80 xG", corners: "65.0% (1.40)", desc: "Lisszaboni rangadó a bajnoki címért." },
+            superlig: { title: "Galatasaray – Fenerbahce", time: "Vasárnap 19:00 (CEST)", odds: "53.0% (1.88)", xG: "~3.10 xG", corners: "79.0% (1.30)", desc: "Fokozott hangulatú isztambuli derbi." }
+        };
+
+        function switchLeague(leagueKey) {
+            document.querySelectorAll('.league-btn').forEach(btn => {
+                btn.className = "league-btn px-4 py-2 rounded-xl text-xs font-bold uppercase transition bg-white/10 hover:bg-white/20 text-gray-200";
+            });
+            const activeBtn = document.querySelector(`[data-league="${leagueKey}"]`);
+            if(activeBtn) activeBtn.className = "league-btn px-4 py-2 rounded-xl text-xs font-bold uppercase transition bg-red-600/80 text-white shadow";
+
+            const data = matchData[leagueKey];
+            if(data) {
+                document.getElementById('match-title').innerText = data.title;
+                document.getElementById('match-time').innerText = data.time;
+                document.getElementById('stat-odds').innerText = data.odds;
+                document.getElementById('stat-xg').innerText = data.xG;
+                document.getElementById('stat-corners').innerText = data.corners;
+                document.getElementById('match-desc').innerText = data.desc;
+            }
+        }
+    </script>
+</body>
+</html>
