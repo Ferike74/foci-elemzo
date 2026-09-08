@@ -42,15 +42,36 @@
             </div>
         </header>
 
-        <!-- Ligák Választó Sáv (Nagyobb, sötétebb, jól látható gombok) -->
-        <div class="glass-panel rounded-2xl p-4 flex items-center space-x-3 overflow-x-auto scrollbar-none mb-6 shadow-xl">
-            <button onclick="switchLeague('premier')" class="league-btn px-5 py-3 rounded-xl text-sm font-extrabold uppercase transition bg-red-600 text-white shadow-lg" data-league="premier">Premier League</button>
-            <button onclick="switchLeague('bundesliga')" class="league-btn px-5 py-3 rounded-xl text-sm font-extrabold uppercase transition bg-black/60 hover:bg-black/80 text-white shadow-lg border border-white/20" data-league="bundesliga">DE Bundesliga</button>
-            <button onclick="switchLeague('seriea')" class="league-btn px-5 py-3 rounded-xl text-sm font-extrabold uppercase transition bg-black/60 hover:bg-black/80 text-white shadow-lg border border-white/20" data-league="seriea">IT Serie A</button>
-            <button onclick="switchLeague('ligue1')" class="league-btn px-5 py-3 rounded-xl text-sm font-extrabold uppercase transition bg-black/60 hover:bg-black/80 text-white shadow-lg border border-white/20" data-league="ligue1">FR Ligue 1</button>
-            <button onclick="switchLeague('laliga')" class="league-btn px-5 py-3 rounded-xl text-sm font-extrabold uppercase transition bg-black/60 hover:bg-black/80 text-white shadow-lg border border-white/20" data-league="laliga">ES La Liga</button>
-            <button onclick="switchLeague('portugal')" class="league-btn px-5 py-3 rounded-xl text-sm font-extrabold uppercase transition bg-black/60 hover:bg-black/80 text-white shadow-lg border border-white/20" data-league="portugal">PT Liga Portugal</button>
-            <button onclick="switchLeague('superlig')" class="league-btn px-5 py-3 rounded-xl text-sm font-extrabold uppercase transition bg-black/60 hover:bg-black/80 text-white shadow-lg border border-white/20" data-league="superlig">TR Süper Lig</button>
+        <!-- Ligák Választó Sáv (Nagyobb kártyák logókkal / címer ikonokkal) -->
+        <div class="glass-panel rounded-2xl p-4 flex items-center space-x-4 overflow-x-auto scrollbar-none mb-6 shadow-xl">
+            <button onclick="switchLeague('premier')" class="league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-red-600 text-white shadow-xl space-y-1 border border-red-500" data-league="premier">
+                <span class="text-xl">🦁</span>
+                <span>Premier League</span>
+            </button>
+            <button onclick="switchLeague('bundesliga')" class="league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1 border border-white/20" data-league="bundesliga">
+                <span class="text-xl">🦅</span>
+                <span>DE Bundesliga</span>
+            </button>
+            <button onclick="switchLeague('seriea')" class="league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1 border border-white/20" data-league="seriea">
+                <span class="text-xl">🏆</span>
+                <span>IT Serie A</span>
+            </button>
+            <button onclick="switchLeague('ligue1')" class="league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1 border border-white/20" data-league="ligue1">
+                <span class="text-xl">🗼</span>
+                <span>FR Ligue 1</span>
+            </button>
+            <button onclick="switchLeague('laliga')" class="league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1 border border-white/20" data-league="laliga">
+                <span class="text-xl">👑</span>
+                <span>ES La Liga</span>
+            </button>
+            <button onclick="switchLeague('portugal')" class="league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1 border border-white/20" data-league="portugal">
+                <span class="text-xl">⛵</span>
+                <span>PT Liga Portugal</span>
+            </button>
+            <button onclick="switchLeague('superlig')" class="league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1 border border-white/20" data-league="superlig">
+                <span class="text-xl">⭐</span>
+                <span>TR Süper Lig</span>
+            </button>
         </div>
 
         <!-- Al-meccs választó -->
@@ -211,10 +232,10 @@
 
         function switchLeague(leagueKey) {
             document.querySelectorAll('.league-btn').forEach(btn => {
-                btn.className = "league-btn px-5 py-3 rounded-xl text-sm font-extrabold uppercase transition bg-black/60 hover:bg-black/80 text-white shadow-lg border border-white/20";
+                btn.className = "league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1 border border-white/20";
             });
             const activeBtn = document.querySelector(`[data-league="${leagueKey}"]`);
-            if(activeBtn) activeBtn.className = "league-btn px-5 py-3 rounded-xl text-sm font-extrabold uppercase transition bg-red-600 text-white shadow-lg border border-red-500";
+            if(activeBtn) activeBtn.className = "league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-red-600 text-white shadow-xl space-y-1 border border-red-500";
 
             const data = matchData[leagueKey];
             if(data) {
