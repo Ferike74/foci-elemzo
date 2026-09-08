@@ -42,34 +42,34 @@
             </div>
         </header>
 
-        <!-- Ligák Választó Sáv (Nagyobb kártyák logókkal / címer ikonokkal) -->
+        <!-- Ligák Választó Sáv (UEFA TV stílusú hivatalos logókkal) -->
         <div class="glass-panel rounded-2xl p-4 flex items-center space-x-4 overflow-x-auto scrollbar-none mb-6 shadow-xl">
-            <button onclick="switchLeague('premier')" class="league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-red-600 text-white shadow-xl space-y-1 border border-red-500" data-league="premier">
-                <span class="text-xl">🦁</span>
+            <button onclick="switchLeague('premier')" class="league-btn flex flex-col items-center justify-center min-w-[140px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-red-600 text-white shadow-xl space-y-1.5 border border-red-500" data-league="premier">
+                <img src="https://resources.premierleague.com/premierleague/photo/2022/03/16/e2e6d630-8eb7-4c33-85af-76d1e4e5bc00/PL_Logo_stacked_RGB.png" alt="Premier League" class="h-8 object-contain filter drop-shadow">
                 <span>Premier League</span>
             </button>
-            <button onclick="switchLeague('bundesliga')" class="league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1 border border-white/20" data-league="bundesliga">
-                <span class="text-xl">🦅</span>
+            <button onclick="switchLeague('bundesliga')" class="league-btn flex flex-col items-center justify-center min-w-[140px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1.5 border border-white/20" data-league="bundesliga">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Bundesliga_logo_%282017%29.svg/1200px-Bundesliga_logo_%282017%29.svg.png" alt="Bundesliga" class="h-8 object-contain filter drop-shadow">
                 <span>DE Bundesliga</span>
             </button>
-            <button onclick="switchLeague('seriea')" class="league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1 border border-white/20" data-league="seriea">
-                <span class="text-xl">🏆</span>
+            <button onclick="switchLeague('seriea')" class="league-btn flex flex-col items-center justify-center min-w-[140px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1.5 border border-white/20" data-league="seriea">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Logo_Serie_A_Enilive_2024.svg/1200px-Logo_Serie_A_Enilive_2024.svg.png" alt="Serie A" class="h-8 object-contain filter drop-shadow">
                 <span>IT Serie A</span>
             </button>
-            <button onclick="switchLeague('ligue1')" class="league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1 border border-white/20" data-league="ligue1">
-                <span class="text-xl">🗼</span>
+            <button onclick="switchLeague('ligue1')" class="league-btn flex flex-col items-center justify-center min-w-[140px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1.5 border border-white/20" data-league="ligue1">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Ligue_1_%282024%29_logo.svg/1200px-Ligue_1_%282024%29_logo.svg.png" alt="Ligue 1" class="h-8 object-contain filter drop-shadow">
                 <span>FR Ligue 1</span>
             </button>
-            <button onclick="switchLeague('laliga')" class="league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1 border border-white/20" data-league="laliga">
-                <span class="text-xl">👑</span>
+            <button onclick="switchLeague('laliga')" class="league-btn flex flex-col items-center justify-center min-w-[140px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1.5 border border-white/20" data-league="laliga">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/LaLiga_logo_2023.svg/1200px-LaLiga_logo_2023.svg.png" alt="La Liga" class="h-8 object-contain filter drop-shadow">
                 <span>ES La Liga</span>
             </button>
-            <button onclick="switchLeague('portugal')" class="league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1 border border-white/20" data-league="portugal">
-                <span class="text-xl">⛵</span>
+            <button onclick="switchLeague('portugal')" class="league-btn flex flex-col items-center justify-center min-w-[140px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1.5 border border-white/20" data-league="portugal">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Liga_Portugal_logo_%282023%29.svg/1200px-Liga_Portugal_logo_%282023%29.svg.png" alt="Liga Portugal" class="h-8 object-contain filter drop-shadow">
                 <span>PT Liga Portugal</span>
             </button>
-            <button onclick="switchLeague('superlig')" class="league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1 border border-white/20" data-league="superlig">
-                <span class="text-xl">⭐</span>
+            <button onclick="switchLeague('superlig')" class="league-btn flex flex-col items-center justify-center min-w-[140px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1.5 border border-white/20" data-league="superlig">
+                <img src="https://upload.wikimedia.org/wikipedia/tr/thumb/8/87/Trendyol_S%C3%BCper_Lig_yeni_logosu.png/640px-Trendyol_S%C3%BCper_Lig_yeni_logosu.png" alt="Süper Lig" class="h-8 object-contain filter drop-shadow">
                 <span>TR Süper Lig</span>
             </button>
         </div>
@@ -232,10 +232,10 @@
 
         function switchLeague(leagueKey) {
             document.querySelectorAll('.league-btn').forEach(btn => {
-                btn.className = "league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1 border border-white/20";
+                btn.className = "league-btn flex flex-col items-center justify-center min-w-[140px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-black/70 hover:bg-black/90 text-white shadow-xl space-y-1.5 border border-white/20";
             });
             const activeBtn = document.querySelector(`[data-league="${leagueKey}"]`);
-            if(activeBtn) activeBtn.className = "league-btn flex flex-col items-center justify-center min-w-[130px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-red-600 text-white shadow-xl space-y-1 border border-red-500";
+            if(activeBtn) activeBtn.className = "league-btn flex flex-col items-center justify-center min-w-[140px] px-4 py-3 rounded-2xl text-xs font-extrabold uppercase transition bg-red-600 text-white shadow-xl space-y-1.5 border border-red-500";
 
             const data = matchData[leagueKey];
             if(data) {
