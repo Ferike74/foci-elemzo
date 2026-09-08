@@ -20,6 +20,14 @@
             -webkit-backdrop-filter: blur(3px);
             border: 1px solid rgba(255, 255, 255, 0.12);
         }
+        /* Görgetősáv elrejtése a tiszta megjelenítésért, de marad a sima görgetés */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
 <body class="min-h-screen text-white font-sans antialiased flex flex-col justify-between">
@@ -42,35 +50,48 @@
             </div>
         </header>
 
-        <!-- Ligák Választó Sáv (Széles téglalapok, égszínkék alap, logó és név) -->
-        <div class="glass-panel rounded-2xl p-4 flex items-center justify-center space-x-4 overflow-x-auto scrollbar-none mb-6 shadow-xl">
-            <button onclick="switchLeague('premier')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2" data-league="premier">
-                <img src="https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg" alt="Premier League" class="h-9 object-contain filter drop-shadow">
-                <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">Premier League</span>
+        <!-- Interaktív Ligák Választó Sáv (Nyilakkal és egységes égszínkék téglákkal) -->
+        <div class="glass-panel rounded-2xl p-4 mb-6 shadow-xl relative flex items-center">
+            <!-- Bal nyíl gomb -->
+            <button onclick="scrollLeagues('left')" class="absolute left-2 z-20 bg-black/60 hover:bg-black/90 text-white p-2.5 rounded-full shadow-lg border border-white/20 transition backdrop-blur-md">
+                ❮
             </button>
-            <button onclick="switchLeague('bundesliga')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-black/70 hover:bg-black/90 shadow-xl border border-white/20 p-2.5 space-y-2" data-league="bundesliga">
-                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Bundesliga_logo_%282017%29.svg/1200px-Bundesliga_logo_%282017%29.svg.png" alt="Bundesliga" class="h-9 object-contain filter drop-shadow">
-                <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">DE Bundesliga</span>
-            </button>
-            <button onclick="switchLeague('seriea')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-black/70 hover:bg-black/90 shadow-xl border border-white/20 p-2.5 space-y-2" data-league="seriea">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Logo_Serie_A_Enilive_2024.svg/1200px-Logo_Serie_A_Enilive_2024.svg.png" alt="Serie A" class="h-9 object-contain filter drop-shadow">
-                <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">IT Serie A</span>
-            </button>
-            <button onclick="switchLeague('ligue1')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-black/70 hover:bg-black/90 shadow-xl border border-white/20 p-2.5 space-y-2" data-league="ligue1">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Ligue_1_%282024%29_logo.svg/1200px-Ligue_1_%282024%29_logo.svg.png" alt="Ligue 1" class="h-9 object-contain filter drop-shadow">
-                <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">FR Ligue 1</span>
-            </button>
-            <button onclick="switchLeague('laliga')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-black/70 hover:bg-black/90 shadow-xl border border-white/20 p-2.5 space-y-2" data-league="laliga">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/LaLiga_logo_2023.svg/1200px-LaLiga_logo_2023.svg.png" alt="La Liga" class="h-9 object-contain filter drop-shadow">
-                <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">ES La Liga</span>
-            </button>
-            <button onclick="switchLeague('portugal')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-black/70 hover:bg-black/90 shadow-xl border border-white/20 p-2.5 space-y-2" data-league="portugal">
-                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Liga_Portugal_logo_%282023%29.svg/1200px-Liga_Portugal_logo_%282023%29.svg.png" alt="Liga Portugal" class="h-9 object-contain filter drop-shadow">
-                <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">PT Liga Portugal</span>
-            </button>
-            <button onclick="switchLeague('superlig')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-black/70 hover:bg-black/90 shadow-xl border border-white/20 p-2.5 space-y-2" data-league="superlig">
-                <img src="https://upload.wikimedia.org/wikipedia/tr/thumb/8/87/Trendyol_S%C3%BCper_Lig_yeni_logosu.png/640px-Trendyol_S%C3%BCper_Lig_yeni_logosu.png" alt="Süper Lig" class="h-9 object-contain filter drop-shadow">
-                <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">TR Süper Lig</span>
+
+            <!-- Görgethető ligatéglák konténer -->
+            <div id="league-container" class="no-scrollbar flex items-center space-x-4 overflow-x-auto scroll-smooth px-10 w-full">
+                <button onclick="switchLeague('premier')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="premier">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg" alt="Premier League" class="h-9 object-contain filter drop-shadow">
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">Premier League</span>
+                </button>
+                <button onclick="switchLeague('bundesliga')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="bundesliga">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Bundesliga_logo_%282017%29.svg/1200px-Bundesliga_logo_%282017%29.svg.png" alt="Bundesliga" class="h-9 object-contain filter drop-shadow">
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">DE Bundesliga</span>
+                </button>
+                <button onclick="switchLeague('seriea')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="seriea">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Logo_Serie_A_Enilive_2024.svg/1200px-Logo_Serie_A_Enilive_2024.svg.png" alt="Serie A" class="h-9 object-contain filter drop-shadow">
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">IT Serie A</span>
+                </button>
+                <button onclick="switchLeague('ligue1')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="ligue1">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Ligue_1_%282024%29_logo.svg/1200px-Ligue_1_%282024%29_logo.svg.png" alt="Ligue 1" class="h-9 object-contain filter drop-shadow">
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">FR Ligue 1</span>
+                </button>
+                <button onclick="switchLeague('laliga')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="laliga">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/LaLiga_logo_2023.svg/1200px-LaLiga_logo_2023.svg.png" alt="La Liga" class="h-9 object-contain filter drop-shadow">
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">ES La Liga</span>
+                </button>
+                <button onclick="switchLeague('portugal')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="portugal">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Liga_Portugal_logo_%282023%29.svg/1200px-Liga_Portugal_logo_%282023%29.svg.png" alt="Liga Portugal" class="h-9 object-contain filter drop-shadow">
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">PT Liga Portugal</span>
+                </button>
+                <button onclick="switchLeague('superlig')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="superlig">
+                    <img src="https://upload.wikimedia.org/wikipedia/tr/thumb/8/87/Trendyol_S%C3%BCper_Lig_yeni_logosu.png/640px-Trendyol_S%C3%BCper_Lig_yeni_logosu.png" alt="Süper Lig" class="h-9 object-contain filter drop-shadow">
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">TR Süper Lig</span>
+                </button>
+            </div>
+
+            <!-- Jobb nyíl gomb -->
+            <button onclick="scrollLeagues('right')" class="absolute right-2 z-20 bg-black/60 hover:bg-black/90 text-white p-2.5 rounded-full shadow-lg border border-white/20 transition backdrop-blur-md">
+                ❯
             </button>
         </div>
 
@@ -220,6 +241,17 @@
             }
         }
 
+        // Görgető függvény a nyilakhoz
+        function scrollLeagues(direction) {
+            const container = document.getElementById('league-container');
+            const scrollAmount = 300;
+            if (direction === 'left') {
+                container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else {
+                container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        }
+
         const matchData = {
             premier: { title: "Arsenal – Manchester City", time: "Ma 21:00 (CEST)", odds: "51.2% (1.95)", xG: "~2.90 xG", corners: "68.4% (1.45)", desc: "A Premier League rangadója komoly taktikai csatát és magas presszinget ígér az Emirates Stadionban." },
             bundesliga: { title: "Bayern München – Borussia Dortmund", time: "Ma 18:30 (CEST)", odds: "58.4% (1.71)", xG: "~3.45 xG", corners: "76.2% (1.31)", desc: "A Der Klassiker volumetriája agresszív letámadást és kiélezett szélső párharcokat mutat az Allianz Arena katlanjában." },
@@ -232,10 +264,10 @@
 
         function switchLeague(leagueKey) {
             document.querySelectorAll('.league-btn').forEach(btn => {
-                btn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-black/70 hover:bg-black/90 shadow-xl border border-white/20 p-2.5 space-y-2";
+                btn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0";
             });
             const activeBtn = document.querySelector(`[data-league="${leagueKey}"]`);
-            if(activeBtn) activeBtn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2";
+            if(activeBtn) activeBtn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-600 shadow-2xl border-2 border-white p-2.5 space-y-2 shrink-0 scale-105";
 
             const data = matchData[leagueKey];
             if(data) {
