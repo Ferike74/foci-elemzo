@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sportfogadás Elemző Agent | Prémium Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body {
@@ -20,21 +19,15 @@
             -webkit-backdrop-filter: blur(3px);
             border: 1px solid rgba(255, 255, 255, 0.12);
         }
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="min-h-screen text-white font-sans antialiased flex flex-col justify-between">
 
-    <!-- Fő keret -->
     <div class="relative z-10 flex flex-col min-h-screen p-4 md:p-6 max-w-7xl mx-auto w-full">
         
-        <!-- Fejléc / Navigáció -->
+        <!-- Fejléc -->
         <header class="glass-panel rounded-full px-6 py-3 flex items-center justify-between shadow-2xl mb-6">
             <div class="flex items-center space-x-3">
                 <span class="text-2xl">⚽</span>
@@ -49,27 +42,21 @@
             </div>
         </header>
 
-        <!-- Interaktív Ligák Választó Sáv -->
+        <!-- Ligák Választó Sáv -->
         <div class="glass-panel rounded-2xl p-4 mb-6 shadow-xl relative flex items-center">
-            <button onclick="scrollLeagues('left')" class="absolute left-2 z-20 bg-black/60 hover:bg-black/90 text-white p-2.5 rounded-full shadow-lg border border-white/20 transition backdrop-blur-md">
-                ❮
-            </button>
+            <button onclick="scrollLeagues('left')" class="absolute left-2 z-20 bg-black/60 hover:bg-black/90 text-white p-2.5 rounded-full shadow-lg border border-white/20 transition backdrop-blur-md">❮</button>
 
-            <!-- Görgethető ligatéglák konténer -->
             <div id="league-container" class="no-scrollbar flex items-center space-x-4 overflow-x-auto scroll-smooth px-10 w-full">
-                <!-- UEFA Bajnokok Ligája legördülővel -->
+                <!-- BL Legördülő -->
                 <div class="relative inline-block shrink-0">
                     <button onclick="toggleUclDropdown()" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-amber-600 shadow-xl border border-amber-400 p-2.5 space-y-1" data-league="ucl">
                         <span class="text-2xl">🏆</span>
                         <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">UEFA Bajnokok Ligája</span>
                         <span class="text-[9px] text-amber-200">Meccsek ▼</span>
                     </button>
-                    <!-- Bajnokok Ligája Legördülő Lista -->
                     <div id="ucl-dropdown" class="absolute left-0 mt-2 w-64 bg-slate-900/95 border border-white/20 rounded-2xl shadow-2xl hidden z-50 p-2 backdrop-blur-md">
                         <div class="text-[10px] uppercase font-bold text-amber-400 px-3 py-1 border-b border-white/10 mb-1">Elérhető Bajnokok Ligája Meccsek</div>
-                        <div id="ucl-matches-list" class="space-y-1">
-                            <!-- Ide dinamikusan töltődnek be a BL meccsek -->
-                        </div>
+                        <div id="ucl-matches-list" class="space-y-1"></div>
                     </div>
                 </div>
 
@@ -103,12 +90,10 @@
                 </button>
             </div>
 
-            <button onclick="scrollLeagues('right')" class="absolute right-2 z-20 bg-black/60 hover:bg-black/90 text-white p-2.5 rounded-full shadow-lg border border-white/20 transition backdrop-blur-md">
-                ❯
-            </button>
+            <button onclick="scrollLeagues('right')" class="absolute right-2 z-20 bg-black/60 hover:bg-black/90 text-white p-2.5 rounded-full shadow-lg border border-white/20 transition backdrop-blur-md">❯</button>
         </div>
 
-        <!-- Al-meccs választó -->
+        <!-- Aktív Meccs sáv -->
         <div class="mb-4 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <span class="text-xs uppercase tracking-widest text-red-400 font-bold drop-shadow-md">Aktív Elemzések (Supabase Adatforrás)</span>
@@ -122,7 +107,7 @@
             </button>
         </div>
 
-        <!-- Fő Elemzési Kártya -->
+        <!-- Fő Kártya -->
         <main class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl flex-1 flex flex-col justify-between">
             <div>
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-4 mb-6">
@@ -130,9 +115,7 @@
                         <span class="text-xs text-red-400 uppercase font-bold tracking-wider drop-shadow" id="match-league-subtitle">Éles Elemzés</span>
                         <h1 class="text-2xl md:text-3xl font-black mt-1 drop-shadow-md" id="match-title">Kapcsolódás a Supabase-hez...</h1>
                     </div>
-                    <div class="mt-2 md:mt-0 text-sm text-white bg-black/20 px-4 py-1.5 rounded-xl border border-white/10 backdrop-blur-sm" id="match-time">
-                        --
-                    </div>
+                    <div class="mt-2 md:mt-0 text-sm text-white bg-black/20 px-4 py-1.5 rounded-xl border border-white/10 backdrop-blur-sm" id="match-time">--</div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -173,25 +156,17 @@
         </footer>
     </div>
 
-    <!-- Részletes Elemzés Modal (Google Drive stílusú nézet) -->
-    <div id="full-analysis-modal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-white/20 w-full max-w-4xl max-h-[90vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
-            <button onclick="closeFullAnalysisModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-2xl font-bold">&times;</button>
+    <!-- Részletes Elemzés Modal (Teljes HTML formátum beillesztése) -->
+    <div id="full-analysis-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 md:p-6">
+        <div class="bg-white text-slate-900 w-full max-w-5xl max-h-[92vh] rounded-3xl p-4 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
+            <button onclick="closeFullAnalysisModal()" class="absolute top-4 right-6 text-slate-700 hover:text-red-600 text-3xl font-bold">&times;</button>
             
-            <div class="flex items-center space-x-3 border-b border-white/10 pb-4 mb-4">
-                <span class="text-3xl">📄</span>
-                <div>
-                    <h2 class="text-xl font-extrabold text-amber-400" id="modal-match-title">Részletes Sportfogadási Elemzés</h2>
-                    <p class="text-xs text-gray-300" id="modal-match-subtitle">Hivatalos AI szimulációs jelentés</p>
-                </div>
+            <div id="modal-html-container" class="mt-2">
+                <!-- Itt jelenik meg a Google Drive-os stílusú teljes HTML jelentés -->
             </div>
 
-            <div id="modal-content-body" class="text-sm text-gray-100 space-y-4 bg-black/30 p-6 rounded-2xl border border-white/10 leading-relaxed">
-                <!-- Itt jelenik meg a részletes elemzés szövege -->
-            </div>
-
-            <div class="mt-6 text-center">
-                <button onclick="closeFullAnalysisModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-6 py-2.5 rounded-xl shadow-lg transition text-xs uppercase tracking-wider">
+            <div class="mt-6 text-center border-t pt-4">
+                <button onclick="closeFullAnalysisModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-lg transition text-xs uppercase tracking-wider">
                     Bezárás
                 </button>
             </div>
@@ -206,7 +181,7 @@
             <div class="text-center mb-6">
                 <span class="text-3xl">⚽</span>
                 <h3 class="text-xl font-extrabold mt-2 drop-shadow">Kezdd el a 3 napos próbaidőszakot</h3>
-                <p class="text-xs text-gray-200 mt-1 drop-shadow">Hozzáférés az összes mesterséges intelligencia által generált elemzéshez és odds mátrixhoz.</p>
+                <p class="text-xs text-gray-200 mt-1 drop-shadow">Hozzáférés az összes mesterséges intelligencia által generált elemzéshez.</p>
             </div>
 
             <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-4">
@@ -255,7 +230,7 @@
                 if (!error && analyses && analyses.length > 0) {
                     allMatches = analyses;
                     populateUclDropdown(analyses);
-                    renderMatch(analyses[analyses.length - 1]); // Alapértelmezetten a legfrissebb
+                    renderMatch(analyses[analyses.length - 1]);
                 } else {
                     switchLeague('bundesliga');
                 }
@@ -267,7 +242,7 @@
         function populateUclDropdown(matches) {
             const listEl = document.getElementById('ucl-matches-list');
             listEl.innerHTML = '';
-            matches.forEach((m, index) => {
+            matches.forEach((m) => {
                 const btn = document.createElement('button');
                 btn.className = "w-full text-left px-3 py-2 text-xs text-white hover:bg-amber-500/20 rounded-xl transition flex items-center justify-between";
                 btn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-[10px] text-gray-400">Megnyitás</span>`;
@@ -280,8 +255,7 @@
         }
 
         function toggleUclDropdown() {
-            const dropdown = document.getElementById('ucl-dropdown');
-            dropdown.classList.toggle('hidden');
+            document.getElementById('ucl-dropdown').classList.toggle('hidden');
         }
 
         function renderMatch(item) {
@@ -299,35 +273,24 @@
 
         function openFullAnalysisModal() {
             if (!currentActiveMatch) return;
-            document.getElementById('modal-match-title').innerText = currentActiveMatch.match_title;
-            document.getElementById('modal-match-subtitle').innerText = `${currentActiveMatch.league_name} — ${currentActiveMatch.match_time}`;
+            const container = document.getElementById('modal-html-container');
             
-            // HTML formátumú részletes elemzés betöltése
-            const bodyEl = document.getElementById('modal-content-body');
-            bodyEl.innerHTML = `
-                <div class="border-b border-white/10 pb-3 mb-3">
-                    <span class="text-xs uppercase font-bold text-amber-400">Statisztikai összefoglaló</span>
-                    <p class="text-sm mt-1">${currentActiveMatch.analysis_desc}</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
-                    <div class="bg-black/40 p-3 rounded-xl border border-white/10">
-                        <span class="text-xs text-green-400 font-bold">Fair Odds / Valószínűség</span>
-                        <p class="text-base font-black mt-1">${currentActiveMatch.fair_odds_val}</p>
+            // Ha van mentett full_html a Supabase-ben, azt jelenítjük meg, különben egy formázott generált nézetet
+            if (currentActiveMatch.full_html) {
+                container.innerHTML = currentActiveMatch.full_html;
+            } else {
+                container.innerHTML = `
+                    <div style="font-family: sans-serif; padding: 10px;">
+                        <h2 style="color: #003366; border-bottom: 2px solid #0056b3; padding-bottom: 8px;">${currentActiveMatch.match_title}</h2>
+                        <p><strong>Liga:</strong> ${currentActiveMatch.league_name}</p>
+                        <p><strong>Időpont:</strong> ${currentActiveMatch.match_time}</p>
+                        <hr style="margin: 15px 0;">
+                        <p><strong>Elemzés:</strong> ${currentActiveMatch.analysis_desc}</p>
+                        <p><strong>Fair Odds:</strong> ${currentActiveMatch.fair_odds_val}</p>
+                        <p><strong>xG:</strong> ${currentActiveMatch.xg_val}</p>
                     </div>
-                    <div class="bg-black/40 p-3 rounded-xl border border-white/10">
-                        <span class="text-xs text-green-400 font-bold">Várható gólok (xG)</span>
-                        <p class="text-base font-black mt-1">${currentActiveMatch.xg_val}</p>
-                    </div>
-                </div>
-                <div class="bg-black/40 p-4 rounded-xl border border-white/10">
-                    <span class="text-xs text-amber-400 font-bold uppercase">Mesterséges Intelligencia Szimulációs Jelentés</span>
-                    <p class="text-xs text-gray-300 mt-2 leading-relaxed">
-                        A 100 000 futásos Monte Carlo szimuláció és a Poisson eloszlású modell alapján a mérkőzés kulcstényezői: 
-                        intenzív középpályás letámadás, magas xG konverzió a széleken, valamint a pontrúgásokból fakadó helyzetkihasználás. 
-                        A legvalószínűbb kimenetel a mérkőzés dinamikája alapján a kiválasztott piacok szerint alakul.
-                    </p>
-                </div>
-            `;
+                `;
+            }
 
             document.getElementById('full-analysis-modal').classList.remove('hidden');
         }
