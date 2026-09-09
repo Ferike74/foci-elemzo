@@ -57,11 +57,11 @@
         <div class="mb-4 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <span class="text-xs uppercase tracking-widest text-red-400 font-bold drop-shadow-md">Kiválasztott Elemzés:</span>
-                <div class="bg-red-600 text-white text-xs px-3 py-1 rounded-full font-semibold shadow shadow-red-600/50" id="badge-match-title">
+                <div class="bg-red-600 text-white text-xs px-3 py-1 rounded-full font-semibold shadow" id="badge-match-title">
                     Válassz a fenti ligákból...
                 </div>
             </div>
-            <span class="text-xs text-amber-300 font-semibold italic">💡 Kattints a ligára fent a meccsek listázásához!</span>
+            <span class="text-xs text-amber-300 font-semibold italic">💡 Kattints a ligára fent a meccsek listájához!</span>
         </div>
 
         <!-- Fő Kártya -->
@@ -113,7 +113,7 @@
         </footer>
     </div>
 
-    <!-- Teljes HTML Elemzés Modal (automatikusan megnyílik a meccsre kattintva) -->
+    <!-- Teljes HTML Elemzés Modal -->
     <div id="full-analysis-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 md:p-6">
         <div class="bg-white text-slate-900 w-full max-w-5xl max-h-[92vh] rounded-3xl p-4 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
             <button onclick="closeFullAnalysisModal()" class="absolute top-4 right-6 text-slate-700 hover:text-red-600 text-3xl font-bold">&times;</button>
@@ -221,28 +221,33 @@
                 const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league));
 
                 const containerDiv = document.createElement('div');
-                containerDiv.className = "relative inline-block shrink-0";
+                containerDiv.className = "relative inline-block";
 
                 const btn = document.createElement('button');
-                btn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 hover:bg-sky-600 shadow-xl border border-sky-400 p-2.5 space-y-1";
-                btn.setAttribute('data-league', league.key);
+                btn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 hover:bg-sky-600 shadow-xl border border-sky-400 p-2.5 space-y-1 relative z-10";
                 btn.innerHTML = `
                     <span class="text-2xl">${league.emoji}</span>
                     <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">${league.name}</span>
                     <span class="text-[9px] text-sky-200">Meccsek (${leagueMatches.length}) ▼</span>
                 `;
-                btn.onclick = (e) => {
-                    e.stopPropagation();
-                    toggleDropdown(league.key);
-                };
-
+                
                 const dropdownDiv = document.createElement('div');
                 dropdownDiv.id = `dropdown-${league.key}`;
-                dropdownDiv.className = "absolute left-0 mt-2 w-64 bg-slate-900/95 border border-white/20 rounded-2xl shadow-2xl hidden z-50 p-2 backdrop-blur-md";
+                dropdownDiv.className = "absolute left-0 top-full mt-2 w-72 bg-slate-900/95 border border-white/20 rounded-2xl shadow-2xl hidden z-50 p-2 backdrop-blur-md";
                 dropdownDiv.innerHTML = `
                     <div class="text-[10px] uppercase font-bold text-amber-400 px-3 py-1 border-b border-white/10 mb-1">${league.name} Meccsek</div>
                     <div id="list-${league.key}" class="space-y-1 max-h-48 overflow-y-auto no-scrollbar"></div>
                 `;
+
+                // Kattintásra lenyitja/bezárja a saját menüjét
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    // Bezárjuk a többit
+                    document.querySelectorAll('[id^="dropdown-"]').forEach(d => {
+                        if (d.id !== `dropdown-${league.key}`) d.classList.add('hidden');
+                    });
+                    dropdownDiv.classList.toggle('hidden');
+                };
 
                 containerDiv.appendChild(btn);
                 containerDiv.appendChild(dropdownDiv);
@@ -253,10 +258,10 @@
                     leagueMatches.forEach(m => {
                         const mBtn = document.createElement('button');
                         mBtn.className = "w-full text-left px-3 py-2 text-xs text-white hover:bg-sky-500/20 rounded-xl transition flex items-center justify-between";
-                        mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-[10px] text-amber-400">Megnyitás</span>`;
+                        mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-[10px] text-amber-400 font-bold">Megnyitás</span>`;
                         
-                        // Kattintásra: Betölti a kártyára ÉS AZONNAL megnyitja a részletes HTML ablakot is!
-                        mBtn.onclick = () => {
+                        mBtn.onclick = (e) => {
+                            e.stopPropagation();
                             renderMatch(m);
                             dropdownDiv.classList.add('hidden');
                             openFullAnalysisModal();
@@ -271,17 +276,10 @@
                 }
             });
 
+            // Bárhová kattintva az oldalon bezáródnak a menük
             window.onclick = () => {
                 document.querySelectorAll('[id^="dropdown-"]').forEach(d => d.classList.add('hidden'));
             };
-        }
-
-        function toggleDropdown(leagueKey) {
-            document.querySelectorAll('[id^="dropdown-"]').forEach(d => {
-                if (d.id !== `dropdown-${leagueKey}`) d.classList.add('hidden');
-            });
-            const drop = document.getElementById(`dropdown-${leagueKey}`);
-            if (drop) drop.classList.toggle('hidden');
         }
 
         function renderMatch(item) {
