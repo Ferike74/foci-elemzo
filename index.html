@@ -42,15 +42,12 @@
             </div>
         </header>
 
-        <!-- Ligák Választó Sáv (Dinamikus Lenyílókkal) -->
+        <!-- Ligák Választó Sáv -->
         <div class="glass-panel rounded-2xl p-4 mb-6 shadow-xl relative flex items-center">
             <button onclick="scrollLeagues('left')" class="absolute left-2 z-20 bg-black/60 hover:bg-black/90 text-white p-2.5 rounded-full shadow-lg border border-white/20 transition backdrop-blur-md">❮</button>
 
             <div id="league-container" class="no-scrollbar flex items-center space-x-4 overflow-x-auto scroll-smooth px-10 w-full">
-                
-                <!-- Generált ligák sávja -->
                 <div id="league-buttons-wrapper" class="flex items-center space-x-4"></div>
-
             </div>
 
             <button onclick="scrollLeagues('right')" class="absolute right-2 z-20 bg-black/60 hover:bg-black/90 text-white p-2.5 rounded-full shadow-lg border border-white/20 transition backdrop-blur-md">❯</button>
@@ -76,7 +73,7 @@
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-4 mb-6">
                     <div>
                         <span class="text-xs text-red-400 uppercase font-bold tracking-wider drop-shadow" id="match-league-subtitle">Éles Elemzés</span>
-                        <h1 class="text-2xl md:text-3xl font-black mt-1 drop-shadow-md" id="match-title">Kapcsolódás a Supabase-hez...</h1>
+                        <h1 class="text-2xl md:text-3xl font-black mt-1 drop-shadow-md" id="match-title">Válassz egy ligát és meccset a fenti sávból...</h1>
                     </div>
                     <div class="mt-2 md:mt-0 text-sm text-white bg-black/20 px-4 py-1.5 rounded-xl border border-white/10 backdrop-blur-sm" id="match-time">--</div>
                 </div>
@@ -101,7 +98,7 @@
                 </div>
 
                 <p class="text-sm text-white bg-black/20 p-4 rounded-xl border border-white/10 mb-6 backdrop-blur-sm drop-shadow" id="match-desc">
-                    Az adatok betöltése folyamatban van az adatbázisból...
+                    Kattints bármelyik ligára fent, hogy láthasd a kielemzett meccseket!
                 </p>
             </div>
 
@@ -123,9 +120,7 @@
     <div id="full-analysis-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 md:p-6">
         <div class="bg-white text-slate-900 w-full max-w-5xl max-h-[92vh] rounded-3xl p-4 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
             <button onclick="closeFullAnalysisModal()" class="absolute top-4 right-6 text-slate-700 hover:text-red-600 text-3xl font-bold">&times;</button>
-            
             <div id="modal-html-container" class="mt-2"></div>
-
             <div class="mt-6 text-center border-t pt-4">
                 <button onclick="closeFullAnalysisModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-lg transition text-xs uppercase tracking-wider">
                     Bezárás
@@ -138,13 +133,10 @@
     <div id="auth-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-white/20 shadow-2xl">
             <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-xl font-bold">&times;</button>
-            
             <div class="text-center mb-6">
                 <span class="text-3xl">⚽</span>
                 <h3 class="text-xl font-extrabold mt-2 drop-shadow">Kezdd el a 3 napos próbaidőszakot</h3>
-                <p class="text-xs text-gray-200 mt-1 drop-shadow">Hozzáférés az összes mesterséges intelligencia által generált elemzéshez.</p>
             </div>
-
             <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Email cím</label>
@@ -177,22 +169,22 @@
         let currentActiveMatch = null;
 
         const leaguesConfig = [
-            { key: "ucl", name: "UEFA Bajnokok Ligája", emoji: "🏆" },
-            { key: "europaliga", name: "UEFA Európa Liga", emoji: "🥈" },
-            { key: "konferencia", name: "UEFA Konferencia Liga", emoji: "🥉" },
-            { key: "premier", name: "Anglia Premier Liga", emoji: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
-            { key: "championship", name: "Anglia Championship", emoji: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
-            { key: "fakupa", name: "Anglia FA Kupa", emoji: "🏆" },
-            { key: "eflkupa", name: "Anglia EFL Kupa", emoji: "🍺" },
-            { key: "laliga", name: "Spanyol La Liga", emoji: "🇪🇸" },
-            { key: "ligue1", name: "Francia Liga 1", emoji: "🇫🇷" },
-            { key: "bundesliga", name: "Német Bundesliga", emoji: "🇩🇪" },
-            { key: "seriea", name: "Olasz Serie A", emoji: "🇮🇹" },
-            { key: "gorog", name: "Görög Szuperliga", emoji: "🇬🇷" },
-            { key: "holland", name: "Holland Eredivisie", emoji: "🇳🇱" },
-            { key: "portugal", name: "Portugál Liga", emoji: "🇵🇹" },
-            { key: "superlig", name: "Török Süper Lig", emoji: "🇹🇷" },
-            { key: "belga", name: "Belgium Jupiler Pro", emoji: "🇧🇪" }
+            { key: "ucl", name: "UEFA Bajnokok Ligája", emoji: "🏆", synonyms: ["bajnokok ligája", "champions league", "ucl", "bl"] },
+            { key: "europaliga", name: "UEFA Európa Liga", emoji: "🥈", synonyms: ["európa liga", "europa league", "el"] },
+            { key: "konferencia", name: "UEFA Konferencia Liga", emoji: "🥉", synonyms: ["konferencia liga", "conference league"] },
+            { key: "premier", name: "Anglia Premier Liga", emoji: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", synonyms: ["premier league", "anglia premier", "premier"] },
+            { key: "championship", name: "Anglia Championship", emoji: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", synonyms: ["championship"] },
+            { key: "fakupa", name: "Anglia FA Kupa", emoji: "🏆", synonyms: ["fa kupa", "fa cup"] },
+            { key: "eflkupa", name: "Anglia EFL Kupa", emoji: "🍺", synonyms: ["efl kupa", "efl cup", "league cup"] },
+            { key: "laliga", name: "Spanyol La Liga", emoji: "🇪🇸", synonyms: ["la liga", "spanyol", "laliga"] },
+            { key: "ligue1", name: "Francia Liga 1", emoji: "🇫🇷", synonyms: ["liga 1", "ligue 1", "francia"] },
+            { key: "bundesliga", name: "Német Bundesliga", emoji: "🇩🇪", synonyms: ["bundesliga", "német"] },
+            { key: "seriea", name: "Olasz Serie A", emoji: "🇮🇹", synonyms: ["serie a", "olasz"] },
+            { key: "gorog", name: "Görög Szuperliga", emoji: "🇬🇷", synonyms: ["görög", "szuperliga"] },
+            { key: "holland", name: "Holland Eredivisie", emoji: "🇳🇱", synonyms: ["holland", "eredivisie"] },
+            { key: "portugal", name: "Portugál Liga", emoji: "🇵🇹", synonyms: ["portugál", "liga portugal"] },
+            { key: "superlig", name: "Török Süper Lig", emoji: "🇹🇷", synonyms: ["török", "süper lig", "super lig"] },
+            { key: "belga", name: "Belgium Jupiler Pro", emoji: "🇧🇪", synonyms: ["belga", "jupiler"] }
         ];
 
         window.addEventListener('DOMContentLoaded', async () => {
@@ -210,24 +202,28 @@
                 if (!error && analyses && analyses.length > 0) {
                     allMatches = analyses;
                     buildLeagueRibbon(analyses);
+                    // Automatikusan az utolsóként feltöltött meccset jelenítjük meg indításkor
                     renderMatch(analyses[analyses.length - 1]);
                 } else {
                     buildLeagueRibbon([]);
-                    switchLeague('bundesliga');
                 }
             } else {
                 buildLeagueRibbon([]);
-                switchLeague('bundesliga');
             }
         });
+
+        function matchBelongsToLeague(dbLeagueName, leagueConfig) {
+            if (!dbLeagueName) return false;
+            const lowerDb = dbLeagueName.toLowerCase();
+            return leagueConfig.synonyms.some(syn => lowerDb.includes(syn)) || lowerDb.includes(leagueConfig.name.toLowerCase());
+        }
 
         function buildLeagueRibbon(matches) {
             const wrapper = document.getElementById('league-buttons-wrapper');
             wrapper.innerHTML = '';
 
             leaguesConfig.forEach(league => {
-                // Kigyűjtjük az ehhez a ligához tartozó meccseket az adatbázisból
-                const leagueMatches = matches.filter(m => m.league_name && m.league_name.toLowerCase().includes(league.key));
+                const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league));
 
                 const containerDiv = document.createElement('div');
                 containerDiv.className = "relative inline-block shrink-0";
@@ -257,7 +253,6 @@
                 containerDiv.appendChild(dropdownDiv);
                 wrapper.appendChild(containerDiv);
 
-                // Feltöltjük a legördülő listát a meccsekkel
                 const listEl = dropdownDiv.querySelector(`#list-${league.key}`);
                 if (leagueMatches.length > 0) {
                     leagueMatches.forEach(m => {
@@ -278,14 +273,12 @@
                 }
             });
 
-            // Kattintásra bárhová bezárjuk a lenyílókat
             window.onclick = () => {
                 document.querySelectorAll('[id^="dropdown-"]').forEach(d => d.classList.add('hidden'));
             };
         }
 
         function toggleDropdown(leagueKey) {
-            // Bezárjuk a többi nyitott dropdown-t
             document.querySelectorAll('[id^="dropdown-"]').forEach(d => {
                 if (d.id !== `dropdown-${leagueKey}`) d.classList.add('hidden');
             });
@@ -320,8 +313,6 @@
                         <p><strong>Időpont:</strong> ${currentActiveMatch.match_time}</p>
                         <hr style="margin: 15px 0;">
                         <p><strong>Elemzés:</strong> ${currentActiveMatch.analysis_desc}</p>
-                        <p><strong>Fair Odds:</strong> ${currentActiveMatch.fair_odds_val}</p>
-                        <p><strong>xG:</strong> ${currentActiveMatch.xg_val}</p>
                     </div>
                 `;
             }
@@ -374,13 +365,6 @@
                 container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
             } else {
                 container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-            }
-        }
-
-        function switchLeague(leagueKey) {
-            const found = allMatches.slice().reverse().find(m => m.league_name && m.league_name.toLowerCase().includes(leagueKey));
-            if (found) {
-                renderMatch(found);
             }
         }
     </script>
