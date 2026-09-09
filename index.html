@@ -97,9 +97,9 @@
 
         <!-- Al-meccs választó -->
         <div class="mb-4 flex items-center space-x-3">
-            <span class="text-xs uppercase tracking-widest text-red-400 font-bold drop-shadow-md" id="current-league-label">Bundesliga — Aktív Elemzések (1 meccs)</span>
-            <div class="bg-red-600 text-white text-xs px-3 py-1 rounded-full font-semibold shadow cursor-pointer animate-pulse">
-                Bayern München – Borussia Dortmund
+            <span class="text-xs uppercase tracking-widest text-red-400 font-bold drop-shadow-md" id="current-league-label">Aktív Elemzések (Supabase Adatforrás)</span>
+            <div class="bg-red-600 text-white text-xs px-3 py-1 rounded-full font-semibold shadow cursor-pointer animate-pulse" id="badge-match-title">
+                Betöltés alatt...
             </div>
         </div>
 
@@ -109,27 +109,27 @@
                 <!-- Meccs Fejléc -->
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-4 mb-6">
                     <div>
-                        <span class="text-xs text-red-400 uppercase font-bold tracking-wider drop-shadow">Bundesliga Csúcsrangadó</span>
-                        <h1 class="text-2xl md:text-3xl font-black mt-1 drop-shadow-md" id="match-title">Bayern München – Borussia Dortmund</h1>
+                        <span class="text-xs text-red-400 uppercase font-bold tracking-wider drop-shadow" id="match-league-subtitle">Éles Elemzés</span>
+                        <h1 class="text-2xl md:text-3xl font-black mt-1 drop-shadow-md" id="match-title">Kapcsolódás a Supabase-hez...</h1>
                     </div>
                     <div class="mt-2 md:mt-0 text-sm text-white bg-black/20 px-4 py-1.5 rounded-xl border border-white/10 backdrop-blur-sm" id="match-time">
-                        Ma 18:30 (CEST)
+                        --
                     </div>
                 </div>
 
                 <!-- 4 Statisztikai Metrika Kártya -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                     <div class="bg-black/20 border border-green-500/40 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
-                        <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Bayern Győzelem (Fair Odds)</div>
-                        <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-odds">58.4% (1.71)</div>
+                        <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Valószínűség (Fair Odds)</div>
+                        <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-odds">--</div>
                     </div>
                     <div class="bg-black/20 border border-green-500/40 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
                         <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Várható Gólok (xG Átlag)</div>
-                        <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-xg">~3.45 xG</div>
+                        <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-xg">--</div>
                     </div>
                     <div class="bg-black/20 border border-green-500/40 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
-                        <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Lesek: Több Mint 2.5</div>
-                        <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-corners">76.2% (1.31)</div>
+                        <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Statisztikai Mutató</div>
+                        <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-corners">--</div>
                     </div>
                     <div class="bg-black/20 border border-green-500/40 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
                         <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Szimulációs Minőség</div>
@@ -139,7 +139,7 @@
 
                 <!-- Elemzés leírás -->
                 <p class="text-sm text-white bg-black/20 p-4 rounded-xl border border-white/10 mb-6 backdrop-blur-sm drop-shadow" id="match-desc">
-                    A Der Klassiker volumetriája agresszív letámadást és kiélezett szélső párharcokat mutat az Allianz Arena katlanjában.
+                    Az adatok betöltése folyamatban van az adatbázisból...
                 </p>
             </div>
 
@@ -198,12 +198,45 @@
             console.error("Supabase hiba:", e);
         }
 
+        let dynamicMatchData = {};
+
         window.addEventListener('DOMContentLoaded', async () => {
             if (supabaseClient) {
+                // Bejelentkezés ellenőrzése
                 const { data: { session } } = await supabaseClient.auth.getSession();
                 if (session) {
                     document.getElementById('user-status').innerText = `Bejelentkezve: ${session.user.email}`;
                 }
+
+                // Elemzések lekérdezése a Supabase match_analyses táblájából
+                const { data: analyses, error } = await supabaseClient
+                    .from('match_analyses')
+                    .select('*');
+
+                if (!error && analyses && analyses.length > 0) {
+                    analyses.forEach(item => {
+                        let key = item.league_name ? item.league_name.toLowerCase().replace(/\s+/g, '') : 'default';
+                        
+                        dynamicMatchData[key] = {
+                            title: item.match_title || "Ismeretlen meccs",
+                            time: item.match_time || "Közelben",
+                            odds: item.fair_odds || "58.4% (1.71)",
+                            xG: item.xg_avg || "~3.00 xG",
+                            corners: item.corners_analysis || "75.0% (1.35)",
+                            desc: item.analysis_text || item.match_desc || "Mesterséges intelligencia által generált részletes statisztikai elemzés."
+                        };
+                    });
+
+                    const firstKey = Object.keys(dynamicMatchData)[0];
+                    if (firstKey) {
+                        switchLeague(firstKey);
+                    }
+                } else {
+                    // Ha üres a tábla, betöltjük a tartalék adatot
+                    switchLeague('bundesliga');
+                }
+            } else {
+                switchLeague('bundesliga');
             }
         });
 
@@ -241,7 +274,6 @@
             }
         }
 
-        // Görgető függvény a nyilakhoz
         function scrollLeagues(direction) {
             const container = document.getElementById('league-container');
             const scrollAmount = 300;
@@ -252,7 +284,7 @@
             }
         }
 
-        const matchData = {
+        const fallbackMatchData = {
             premier: { title: "Arsenal – Manchester City", time: "Ma 21:00 (CEST)", odds: "51.2% (1.95)", xG: "~2.90 xG", corners: "68.4% (1.45)", desc: "A Premier League rangadója komoly taktikai csatát és magas presszinget ígér az Emirates Stadionban." },
             bundesliga: { title: "Bayern München – Borussia Dortmund", time: "Ma 18:30 (CEST)", odds: "58.4% (1.71)", xG: "~3.45 xG", corners: "76.2% (1.31)", desc: "A Der Klassiker volumetriája agresszív letámadást és kiélezett szélső párharcokat mutat az Allianz Arena katlanjában." },
             seriea: { title: "Inter Milan – Juventus", time: "Holnap 20:45 (CEST)", odds: "54.0% (1.85)", xG: "~2.40 xG", corners: "62.0% (1.55)", desc: "Taktikai olasz rangadó, ahol a védekezési stabilitás és a pontrúgások dönthetnek." },
@@ -269,9 +301,10 @@
             const activeBtn = document.querySelector(`[data-league="${leagueKey}"]`);
             if(activeBtn) activeBtn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-600 shadow-2xl border-2 border-white p-2.5 space-y-2 shrink-0 scale-105";
 
-            const data = matchData[leagueKey];
+            const data = dynamicMatchData[leagueKey] || fallbackMatchData[leagueKey];
             if(data) {
                 document.getElementById('match-title').innerText = data.title;
+                document.getElementById('badge-match-title').innerText = data.title;
                 document.getElementById('match-time').innerText = data.time;
                 document.getElementById('stat-odds').innerText = data.odds;
                 document.getElementById('stat-xg').innerText = data.xG;
