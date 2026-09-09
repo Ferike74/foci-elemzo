@@ -224,7 +224,7 @@
                 containerDiv.className = "relative inline-block";
 
                 const btn = document.createElement('button');
-                btn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 hover:bg-sky-600 shadow-xl border border-sky-400 p-2.5 space-y-1 relative z-10";
+                btn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 hover:bg-sky-600 shadow-xl border border-sky-400 p-2.5 space-y-1 relative z-20 cursor-pointer";
                 btn.innerHTML = `
                     <span class="text-2xl">${league.emoji}</span>
                     <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">${league.name}</span>
@@ -233,20 +233,19 @@
                 
                 const dropdownDiv = document.createElement('div');
                 dropdownDiv.id = `dropdown-${league.key}`;
-                dropdownDiv.className = "absolute left-0 top-full mt-2 w-72 bg-slate-900/95 border border-white/20 rounded-2xl shadow-2xl hidden z-50 p-2 backdrop-blur-md";
+                dropdownDiv.className = "absolute left-0 top-full mt-2 w-72 bg-slate-900 border border-white/20 rounded-2xl shadow-2xl hidden z-50 p-2 backdrop-blur-md";
                 dropdownDiv.innerHTML = `
                     <div class="text-[10px] uppercase font-bold text-amber-400 px-3 py-1 border-b border-white/10 mb-1">${league.name} Meccsek</div>
                     <div id="list-${league.key}" class="space-y-1 max-h-48 overflow-y-auto no-scrollbar"></div>
                 `;
 
-                // Kattintásra lenyitja/bezárja a saját menüjét
                 btn.onclick = (e) => {
                     e.stopPropagation();
-                    // Bezárjuk a többit
-                    document.querySelectorAll('[id^="dropdown-"]').forEach(d => {
-                        if (d.id !== `dropdown-${league.key}`) d.classList.add('hidden');
-                    });
-                    dropdownDiv.classList.toggle('hidden');
+                    const wasHidden = dropdownDiv.classList.contains('hidden');
+                    document.querySelectorAll('[id^="dropdown-"]').forEach(d => d.classList.add('hidden'));
+                    if (wasHidden) {
+                        dropdownDiv.classList.remove('hidden');
+                    }
                 };
 
                 containerDiv.appendChild(btn);
@@ -257,11 +256,12 @@
                 if (leagueMatches.length > 0) {
                     leagueMatches.forEach(m => {
                         const mBtn = document.createElement('button');
-                        mBtn.className = "w-full text-left px-3 py-2 text-xs text-white hover:bg-sky-500/20 rounded-xl transition flex items-center justify-between";
+                        mBtn.className = "w-full text-left px-3 py-2 text-xs text-white hover:bg-sky-500/30 rounded-xl transition flex items-center justify-between cursor-pointer";
                         mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-[10px] text-amber-400 font-bold">Megnyitás</span>`;
                         
                         mBtn.onclick = (e) => {
                             e.stopPropagation();
+                            currentActiveMatch = m;
                             renderMatch(m);
                             dropdownDiv.classList.add('hidden');
                             openFullAnalysisModal();
@@ -276,7 +276,6 @@
                 }
             });
 
-            // Bárhová kattintva az oldalon bezáródnak a menük
             window.onclick = () => {
                 document.querySelectorAll('[id^="dropdown-"]').forEach(d => d.classList.add('hidden'));
             };
