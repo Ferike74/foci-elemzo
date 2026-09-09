@@ -97,7 +97,7 @@
 
         <!-- Al-meccs választó -->
         <div class="mb-4 flex items-center space-x-3">
-            <span class="text-xs uppercase tracking-widest text-red-400 font-bold drop-shadow-md" id="current-league-label">Aktív Elemzések (Supabase Adatforrás)</span>
+            <span class="text-xs uppercase tracking-widest text-red-400 font-bold drop-shadow-md">Aktív Elemzések (Supabase Adatforrás)</span>
             <div class="bg-red-600 text-white text-xs px-3 py-1 rounded-full font-semibold shadow cursor-pointer animate-pulse" id="badge-match-title">
                 Betöltés alatt...
             </div>
@@ -198,47 +198,43 @@
             console.error("Supabase hiba:", e);
         }
 
-        let dynamicMatchData = {};
+        let allMatches = [];
 
         window.addEventListener('DOMContentLoaded', async () => {
             if (supabaseClient) {
-                // Bejelentkezés ellenőrzése
                 const { data: { session } } = await supabaseClient.auth.getSession();
                 if (session) {
                     document.getElementById('user-status').innerText = `Bejelentkezve: ${session.user.email}`;
                 }
 
-                // Elemzések lekérdezése a Supabase match_analyses táblájából
                 const { data: analyses, error } = await supabaseClient
                     .from('match_analyses')
-                    .select('*');
+                    .select('*')
+                    .order('id', { ascending: true });
 
                 if (!error && analyses && analyses.length > 0) {
-                    analyses.forEach(item => {
-                        let key = item.league_name ? item.league_name.toLowerCase().replace(/\s+/g, '') : 'default';
-                        
-                        dynamicMatchData[key] = {
-                            title: item.match_title || "Ismeretlen meccs",
-                            time: item.match_time || "Közelben",
-                            odds: item.fair_odds || "58.4% (1.71)",
-                            xG: item.xg_avg || "~3.00 xG",
-                            corners: item.corners_analysis || "75.0% (1.35)",
-                            desc: item.analysis_text || item.match_desc || "Mesterséges intelligencia által generált részletes statisztikai elemzés."
-                        };
-                    });
-
-                    const firstKey = Object.keys(dynamicMatchData)[0];
-                    if (firstKey) {
-                        switchLeague(firstKey);
-                    }
+                    allMatches = analyses;
+                    // Megjelenítjük a legutolsó (legfrissebb) meccset alapértelmezetten (pl. Barcelona - Feyenoord)
+                    renderMatch(analyses[analyses.length - 1]);
                 } else {
-                    // Ha üres a tábla, betöltjük a tartalék adatot
                     switchLeague('bundesliga');
                 }
             } else {
                 switchLeague('bundesliga');
             }
         });
+
+        function renderMatch(item) {
+            if (!item) return;
+            document.getElementById('match-title').innerText = item.match_title || "Ismeretlen meccs";
+            document.getElementById('badge-match-title').innerText = item.match_title || "Ismeretlen meccs";
+            document.getElementById('match-time').innerText = item.match_time || "Közelben";
+            document.getElementById('match-league-subtitle').innerText = item.league_name || "Éles Elemzés";
+            document.getElementById('stat-odds').innerText = item.fair_odds_val || "1.85";
+            document.getElementById('stat-xg').innerText = item.xg_val || "~3.00 xG";
+            document.getElementById('stat-corners').innerText = item.special_val || "BTTS: Igen";
+            document.getElementById('match-desc').innerText = item.analysis_desc || "Részletes elemzés.";
+        }
 
         function openAuthModal() {
             document.getElementById('auth-modal').classList.remove('hidden');
@@ -263,10 +259,10 @@
                 if (signUpRes.error) {
                     msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${signUpRes.error.message}</span>`;
                 } else {
-                    msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres regisztráció és 3 napos próba aktiválva! Most már beléphetsz.</span>';
+                    msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres regisztráció! Most már beléphetsz.</span>';
                 }
             } else {
-                msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres bejelentkezés! Átirányítás...</span>';
+                msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres bejelentkezés!</span>';
                 setTimeout(() => {
                     closeAuthModal();
                     location.reload();
@@ -285,13 +281,13 @@
         }
 
         const fallbackMatchData = {
-            premier: { title: "Arsenal – Manchester City", time: "Ma 21:00 (CEST)", odds: "51.2% (1.95)", xG: "~2.90 xG", corners: "68.4% (1.45)", desc: "A Premier League rangadója komoly taktikai csatát és magas presszinget ígér az Emirates Stadionban." },
-            bundesliga: { title: "Bayern München – Borussia Dortmund", time: "Ma 18:30 (CEST)", odds: "58.4% (1.71)", xG: "~3.45 xG", corners: "76.2% (1.31)", desc: "A Der Klassiker volumetriája agresszív letámadást és kiélezett szélső párharcokat mutat az Allianz Arena katlanjában." },
-            seriea: { title: "Inter Milan – Juventus", time: "Holnap 20:45 (CEST)", odds: "54.0% (1.85)", xG: "~2.40 xG", corners: "62.0% (1.55)", desc: "Taktikai olasz rangadó, ahol a védekezési stabilitás és a pontrúgások dönthetnek." },
-            ligue1: { title: "Paris Saint-Germain – Marseille", time: "Vasárnap 21:00 (CEST)", odds: "65.0% (1.54)", xG: "~3.80 xG", corners: "81.0% (1.25)", desc: "Le Classique: gólzáporos mérkőzésre számítunk a hazaiak támadófocija miatt." },
-            laliga: { title: "Real Madrid – Barcelona", time: "Vasárnap 16:15 (CEST)", odds: "49.0% (2.04)", xG: "~3.20 xG", corners: "74.0% (1.35)", desc: "El Clásico: a világ szeme ezen a mérkőzésen, maximális tempó várható." },
-            portugal: { title: "Benfica – Sporting CP", time: "Hétfő 21:15 (CEST)", odds: "52.0% (1.92)", xG: "~2.80 xG", corners: "65.0% (1.40)", desc: "Lisszaboni rangadó a bajnoki címért." },
-            superlig: { title: "Galatasaray – Fenerbahce", time: "Vasárnap 19:00 (CEST)", odds: "53.0% (1.88)", xG: "~3.10 xG", corners: "79.0% (1.30)", desc: "Fokozott hangulatú isztambuli derbi." }
+            premier: { title: "Arsenal – Manchester City", time: "Ma 21:00 (CEST)", odds: "51.2% (1.95)", xG: "~2.90 xG", corners: "68.4% (1.45)", desc: "A Premier League rangadója." },
+            bundesliga: { title: "Bayern München – Borussia Dortmund", time: "Ma 18:30 (CEST)", odds: "58.4% (1.71)", xG: "~3.45 xG", corners: "76.2% (1.31)", desc: "A Der Klassiker rangadó." },
+            seriea: { title: "Inter Milan – Juventus", time: "Holnap 20:45 (CEST)", odds: "54.0% (1.85)", xG: "~2.40 xG", corners: "62.0% (1.55)", desc: "Olasz rangadó." },
+            ligue1: { title: "Paris Saint-Germain – Marseille", time: "Vasárnap 21:00 (CEST)", odds: "65.0% (1.54)", xG: "~3.80 xG", corners: "81.0% (1.25)", desc: "Francia rangadó." },
+            laliga: { title: "Real Madrid – Barcelona", time: "Vasárnap 16:15 (CEST)", odds: "49.0% (2.04)", xG: "~3.20 xG", corners: "74.0% (1.35)", desc: "El Clásico." },
+            portugal: { title: "Benfica – Sporting CP", time: "Hétfő 21:15 (CEST)", odds: "52.0% (1.92)", xG: "~2.80 xG", corners: "65.0% (1.40)", desc: "Lisszaboni rangadó." },
+            superlig: { title: "Galatasaray – Fenerbahce", time: "Vasárnap 19:00 (CEST)", odds: "53.0% (1.88)", xG: "~3.10 xG", corners: "79.0% (1.30)", desc: "Isztambuli derbi." }
         };
 
         function switchLeague(leagueKey) {
@@ -301,15 +297,20 @@
             const activeBtn = document.querySelector(`[data-league="${leagueKey}"]`);
             if(activeBtn) activeBtn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-600 shadow-2xl border-2 border-white p-2.5 space-y-2 shrink-0 scale-105";
 
-            const data = dynamicMatchData[leagueKey] || fallbackMatchData[leagueKey];
-            if(data) {
-                document.getElementById('match-title').innerText = data.title;
-                document.getElementById('badge-match-title').innerText = data.title;
-                document.getElementById('match-time').innerText = data.time;
-                document.getElementById('stat-odds').innerText = data.odds;
-                document.getElementById('stat-xg').innerText = data.xG;
-                document.getElementById('stat-corners').innerText = data.corners;
-                document.getElementById('match-desc').innerText = data.desc;
+            const found = allMatches.slice().reverse().find(m => m.league_name && m.league_name.toLowerCase().includes(leagueKey));
+            if (found) {
+                renderMatch(found);
+            } else {
+                const data = fallbackMatchData[leagueKey];
+                if(data) {
+                    document.getElementById('match-title').innerText = data.title;
+                    document.getElementById('badge-match-title').innerText = data.title;
+                    document.getElementById('match-time').innerText = data.time;
+                    document.getElementById('stat-odds').innerText = data.odds;
+                    document.getElementById('stat-xg').innerText = data.xG;
+                    document.getElementById('stat-corners').innerText = data.corners;
+                    document.getElementById('match-desc').innerText = data.desc;
+                }
             }
         }
     </script>
