@@ -200,10 +200,12 @@
                     .order('id', { ascending: true });
 
                 if (!error && analyses && analyses.length > 0) {
-                    allMatches = analyses;
-                    buildLeagueRibbon(analyses);
-                    // Automatikusan az utolsóként feltöltött meccset jelenítjük meg indításkor
-                    renderMatch(analyses[analyses.length - 1]);
+                    // Szűrjük ki azokat, amiknek van érvényes meccscíme
+                    allMatches = analyses.filter(m => m.match_title && m.match_title.trim() !== "");
+                    buildLeagueRibbon(allMatches);
+                    if (allMatches.length > 0) {
+                        renderMatch(allMatches[allMatches.length - 1]);
+                    }
                 } else {
                     buildLeagueRibbon([]);
                 }
