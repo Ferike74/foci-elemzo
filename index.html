@@ -56,15 +56,12 @@
         <!-- Aktív Meccs sáv -->
         <div class="mb-4 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <span class="text-xs uppercase tracking-widest text-red-400 font-bold drop-shadow-md">Aktív Elemzés (Supabase Adatforrás)</span>
-                <div class="bg-red-600 text-white text-xs px-3 py-1 rounded-full font-semibold shadow cursor-pointer animate-pulse" id="badge-match-title">
-                    Betöltés alatt...
+                <span class="text-xs uppercase tracking-widest text-red-400 font-bold drop-shadow-md">Kiválasztott Elemzés:</span>
+                <div class="bg-red-600 text-white text-xs px-3 py-1 rounded-full font-semibold shadow shadow-red-600/50" id="badge-match-title">
+                    Válassz a fenti ligákból...
                 </div>
             </div>
-            <button onclick="openFullAnalysisModal()" class="bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs px-4 py-2 rounded-xl shadow-lg transition transform hover:scale-105 flex items-center space-x-1.5">
-                <span>📄</span>
-                <span>Részletes Elemzés Olvasása</span>
-            </button>
+            <span class="text-xs text-amber-300 font-semibold italic">💡 Kattints a ligára fent a meccsek listázásához!</span>
         </div>
 
         <!-- Fő Kártya -->
@@ -73,7 +70,7 @@
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-4 mb-6">
                     <div>
                         <span class="text-xs text-red-400 uppercase font-bold tracking-wider drop-shadow" id="match-league-subtitle">Éles Elemzés</span>
-                        <h1 class="text-2xl md:text-3xl font-black mt-1 drop-shadow-md" id="match-title">Válassz egy ligát és meccset a fenti sávból...</h1>
+                        <h1 class="text-2xl md:text-3xl font-black mt-1 drop-shadow-md" id="match-title">Válassz egy ligát a fenti sávból...</h1>
                     </div>
                     <div class="mt-2 md:mt-0 text-sm text-white bg-black/20 px-4 py-1.5 rounded-xl border border-white/10 backdrop-blur-sm" id="match-time">--</div>
                 </div>
@@ -98,7 +95,7 @@
                 </div>
 
                 <p class="text-sm text-white bg-black/20 p-4 rounded-xl border border-white/10 mb-6 backdrop-blur-sm drop-shadow" id="match-desc">
-                    Kattints bármelyik ligára fent, hogy láthasd a kielemzett meccseket!
+                    A részletes elemzés megnyitásához kattints a ligára, majd a lenyíló menüben a meccsre!
                 </p>
             </div>
 
@@ -116,7 +113,7 @@
         </footer>
     </div>
 
-    <!-- Részletes Elemzés Modal -->
+    <!-- Teljes HTML Elemzés Modal (automatikusan megnyílik a meccsre kattintva) -->
     <div id="full-analysis-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 md:p-6">
         <div class="bg-white text-slate-900 w-full max-w-5xl max-h-[92vh] rounded-3xl p-4 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
             <button onclick="closeFullAnalysisModal()" class="absolute top-4 right-6 text-slate-700 hover:text-red-600 text-3xl font-bold">&times;</button>
@@ -200,12 +197,8 @@
                     .order('id', { ascending: true });
 
                 if (!error && analyses && analyses.length > 0) {
-                    // Szűrjük ki azokat, amiknek van érvényes meccscíme
                     allMatches = analyses.filter(m => m.match_title && m.match_title.trim() !== "");
                     buildLeagueRibbon(allMatches);
-                    if (allMatches.length > 0) {
-                        renderMatch(allMatches[allMatches.length - 1]);
-                    }
                 } else {
                     buildLeagueRibbon([]);
                 }
@@ -260,10 +253,13 @@
                     leagueMatches.forEach(m => {
                         const mBtn = document.createElement('button');
                         mBtn.className = "w-full text-left px-3 py-2 text-xs text-white hover:bg-sky-500/20 rounded-xl transition flex items-center justify-between";
-                        mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-[10px] text-gray-400">Megnyitás</span>`;
+                        mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-[10px] text-amber-400">Megnyitás</span>`;
+                        
+                        // Kattintásra: Betölti a kártyára ÉS AZONNAL megnyitja a részletes HTML ablakot is!
                         mBtn.onclick = () => {
                             renderMatch(m);
                             dropdownDiv.classList.add('hidden');
+                            openFullAnalysisModal();
                         };
                         listEl.appendChild(mBtn);
                     });
@@ -304,21 +300,11 @@
         function openFullAnalysisModal() {
             if (!currentActiveMatch) return;
             const container = document.getElementById('modal-html-container');
-            
             if (currentActiveMatch.full_html) {
                 container.innerHTML = currentActiveMatch.full_html;
             } else {
-                container.innerHTML = `
-                    <div style="font-family: sans-serif; padding: 10px;">
-                        <h2 style="color: #003366; border-bottom: 2px solid #0056b3; padding-bottom: 8px;">${currentActiveMatch.match_title}</h2>
-                        <p><strong>Liga:</strong> ${currentActiveMatch.league_name}</p>
-                        <p><strong>Időpont:</strong> ${currentActiveMatch.match_time}</p>
-                        <hr style="margin: 15px 0;">
-                        <p><strong>Elemzés:</strong> ${currentActiveMatch.analysis_desc}</p>
-                    </div>
-                `;
+                container.innerHTML = `<div style="padding:20px;"><h2>${currentActiveMatch.match_title}</h2><p>${currentActiveMatch.analysis_desc}</p></div>`;
             }
-
             document.getElementById('full-analysis-modal').classList.remove('hidden');
         }
 
@@ -326,37 +312,26 @@
             document.getElementById('full-analysis-modal').classList.add('hidden');
         }
 
-        function openAuthModal() {
-            document.getElementById('auth-modal').classList.remove('hidden');
-        }
-
-        function closeAuthModal() {
-            document.getElementById('auth-modal').classList.add('hidden');
-        }
+        function openAuthModal() { document.getElementById('auth-modal').classList.remove('hidden'); }
+        function closeAuthModal() { document.getElementById('auth-modal').classList.add('hidden'); }
 
         async function handleAuth(event) {
             event.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const msgEl = document.getElementById('auth-message');
-
             msgEl.innerHTML = '<span class="text-gray-200">Folyamatban...</span>';
-
             let { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            
             if (error) {
                 let signUpRes = await supabaseClient.auth.signUp({ email, password });
                 if (signUpRes.error) {
                     msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${signUpRes.error.message}</span>`;
                 } else {
-                    msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres regisztráció! Most már beléphetsz.</span>';
+                    msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres regisztráció!</span>';
                 }
             } else {
                 msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres bejelentkezés!</span>';
-                setTimeout(() => {
-                    closeAuthModal();
-                    location.reload();
-                }, 1500);
+                setTimeout(() => { closeAuthModal(); location.reload(); }, 1500);
             }
         }
 
