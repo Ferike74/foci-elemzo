@@ -42,11 +42,11 @@
             </div>
         </header>
 
-        <!-- Ligák Választó Sáv -->
-        <div class="glass-panel rounded-2xl p-4 mb-6 shadow-xl relative flex items-center">
+        <!-- Ligák Választó Sáv (Nincs overflow-x a fő burkolaton, hogy a lenyíló ne vágódjon le) -->
+        <div class="glass-panel rounded-2xl p-4 mb-6 shadow-xl relative flex items-center overflow-visible">
             <button onclick="scrollLeagues('left')" class="absolute left-2 z-20 bg-black/60 hover:bg-black/90 text-white p-2.5 rounded-full shadow-lg border border-white/20 transition backdrop-blur-md">❮</button>
 
-            <div id="league-container" class="no-scrollbar flex items-center space-x-4 overflow-x-auto scroll-smooth px-10 w-full">
+            <div id="league-container" class="no-scrollbar flex items-center space-x-4 overflow-x-auto scroll-smooth px-10 w-full py-2">
                 <div id="league-buttons-wrapper" class="flex items-center space-x-4"></div>
             </div>
 
@@ -221,10 +221,10 @@
                 const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league));
 
                 const containerDiv = document.createElement('div');
-                containerDiv.className = "relative inline-block";
+                containerDiv.className = "relative inline-block shrink-0";
 
                 const btn = document.createElement('button');
-                btn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 hover:bg-sky-600 shadow-xl border border-sky-400 p-2.5 space-y-1 relative z-20 cursor-pointer";
+                btn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 hover:bg-sky-600 shadow-xl border border-sky-400 p-2.5 space-y-1 cursor-pointer";
                 btn.innerHTML = `
                     <span class="text-2xl">${league.emoji}</span>
                     <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">${league.name}</span>
