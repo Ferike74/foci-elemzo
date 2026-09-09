@@ -42,52 +42,115 @@
             </div>
         </header>
 
-        <!-- Ligák Választó Sáv -->
+        <!-- Ligák Választó Sáv (Frissített Lista) -->
         <div class="glass-panel rounded-2xl p-4 mb-6 shadow-xl relative flex items-center">
             <button onclick="scrollLeagues('left')" class="absolute left-2 z-20 bg-black/60 hover:bg-black/90 text-white p-2.5 rounded-full shadow-lg border border-white/20 transition backdrop-blur-md">❮</button>
 
             <div id="league-container" class="no-scrollbar flex items-center space-x-4 overflow-x-auto scroll-smooth px-10 w-full">
-                <!-- BL Legördülő -->
+                
+                <!-- UEFA Bajnokok Ligája -->
                 <div class="relative inline-block shrink-0">
                     <button onclick="toggleUclDropdown()" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-amber-600 shadow-xl border border-amber-400 p-2.5 space-y-1" data-league="ucl">
                         <span class="text-2xl">🏆</span>
-                        <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">UEFA Bajnokok Ligája</span>
+                        <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">UEFA Bajnokok Ligája</span>
                         <span class="text-[9px] text-amber-200">Meccsek ▼</span>
                     </button>
                     <div id="ucl-dropdown" class="absolute left-0 mt-2 w-64 bg-slate-900/95 border border-white/20 rounded-2xl shadow-2xl hidden z-50 p-2 backdrop-blur-md">
-                        <div class="text-[10px] uppercase font-bold text-amber-400 px-3 py-1 border-b border-white/10 mb-1">Elérhető Bajnokok Ligája Meccsek</div>
+                        <div class="text-[10px] uppercase font-bold text-amber-400 px-3 py-1 border-b border-white/10 mb-1">Elérhető BL Meccsek</div>
                         <div id="ucl-matches-list" class="space-y-1"></div>
                     </div>
                 </div>
 
+                <!-- UEFA Európa Liga -->
+                <button onclick="switchLeague('europaliga')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="europaliga">
+                    <span class="text-2xl">🥈</span>
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">UEFA Európa Liga</span>
+                </button>
+
+                <!-- UEFA Konferencia Liga -->
+                <button onclick="switchLeague('konferencia')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="konferencia">
+                    <span class="text-2xl">🥉</span>
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">UEFA Konferencia Liga</span>
+                </button>
+
+                <!-- Anglia Premier Liga -->
                 <button onclick="switchLeague('premier')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="premier">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg" alt="Premier League" class="h-9 object-contain filter drop-shadow">
-                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">Premier League</span>
+                    <span class="text-2xl">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">Anglia Premier Liga</span>
                 </button>
-                <button onclick="switchLeague('bundesliga')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="bundesliga">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Bundesliga_logo_%282017%29.svg/1200px-Bundesliga_logo_%282017%29.svg.png" alt="Bundesliga" class="h-9 object-contain filter drop-shadow">
-                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">DE Bundesliga</span>
+
+                <!-- Anglia Championship -->
+                <button onclick="switchLeague('championship')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="championship">
+                    <span class="text-2xl">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">Anglia Championship</span>
                 </button>
-                <button onclick="switchLeague('seriea')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="seriea">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Logo_Serie_A_Enilive_2024.svg/1200px-Logo_Serie_A_Enilive_2024.svg.png" alt="Serie A" class="h-9 object-contain filter drop-shadow">
-                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">IT Serie A</span>
+
+                <!-- Anglia FA kupa -->
+                <button onclick="switchLeague('fakupa')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="fakupa">
+                    <span class="text-2xl">🏆</span>
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">Anglia FA Kupa</span>
                 </button>
-                <button onclick="switchLeague('ligue1')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="ligue1">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Ligue_1_%282024%29_logo.svg/1200px-Ligue_1_%282024%29_logo.svg.png" alt="Ligue 1" class="h-9 object-contain filter drop-shadow">
-                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">FR Ligue 1</span>
+
+                <!-- Anglia EFL kupa -->
+                <button onclick="switchLeague('eflkupa')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="eflkupa">
+                    <span class="text-2xl">🍺</span>
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">Anglia EFL Kupa</span>
                 </button>
+
+                <!-- Spanyol LA Liga -->
                 <button onclick="switchLeague('laliga')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="laliga">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/LaLiga_logo_2023.svg/1200px-LaLiga_logo_2023.svg.png" alt="La Liga" class="h-9 object-contain filter drop-shadow">
-                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">ES La Liga</span>
+                    <span class="text-2xl">🇪🇸</span>
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">Spanyol La Liga</span>
                 </button>
+
+                <!-- Francia Liga 1 -->
+                <button onclick="switchLeague('ligue1')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="ligue1">
+                    <span class="text-2xl">🇫🇷</span>
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">Francia Liga 1</span>
+                </button>
+
+                <!-- Német Bundes Liga -->
+                <button onclick="switchLeague('bundesliga')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="bundesliga">
+                    <span class="text-2xl">🇩🇪</span>
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">Német Bundesliga</span>
+                </button>
+
+                <!-- Olasz seria A -->
+                <button onclick="switchLeague('seriea')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="seriea">
+                    <span class="text-2xl">🇮🇹</span>
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">Olasz Serie A</span>
+                </button>
+
+                <!-- Görög szuperliga -->
+                <button onclick="switchLeague('gorog')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="gorog">
+                    <span class="text-2xl">🇬🇷</span>
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">Görög Szuperliga</span>
+                </button>
+
+                <!-- Hollandia Első osztály -->
+                <button onclick="switchLeague('holland')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="holland">
+                    <span class="text-2xl">🇳🇱</span>
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">Holland Eredivisie</span>
+                </button>
+
+                <!-- Portugália Liga Portugál -->
                 <button onclick="switchLeague('portugal')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="portugal">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Liga_Portugal_logo_%282023%29.svg/1200px-Liga_Portugal_logo_%282023%29.svg.png" alt="Liga Portugal" class="h-9 object-contain filter drop-shadow">
-                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">PT Liga Portugal</span>
+                    <span class="text-2xl">🇵🇹</span>
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">Portugál Liga</span>
                 </button>
+
+                <!-- Török szuper Liga -->
                 <button onclick="switchLeague('superlig')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="superlig">
-                    <img src="https://upload.wikimedia.org/wikipedia/tr/thumb/8/87/Trendyol_S%C3%BCper_Lig_yeni_logosu.png/640px-Trendyol_S%C3%BCper_Lig_yeni_logosu.png" alt="Süper Lig" class="h-9 object-contain filter drop-shadow">
-                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white">TR Süper Lig</span>
+                    <span class="text-2xl">🇹🇷</span>
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">Török Süper Lig</span>
                 </button>
+
+                <!-- Belgium Jupiler Liga -->
+                <button onclick="switchLeague('belga')" class="league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0" data-league="belga">
+                    <span class="text-2xl">🇧🇪</span>
+                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">Belgium Jupiler Pro</span>
+                </button>
+
             </div>
 
             <button onclick="scrollLeagues('right')" class="absolute right-2 z-20 bg-black/60 hover:bg-black/90 text-white p-2.5 rounded-full shadow-lg border border-white/20 transition backdrop-blur-md">❯</button>
@@ -156,14 +219,12 @@
         </footer>
     </div>
 
-    <!-- Részletes Elemzés Modal (Teljes HTML formátum beillesztése) -->
+    <!-- Részletes Elemzés Modal -->
     <div id="full-analysis-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 md:p-6">
         <div class="bg-white text-slate-900 w-full max-w-5xl max-h-[92vh] rounded-3xl p-4 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
             <button onclick="closeFullAnalysisModal()" class="absolute top-4 right-6 text-slate-700 hover:text-red-600 text-3xl font-bold">&times;</button>
             
-            <div id="modal-html-container" class="mt-2">
-                <!-- Itt jelenik meg a Google Drive-os stílusú teljes HTML jelentés -->
-            </div>
+            <div id="modal-html-container" class="mt-2"></div>
 
             <div class="mt-6 text-center border-t pt-4">
                 <button onclick="closeFullAnalysisModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-lg transition text-xs uppercase tracking-wider">
@@ -275,7 +336,6 @@
             if (!currentActiveMatch) return;
             const container = document.getElementById('modal-html-container');
             
-            // Ha van mentett full_html a Supabase-ben, azt jelenítjük meg, különben egy formázott generált nézetet
             if (currentActiveMatch.full_html) {
                 container.innerHTML = currentActiveMatch.full_html;
             } else {
@@ -344,21 +404,33 @@
         }
 
         const fallbackMatchData = {
-            premier: { title: "Arsenal – Manchester City", time: "Ma 21:00 (CEST)", odds: "51.2% (1.95)", xG: "~2.90 xG", corners: "68.4% (1.45)", desc: "A Premier League rangadója." },
-            bundesliga: { title: "Bayern München – Borussia Dortmund", time: "Ma 18:30 (CEST)", odds: "58.4% (1.71)", xG: "~3.45 xG", corners: "76.2% (1.31)", desc: "A Der Klassiker rangadó." },
-            seriea: { title: "Inter Milan – Juventus", time: "Holnap 20:45 (CEST)", odds: "54.0% (1.85)", xG: "~2.40 xG", corners: "62.0% (1.55)", desc: "Olasz rangadó." },
-            ligue1: { title: "Paris Saint-Germain – Marseille", time: "Vasárnap 21:00 (CEST)", odds: "65.0% (1.54)", xG: "~3.80 xG", corners: "81.0% (1.25)", desc: "Francia rangadó." },
-            laliga: { title: "Real Madrid – Barcelona", time: "Vasárnap 16:15 (CEST)", odds: "49.0% (2.04)", xG: "~3.20 xG", corners: "74.0% (1.35)", desc: "El Clásico." },
-            portugal: { title: "Benfica – Sporting CP", time: "Hétfő 21:15 (CEST)", odds: "52.0% (1.92)", xG: "~2.80 xG", corners: "65.0% (1.40)", desc: "Lisszaboni rangadó." },
-            superlig: { title: "Galatasaray – Fenerbahce", time: "Vasárnap 19:00 (CEST)", odds: "53.0% (1.88)", xG: "~3.10 xG", corners: "79.0% (1.30)", desc: "Isztambuli derbi." }
+            europaliga: { title: "AS Roma – Porto", time: "Csütörtök 21:00", odds: "52.0% (1.92)", xG: "~2.75 xG", corners: "BTTS: Igen", desc: "Európa Liga rangadó elemzés." },
+            konferencia: { title: "Fiorentina – Real Betis", time: "Csütörtök 18:45", odds: "50.5% (1.98)", xG: "~2.60 xG", corners: "BTTS: Igen", desc: "Konferencia Liga mérkőzés." },
+            premier: { title: "Arsenal – Manchester City", time: "Szombat 16:00", odds: "51.2% (1.95)", xG: "~2.90 xG", corners: "BTTS: Igen", desc: "A Premier League rangadója." },
+            championship: { title: "Leeds United – Burnley", time: "Szombat 13:30", odds: "55.0% (1.81)", xG: "~2.60 xG", corners: "BTTS: Igen", desc: "Championship rangadó." },
+            fakupa: { title: "Manchester United – Liverpool", time: "Vasárnap 17:30", odds: "48.0% (2.08)", xG: "~3.10 xG", corners: "BTTS: Igen", desc: "FA kupa rangadó." },
+            eflkupa: { title: "Chelsea – Newcastle", time: "Kedd 20:45", odds: "53.5% (1.87)", xG: "~2.85 xG", corners: "BTTS: Igen", desc: "EFL kupa összecsapás." },
+            laliga: { title: "Real Madrid – Barcelona", time: "Vasárnap 16:15", odds: "49.0% (2.04)", xG: "~3.20 xG", corners: "BTTS: Igen", desc: "El Clásico." },
+            ligue1: { title: "Paris Saint-Germain – Marseille", time: "Vasárnap 21:00", odds: "65.0% (1.54)", xG: "~3.80 xG", corners: "BTTS: Igen", desc: "Francia rangadó." },
+            bundesliga: { title: "Bayern München – Dortmund", time: "Szombat 18:30", odds: "58.4% (1.71)", xG: "~3.45 xG", corners: "BTTS: Igen", desc: "Der Klassiker." },
+            seriea: { title: "Inter Milan – Juventus", time: "Vasárnap 20:45", odds: "54.0% (1.85)", xG: "~2.40 xG", corners: "BTTS: Igen", desc: "Olasz rangadó." },
+            gorog: { title: "Olympiacos – Panathinaikos", time: "Vasárnap 19:30", odds: "53.0% (1.88)", xG: "~2.50 xG", corners: "BTTS: Igen", desc: "Görög rangadó." },
+            holland: { title: "Ajax – PSV Eindhoven", time: "Vasárnap 14:30", odds: "51.0% (1.96)", xG: "~3.40 xG", corners: "BTTS: Igen", desc: "Holland rangadó." },
+            portugal: { title: "Benfica – Sporting CP", time: "Hétfő 21:15", odds: "52.0% (1.92)", xG: "~2.80 xG", corners: "BTTS: Igen", desc: "Lisszaboni rangadó." },
+            superlig: { title: "Galatasaray – Fenerbahce", time: "Vasárnap 19:00", odds: "53.0% (1.88)", xG: "~3.10 xG", corners: "BTTS: Igen", desc: "Isztambuli derbi." },
+            belga: { title: "Club Brugge – Anderlecht", time: "Vasárnap 18:30", odds: "54.5% (1.83)", xG: "~2.90 xG", corners: "BTTS: Igen", desc: "Belga rangadó." }
         };
 
         function switchLeague(leagueKey) {
             document.querySelectorAll('.league-btn').forEach(btn => {
-                btn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0";
+                if(!btn.id.includes('ucl')) {
+                    btn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 shadow-xl border border-sky-400 p-2.5 space-y-2 shrink-0";
+                }
             });
             const activeBtn = document.querySelector(`[data-league="${leagueKey}"]`);
-            if(activeBtn) activeBtn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-600 shadow-2xl border-2 border-white p-2.5 space-y-2 shrink-0 scale-105";
+            if(activeBtn) {
+                activeBtn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-600 shadow-2xl border-2 border-white p-2.5 space-y-2 shrink-0 scale-105";
+            }
 
             const found = allMatches.slice().reverse().find(m => m.league_name && m.league_name.toLowerCase().includes(leagueKey));
             if (found) {
@@ -373,6 +445,18 @@
                     document.getElementById('stat-xg').innerText = data.xG;
                     document.getElementById('stat-corners').innerText = data.corners;
                     document.getElementById('match-desc').innerText = data.desc;
+                    
+                    // Alapértelmezett fallback modal tartalom ha nincsen Supabase sor ehhez a ligához
+                    currentActiveMatch = {
+                        match_title: data.title,
+                        league_name: leagueKey.toUpperCase(),
+                        match_time: data.time,
+                        analysis_desc: data.desc,
+                        fair_odds_val: data.odds,
+                        xg_val: data.xG,
+                        special_val: data.corners,
+                        full_html: `<div style="font-family:sans-serif; padding:15px;"><h2>${data.title}</h2><p><strong>Liga:</strong> ${leagueKey.toUpperCase()}</p><p>${data.desc}</p><hr><p><strong>xG elemzés:</strong> ${data.xG}</p><p><strong>Fair Odds:</strong> ${data.odds}</p></div>`
+                    };
                 }
             }
         }
