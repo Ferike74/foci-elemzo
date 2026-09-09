@@ -42,8 +42,8 @@
             </div>
         </header>
 
-        <!-- Ligák Választó Sáv (Nincs overflow-x a fő burkolaton, hogy a lenyíló ne vágódjon le) -->
-        <div class="glass-panel rounded-2xl p-4 mb-6 shadow-xl relative flex items-center overflow-visible">
+        <!-- Ligák Választó Sáv -->
+        <div class="glass-panel rounded-2xl p-4 mb-6 shadow-xl relative flex items-center">
             <button onclick="scrollLeagues('left')" class="absolute left-2 z-20 bg-black/60 hover:bg-black/90 text-white p-2.5 rounded-full shadow-lg border border-white/20 transition backdrop-blur-md">❮</button>
 
             <div id="league-container" class="no-scrollbar flex items-center space-x-4 overflow-x-auto scroll-smooth px-10 w-full py-2">
@@ -61,7 +61,7 @@
                     Válassz a fenti ligákból...
                 </div>
             </div>
-            <span class="text-xs text-amber-300 font-semibold italic">💡 Kattints a ligára fent a meccsek listájához!</span>
+            <span class="text-xs text-amber-300 font-semibold italic">💡 Kattints bármelyik ligára fent a meccsek listájához!</span>
         </div>
 
         <!-- Fő Kártya -->
@@ -95,7 +95,7 @@
                 </div>
 
                 <p class="text-sm text-white bg-black/20 p-4 rounded-xl border border-white/10 mb-6 backdrop-blur-sm drop-shadow" id="match-desc">
-                    A részletes elemzés megnyitásához kattints a ligára, majd a lenyíló menüben a meccsre!
+                    A részletes elemzés megnyitásához kattints a ligára fent!
                 </p>
             </div>
 
@@ -111,6 +111,15 @@
         <footer class="mt-6 text-center text-xs text-gray-200 pb-2 drop-shadow">
             &copy; 2026 Sportfogadás Elemző Agent. Minden jog fenntartva.
         </footer>
+    </div>
+
+    <!-- Liga Meccsei Modal (Garantáltan megjelenik kattintásra) -->
+    <div id="league-matches-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-slate-900/95 border border-white/20 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl">
+            <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-2xl font-bold">&times;</button>
+            <h3 id="league-modal-title" class="text-lg font-black text-amber-400 mb-4 border-b border-white/10 pb-2">Válassz meccset</h3>
+            <div id="league-modal-list" class="space-y-2 max-h-64 overflow-y-auto no-scrollbar"></div>
+        </div>
     </div>
 
     <!-- Teljes HTML Elemzés Modal -->
@@ -220,65 +229,53 @@
             leaguesConfig.forEach(league => {
                 const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league));
 
-                const containerDiv = document.createElement('div');
-                containerDiv.className = "relative inline-block shrink-0";
-
                 const btn = document.createElement('button');
-                btn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 hover:bg-sky-600 shadow-xl border border-sky-400 p-2.5 space-y-1 cursor-pointer";
+                btn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 hover:bg-sky-600 shadow-xl border border-sky-400 p-2.5 space-y-1 shrink-0 cursor-pointer";
                 btn.innerHTML = `
                     <span class="text-2xl">${league.emoji}</span>
                     <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">${league.name}</span>
                     <span class="text-[9px] text-sky-200">Meccsek (${leagueMatches.length}) ▼</span>
                 `;
                 
-                const dropdownDiv = document.createElement('div');
-                dropdownDiv.id = `dropdown-${league.key}`;
-                dropdownDiv.className = "absolute left-0 top-full mt-2 w-72 bg-slate-900 border border-white/20 rounded-2xl shadow-2xl hidden z-50 p-2 backdrop-blur-md";
-                dropdownDiv.innerHTML = `
-                    <div class="text-[10px] uppercase font-bold text-amber-400 px-3 py-1 border-b border-white/10 mb-1">${league.name} Meccsek</div>
-                    <div id="list-${league.key}" class="space-y-1 max-h-48 overflow-y-auto no-scrollbar"></div>
-                `;
-
-                btn.onclick = (e) => {
-                    e.stopPropagation();
-                    const wasHidden = dropdownDiv.classList.contains('hidden');
-                    document.querySelectorAll('[id^="dropdown-"]').forEach(d => d.classList.add('hidden'));
-                    if (wasHidden) {
-                        dropdownDiv.classList.remove('hidden');
-                    }
+                btn.onclick = () => {
+                    openLeagueModal(league, leagueMatches);
                 };
 
-                containerDiv.appendChild(btn);
-                containerDiv.appendChild(dropdownDiv);
-                wrapper.appendChild(containerDiv);
-
-                const listEl = dropdownDiv.querySelector(`#list-${league.key}`);
-                if (leagueMatches.length > 0) {
-                    leagueMatches.forEach(m => {
-                        const mBtn = document.createElement('button');
-                        mBtn.className = "w-full text-left px-3 py-2 text-xs text-white hover:bg-sky-500/30 rounded-xl transition flex items-center justify-between cursor-pointer";
-                        mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-[10px] text-amber-400 font-bold">Megnyitás</span>`;
-                        
-                        mBtn.onclick = (e) => {
-                            e.stopPropagation();
-                            currentActiveMatch = m;
-                            renderMatch(m);
-                            dropdownDiv.classList.add('hidden');
-                            openFullAnalysisModal();
-                        };
-                        listEl.appendChild(mBtn);
-                    });
-                } else {
-                    const emptyEl = document.createElement('div');
-                    emptyEl.className = "px-3 py-2 text-xs text-gray-400 italic text-center";
-                    emptyEl.innerText = "Nincs még elemzett meccs";
-                    listEl.appendChild(emptyEl);
-                }
+                wrapper.appendChild(btn);
             });
+        }
 
-            window.onclick = () => {
-                document.querySelectorAll('[id^="dropdown-"]').forEach(d => d.classList.add('hidden'));
-            };
+        function openLeagueModal(league, leagueMatches) {
+            document.getElementById('league-modal-title').innerText = `${league.emoji} ${league.name} - Elemzett Meccsek`;
+            const listEl = document.getElementById('league-modal-list');
+            listEl.innerHTML = '';
+
+            if (leagueMatches.length > 0) {
+                leagueMatches.forEach(m => {
+                    const mBtn = document.createElement('button');
+                    mBtn.className = "w-full text-left px-4 py-3 text-sm text-white bg-black/40 hover:bg-sky-600/50 border border-white/10 rounded-xl transition flex items-center justify-between cursor-pointer shadow";
+                    mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-xs text-amber-400 font-bold">Megnyitás &rarr;</span>`;
+                    
+                    mBtn.onclick = () => {
+                        currentActiveMatch = m;
+                        renderMatch(m);
+                        closeLeagueModal();
+                        openFullAnalysisModal();
+                    };
+                    listEl.appendChild(mBtn);
+                });
+            } else {
+                const emptyEl = document.createElement('div');
+                emptyEl.className = "px-4 py-4 text-xs text-gray-400 italic text-center bg-black/20 rounded-xl";
+                emptyEl.innerText = "Ehhez a ligához nincsenek még feltöltött elemzések.";
+                listEl.appendChild(emptyEl);
+            }
+
+            document.getElementById('league-matches-modal').classList.remove('hidden');
+        }
+
+        function closeLeagueModal() {
+            document.getElementById('league-matches-modal').classList.add('hidden');
         }
 
         function renderMatch(item) {
