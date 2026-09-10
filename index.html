@@ -4,378 +4,122 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sportfogadás Elemző Agent | Prémium Platform</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS Client betöltése -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body {
-            background-image: url('stadion.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            margin: 0;
+            padding: 20px;
         }
-        .glass-panel {
-            background: rgba(5, 10, 20, 0.02);
-            backdrop-filter: blur(3px);
-            -webkit-backdrop-filter: blur(3px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
         }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        h1 {
+            text-align: center;
+            color: #38bdf8;
+            margin-bottom: 30px;
+        }
+        .match-grid {
+            display: grid;
+            gap: 20px;
+        }
+        .match-card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+        .league-badge {
+            background-color: #0284c7;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        .match-time {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        .match-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #f1f5f9;
+        }
     </style>
 </head>
-<body class="min-h-screen text-white font-sans antialiased flex flex-col justify-between">
+<body>
 
-    <div class="relative z-10 flex flex-col min-h-screen p-4 md:p-6 max-w-7xl mx-auto w-full">
+<div class="container">
+    <h1>Legfrissebb Meccselemzések</h1>
+    <div id="analyses-container" class="match-grid">
+        <p style="text-align: center; color: #94a3b8;">Adatok betöltése...</p>
+    </div>
+</div>
+
+<script>
+    // Supabase kapcsolat konfigurációja
+    const SUPABASE_URL = 'https://gyozibfurwsbdutwmgrl.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_sz4cCjpwZ6pFNK8J-3d80Q_T8GfpSUy';
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function loadMatchAnalyses() {
+        const container = document.getElementById('analyses-container');
         
-        <!-- Fejléc -->
-        <header class="glass-panel rounded-full px-6 py-3 flex items-center justify-between shadow-2xl mb-6">
-            <div class="flex items-center space-x-3">
-                <span class="text-2xl">⚽</span>
-                <span class="font-extrabold tracking-wider text-lg bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent drop-shadow">EURÓPAI LIGÁK FOCI ELEMZÉSE</span>
-            </div>
-            
-            <div class="flex items-center space-x-4">
-                <span id="user-status" class="text-xs text-gray-200 hidden md:inline drop-shadow"></span>
-                <button onclick="openAuthModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-5 py-2 rounded-full shadow-lg shadow-red-600/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
-                    3 Nap Ingyenes Próba
-                </button>
-            </div>
-        </header>
-
-        <!-- Ligák Választó Sáv -->
-        <div class="glass-panel rounded-2xl p-4 mb-6 shadow-xl relative flex items-center">
-            <button onclick="scrollLeagues('left')" class="absolute left-2 z-20 bg-black/60 hover:bg-black/90 text-white p-2.5 rounded-full shadow-lg border border-white/20 transition backdrop-blur-md">❮</button>
-
-            <div id="league-container" class="no-scrollbar flex items-center space-x-4 overflow-x-auto scroll-smooth px-10 w-full py-2">
-                <div id="league-buttons-wrapper" class="flex items-center space-x-4"></div>
-            </div>
-
-            <button onclick="scrollLeagues('right')" class="absolute right-2 z-20 bg-black/60 hover:bg-black/90 text-white p-2.5 rounded-full shadow-lg border border-white/20 transition backdrop-blur-md">❯</button>
-        </div>
-
-        <!-- Aktív Meccs sáv -->
-        <div class="mb-4 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <span class="text-xs uppercase tracking-widest text-red-400 font-bold drop-shadow-md">Kiválasztott Elemzés:</span>
-                <div class="bg-red-600 text-white text-xs px-3 py-1 rounded-full font-semibold shadow" id="badge-match-title">
-                    Válassz a fenti ligákból...
-                </div>
-            </div>
-            <span class="text-xs text-amber-300 font-semibold italic">💡 Kattints bármelyik ligára fent a meccsek listájához!</span>
-        </div>
-
-        <!-- Fő Kártya -->
-        <main class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl flex-1 flex flex-col justify-between">
-            <div>
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-4 mb-6">
-                    <div>
-                        <span class="text-xs text-red-400 uppercase font-bold tracking-wider drop-shadow" id="match-league-subtitle">Éles Elemzés</span>
-                        <h1 class="text-2xl md:text-3xl font-black mt-1 drop-shadow-md" id="match-title">Válassz egy ligát a fenti sávból...</h1>
-                    </div>
-                    <div class="mt-2 md:mt-0 text-sm text-white bg-black/20 px-4 py-1.5 rounded-xl border border-white/10 backdrop-blur-sm" id="match-time">--</div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                    <div class="bg-black/20 border border-green-500/40 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
-                        <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Valószínűség (Fair Odds)</div>
-                        <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-odds">--</div>
-                    </div>
-                    <div class="bg-black/20 border border-green-500/40 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
-                        <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Várható Gólok (xG Átlag)</div>
-                        <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-xg">--</div>
-                    </div>
-                    <div class="bg-black/20 border border-green-500/40 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
-                        <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Statisztikai Mutató</div>
-                        <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-corners">--</div>
-                    </div>
-                    <div class="bg-black/20 border border-green-500/40 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
-                        <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Szimulációs Minőség</div>
-                        <div class="text-2xl font-black text-white mt-1 drop-shadow-md">100 000 Futás</div>
-                    </div>
-                </div>
-
-                <p class="text-sm text-white bg-black/20 p-4 rounded-xl border border-white/10 mb-6 backdrop-blur-sm drop-shadow" id="match-desc">
-                    A részletes elemzés megnyitásához kattints a ligára fent!
-                </p>
-            </div>
-
-            <div onclick="openAuthModal()" class="bg-gradient-to-r from-red-950/30 via-black/20 to-red-950/30 border border-red-500/40 rounded-2xl p-5 text-center cursor-pointer hover:border-red-400 transition shadow-2xl backdrop-blur-sm">
-                <div class="text-amber-400 font-bold text-sm flex items-center justify-center space-x-2 mb-1 drop-shadow">
-                    <span>🔒</span>
-                    <span>TELJES ODDS MÁTRIX ZÁROLVA</span>
-                </div>
-                <p class="text-xs text-white drop-shadow">Regisztrálj most és tekintsd meg mind a 40+ kielemzett fogadási piacot a 3 napos ingyenes próbaidőszakkal!</p>
-            </div>
-        </main>
-
-        <footer class="mt-6 text-center text-xs text-gray-200 pb-2 drop-shadow">
-            &copy; 2026 Sportfogadás Elemző Agent. Minden jog fenntartva.
-        </footer>
-    </div>
-
-    <!-- Liga Meccsei Modal -->
-    <div id="league-matches-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel bg-slate-900/95 border border-white/20 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl">
-            <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-2xl font-bold">&times;</button>
-            <h3 id="league-modal-title" class="text-lg font-black text-amber-400 mb-4 border-b border-white/10 pb-2">Válassz meccset</h3>
-            <div id="league-modal-list" class="space-y-2 max-h-64 overflow-y-auto no-scrollbar"></div>
-        </div>
-    </div>
-
-    <!-- Teljes HTML Elemzés Modal -->
-    <div id="full-analysis-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 md:p-6">
-        <div class="bg-[#f0f2f5] text-[#1c1e21] w-full max-w-5xl max-h-[92vh] rounded-3xl p-4 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto font-sans">
-            <button onclick="closeFullAnalysisModal()" class="absolute top-4 right-6 text-slate-700 hover:text-red-600 text-4xl font-black z-50 bg-white/90 px-3 py-1 rounded-full shadow">&times;</button>
-            <div id="modal-html-container" class="mt-2"></div>
-            <div class="mt-6 text-center border-t pt-4 bg-[#f0f2f5]">
-                <button onclick="closeFullAnalysisModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-lg transition text-xs uppercase tracking-wider">
-                    Bezárás
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Regisztrációs Modal -->
-    <div id="auth-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-white/20 shadow-2xl">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-xl font-bold">&times;</button>
-            <div class="text-center mb-6">
-                <span class="text-3xl">⚽</span>
-                <h3 class="text-xl font-extrabold mt-2 drop-shadow">Kezdd el a 3 napos próbaidőszakot</h3>
-            </div>
-            <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Email cím</label>
-                    <input type="email" id="email" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="pelda@email.hu">
-                </div>
-                <div>
-                    <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Jelszó</label>
-                    <input type="password" id="password" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="••••••••">
-                </div>
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-red-600/40 transition text-sm uppercase tracking-wider">
-                    Fiók létrehozása / Belépés
-                </button>
-            </form>
-            <div id="auth-message" class="text-center text-xs mt-4"></div>
-        </div>
-    </div>
-
-    <script>
-        const SUPABASE_URL = 'https://gyozibfurwsbdutwmgrl.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_sz4cCjpwZ6pFNK8J-3d80Q_T8GfpSUy';
-        
-        let supabaseClient = null;
         try {
-            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        } catch (e) {
-            console.error("Supabase hiba:", e);
-        }
+            const { data, error } = await supabaseClient
+                .from('match_analyses')
+                .select('*')
+                .order('id', { ascending: false })
+                .limit(10);
 
-        let allMatches = [];
-        let currentActiveMatch = null;
-
-        const leaguesConfig = [
-            { key: "ucl", name: "UEFA Bajnokok Ligája", emoji: "🏆", synonyms: ["bajnokok ligája", "champions league", "ucl", "bl"] },
-            { key: "europaliga", name: "UEFA Európa Liga", emoji: "🥈", synonyms: ["európa liga", "europa league", "el"] },
-            { key: "konferencia", name: "UEFA Konferencia Liga", emoji: "🥉", synonyms: ["konferencia liga", "conference league"] },
-            { key: "premier", name: "Anglia Premier Liga", emoji: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", synonyms: ["premier league", "anglia premier", "premier"] },
-            { key: "championship", name: "Anglia Championship", emoji: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", synonyms: ["championship"] },
-            { key: "fakupa", name: "Anglia FA Kupa", emoji: "🏆", synonyms: ["fa kupa", "fa cup"] },
-            { key: "eflkupa", name: "Anglia EFL Kupa", emoji: "🍺", synonyms: ["efl kupa", "efl cup", "league cup"] },
-            { key: "laliga", name: "Spanyol La Liga", emoji: "🇪🇸", synonyms: ["la liga", "spanyol", "laliga"] },
-            { key: "ligue1", name: "Francia Liga 1", emoji: "🇫🇷", synonyms: ["liga 1", "ligue 1", "francia"] },
-            { key: "bundesliga", name: "Német Bundesliga", emoji: "🇩🇪", synonyms: ["bundesliga", "német"] },
-            { key: "seriea", name: "Olasz Serie A", emoji: "🇮🇹", synonyms: ["serie a", "olasz"] },
-            { key: "gorog", name: "Görög Szuperliga", emoji: "🇬🇷", synonyms: ["görög", "szuperliga"] },
-            { key: "holland", name: "Holland Eredivisie", emoji: "🇳🇱", synonyms: ["holland", "eredivisie"] },
-            { key: "portugal", name: "Portugál Liga", emoji: "🇵🇹", synonyms: ["portugál", "liga portugal"] },
-            { key: "superlig", name: "Török Süper Lig", emoji: "🇹🇷", synonyms: ["török", "süper lig", "super lig"] },
-            { key: "belga", name: "Belgium Jupiler Pro", emoji: "🇧🇪", synonyms: ["belga", "jupiler"] }
-        ];
-
-        window.addEventListener('DOMContentLoaded', async () => {
-            if (supabaseClient) {
-                const { data: { session } } = await supabaseClient.auth.getSession();
-                if (session) {
-                    document.getElementById('user-status').innerText = `Bejelentkezve: ${session.user.email}`;
-                }
-
-                const { data: analyses, error } = await supabaseClient
-                    .from('match_analyses')
-                    .select('*')
-                    .order('id', { ascending: true });
-
-                if (!error && analyses && analyses.length > 0) {
-                    allMatches = analyses.filter(m => m.match_title && m.match_title.trim() !== "");
-                    buildLeagueRibbon(allMatches);
-                } else {
-                    buildLeagueRibbon([]);
-                }
-            } else {
-                buildLeagueRibbon([]);
-            }
-        });
-
-        function matchBelongsToLeague(dbLeagueName, leagueConfig) {
-            if (!dbLeagueName) return false;
-            const lowerDb = dbLeagueName.toLowerCase();
-            return leagueConfig.synonyms.some(syn => lowerDb.includes(syn)) || lowerDb.includes(leagueConfig.name.toLowerCase());
-        }
-
-        function buildLeagueRibbon(matches) {
-            const wrapper = document.getElementById('league-buttons-wrapper');
-            wrapper.innerHTML = '';
-
-            leaguesConfig.forEach(league => {
-                const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league));
-
-                const btn = document.createElement('button');
-                btn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 hover:bg-sky-600 shadow-xl border border-sky-400 p-2.5 space-y-1 shrink-0 cursor-pointer";
-                btn.innerHTML = `
-                    <span class="text-2xl">${league.emoji}</span>
-                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">${league.name}</span>
-                    <span class="text-[9px] text-sky-200">Meccsek (${leagueMatches.length}) ▼</span>
-                `;
-                
-                btn.onclick = () => {
-                    openLeagueModal(league, leagueMatches);
-                };
-
-                wrapper.appendChild(btn);
-            });
-        }
-
-        function openLeagueModal(league, leagueMatches) {
-            document.getElementById('league-modal-title').innerText = `${league.emoji} ${league.name} - Elemzett Meccsek`;
-            const listEl = document.getElementById('league-modal-list');
-            listEl.innerHTML = '';
-
-            if (leagueMatches.length > 0) {
-                leagueMatches.forEach(m => {
-                    const mBtn = document.createElement('button');
-                    mBtn.className = "w-full text-left px-4 py-3 text-sm text-white bg-black/40 hover:bg-sky-600/50 border border-white/10 rounded-xl transition flex items-center justify-between cursor-pointer shadow";
-                    mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-xs text-amber-400 font-bold">Megnyitás &rarr;</span>`;
-                    
-                    mBtn.onclick = () => {
-                        currentActiveMatch = m;
-                        renderMatch(m);
-                        closeLeagueModal();
-                        openFullAnalysisModal();
-                    };
-                    listEl.appendChild(mBtn);
-                });
-            } else {
-                const emptyEl = document.createElement('div');
-                emptyEl.className = "px-4 py-4 text-xs text-gray-400 italic text-center bg-black/20 rounded-xl";
-                emptyEl.innerText = "Ehhez a ligához nincsenek még feltöltött elemzések.";
-                listEl.appendChild(emptyEl);
-            }
-
-            document.getElementById('league-matches-modal').classList.remove('hidden');
-        }
-
-        function closeLeagueModal() {
-            document.getElementById('league-matches-modal').classList.add('hidden');
-        }
-
-        function renderMatch(item) {
-            if (!item) return;
-            currentActiveMatch = item;
-            document.getElementById('match-title').innerText = item.match_title || "Ismeretlen meccs";
-            document.getElementById('badge-match-title').innerText = item.match_title || "Ismeretlen meccs";
-            document.getElementById('match-time').innerText = item.match_time || "Közelben";
-            document.getElementById('match-league-subtitle').innerText = item.league_name || "Éles Elemzés";
-            document.getElementById('stat-odds').innerText = item.fair_odds_val || "1.85";
-            document.getElementById('stat-xg').innerText = item.xg_val || "~3.00 xG";
-            document.getElementById('stat-corners').innerText = item.special_val || "BTTS: Igen";
-            document.getElementById('match-desc').innerText = item.analysis_desc || "Részletes elemzés.";
-        }
-
-        function openFullAnalysisModal() {
-            if (!currentActiveMatch) return;
-            const container = document.getElementById('modal-html-container');
-            
-            let htmlContent = currentActiveMatch.full_html || "";
-
-            // Eltávolítjuk a régi h1-et, ha benne van
-            htmlContent = htmlContent.replace(/<h1>.*?<\/h1>/gi, '');
-
-            // Kiemeljük a meccs nevét (h2) és a dátumot (time) erős félkövérrel és mérettel, ha esetleg nem lennének
-            // De mivel a HTML-ben benne van a match-header, csak biztosítjuk a CSS-t, hogy a h2 és a time határozottan ki legyen emelve.
-
-            let styledHtml = `
-                <style>
-                  .analysis-body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; background-color: #f0f2f5; color: #1c1e21; margin: 0; padding: 10px; }
-                  .analysis-container { max-width: 950px; margin: 0 auto; }
-                  .analysis-title { text-align: center; color: #003366; margin-bottom: 25px; font-size: 26px; font-weight: bold; }
-                  .match-card { background: #ffffff; border-radius: 10px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 6px solid #0056b3; }
-                  .match-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; border-bottom: 2px solid #edf2f7; padding-bottom: 10px; margin-bottom: 15px; }
-                  
-                  /* Kiemelt Meccs Név */
-                  .match-header h2 { margin: 0; color: #003366; font-size: 22px !important; font-weight: 900 !important; flex-grow: 1; letter-spacing: -0.5px; }
-                  
-                  .league { background: #e2e8f0; color: #334155; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 4px; margin-right: 10px; }
-                  
-                  /* Kiemelt Dátum és Időpont */
-                  .match-header .time { font-size: 15px !important; color: #0f172a !important; font-weight: 700 !important; background: #e2e8f0; padding: 4px 8px; border-radius: 4px; }
-                  
-                  .odds-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
-                  .odds-table th { background-color: #003366; color: #ffffff; padding: 9px 12px; text-align: center; font-weight: 600; }
-                  .odds-table td { padding: 9px 12px; text-align: center; border-bottom: 1px solid #e2e8f0; }
-                  .odds-table tr:nth-child(even) { background-color: #f8fafc; }
-                  .odds-table td:first-child { text-align: left; }
-                  .analysis-box { background-color: #f8fafc; border-radius: 6px; padding: 12px 16px; margin-top: 12px; border: 1px solid #e2e8f0; }
-                  .analysis-box p { margin: 6px 0; font-size: 14px; line-height: 1.5; }
-                  .analysis-box strong { color: #0f172a; }
-                </style>
-                <div class="analysis-body">
-                  <div class="analysis-container">
-                    <div class="analysis-title">Napi Sportfogadási Elemzések</div>
-                    ${htmlContent}
-                  </div>
-                </div>
-            `;
-
-            container.innerHTML = styledHtml;
-            document.getElementById('full-analysis-modal').classList.remove('hidden');
-        }
-
-        function closeFullAnalysisModal() {
-            document.getElementById('full-analysis-modal').classList.add('hidden');
-        }
-
-        function openAuthModal() { document.getElementById('auth-modal').classList.remove('hidden'); }
-        function closeAuthModal() { document.getElementById('auth-modal').classList.add('hidden'); }
-
-        async function handleAuth(event) {
-            event.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const msgEl = document.getElementById('auth-message');
-            msgEl.innerHTML = '<span class="text-gray-200">Folyamatban...</span>';
-            let { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (error) {
-                let signUpRes = await supabaseClient.auth.signUp({ email, password });
-                if (signUpRes.error) {
-                    msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${signUpRes.error.message}</span>`;
-                } else {
-                    msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres regisztráció!</span>';
-                }
-            } else {
-                msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres bejelentkezés!</span>';
-                setTimeout(() => { closeAuthModal(); location.reload(); }, 1500);
+                throw error;
             }
-        }
 
-        function scrollLeagues(direction) {
-            const container = document.getElementById('league-container');
-            const scrollAmount = 300;
-            if (direction === 'left') {
-                container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-            } else {
-                container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            if (!data || data.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #94a3b8;">Jelenleg nincsenek elérhető elemzések.</p>';
+                return;
             }
+
+            container.innerHTML = '';
+
+            data.forEach(match => {
+                const card = document.createElement('div');
+                card.className = 'match-card';
+                card.innerHTML = `
+                    <div class="match-header">
+                        <span class="league-badge">${match.league_name || 'Ismeretlen bajnokság'}</span>
+                        <span class="match-time">${match.match_time || ''}</span>
+                    </div>
+                    <div class="match-title">${match.match_title || 'Mérkőzés'}</div>
+                `;
+                container.appendChild(card);
+            });
+
+        } catch (err) {
+            console.error('Hiba történt az adatok lekérésekor:', err);
+            container.innerHTML = '<p style="text-align: center; color: #f87171;">Hiba történt az adatok betöltése közben.</p>';
         }
-    </script>
+    }
+
+    // Oldal betöltésekor azonnal futtatás
+    document.addEventListener('DOMContentLoaded', loadMatchAnalyses);
+</script>
+
 </body>
 </html>
