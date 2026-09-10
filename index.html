@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Európai Ligák Foci Elemzése</title>
-    <!-- Supabase JS Client betöltése -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body {
@@ -91,20 +90,19 @@
 <div class="container">
     <h1>Európai Ligák Foci Elemzése</h1>
     
-    <!-- Liga gombok -->
     <div class="leagues-nav">
-        <button class="league-btn" onclick="filterLeague('Spanyol La Liga', this)">ES - Spanyol La Liga</button>
-        <button class="league-btn" onclick="filterLeague('Francia Liga 1', this)">FR - Francia Liga 1</button>
-        <button class="league-btn" onclick="filterLeague('Német Bundesliga', this)">DE - Német Bundesliga</button>
-        <button class="league-btn" onclick="filterLeague('Olasz Serie A', this)">IT - Olasz Serie A</button>
-        <button class="league-btn" onclick="filterLeague('Görög Szuperliga', this)">GR - Görög Szuperliga</button>
-        <button class="league-btn" onclick="filterLeague('Holland Eredivisie', this)">NL - Holland Eredivisie</button>
-        <button class="league-btn" onclick="filterLeague('Portugál Liga', this)">PT - Portugál Liga</button>
+        <button class="league-btn active" onclick="loadAnalyses('all', this)">Összes Elemzés</button>
+        <button class="league-btn" onclick="loadAnalyses('Spanyol La Liga', this)">Spanyol La Liga</button>
+        <button class="league-btn" onclick="loadAnalyses('Francia Liga 1', this)">Francia Liga 1</button>
+        <button class="league-btn" onclick="loadAnalyses('Német Bundesliga', this)">Német Bundesliga</button>
+        <button class="league-btn" onclick="loadAnalyses('Olasz Serie A', this)">Olasz Serie A</button>
+        <button class="league-btn" onclick="loadAnalyses('Görög Szuperliga', this)">Görög Szuperliga</button>
+        <button class="league-btn" onclick="loadAnalyses('Holland Eredivisie', this)">Holland Eredivisie</button>
+        <button class="league-btn" onclick="loadAnalyses('Portugál Liga', this)">Portugál Liga</button>
     </div>
 
-    <!-- Elemzések listája -->
     <div id="analyses-container">
-        <p style="text-align: center; color: #94a3b8;">Válassz egy ligát a fenti sávból a meccsek megtekintéséhez.</p>
+        <p style="text-align: center; color: #94a3b8;">Adatok betöltése...</p>
     </div>
 </div>
 
@@ -114,8 +112,7 @@
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    async function filterLeague(leagueName, buttonElement) {
-        // Aktív gomb stílus váltás
+    async function loadAnalyses(leagueName, buttonElement) {
         document.querySelectorAll('.league-btn').forEach(btn => btn.classList.remove('active'));
         if (buttonElement) buttonElement.classList.add('active');
 
@@ -123,16 +120,18 @@
         container.innerHTML = '<p style="text-align: center; color: #94a3b8;">Adatok betöltése...</p>';
 
         try {
-            const { data, error } = await supabaseClient
-                .from('match_analyses')
-                .select('*')
-                .eq('league_name', leagueName)
-                .order('id', { ascending: false });
+            let query = supabaseClient.from('match_analyses').select('*').order('id', { ascending: false });
+            
+            if (leagueName !== 'all') {
+                query = query.eq('league_name', leagueName);
+            }
+
+            const { data, error } = await query;
 
             if (error) throw error;
 
             if (!data || data.length === 0) {
-                container.innerHTML = `<p style="text-align: center; color: #94a3b8;">Jelenleg nincsenek elemzések ehhez a ligához (${leagueName}).</p>`;
+                container.innerHTML = `<p style="text-align: center; color: #94a3b8;">Jelenleg nincsenek elemzések ebben a kategóriában.</p>`;
                 return;
             }
 
@@ -143,12 +142,12 @@
                 card.className = 'match-card';
                 card.innerHTML = `
                     <div class="match-header">
-                        <span class="league-badge">${match.league_name}</span>
+                        <span class="league-badge">${match.league_name || 'Ismeretlen'}</span>
                         <span class="match-time">${match.match_time || ''}</span>
                     </div>
-                    <div class="match-title">${match.match_title}</div>
+                    <div class="match-title">${match.match_title || 'Mérkőzés'}</div>
                     <div class="analysis-content">
-                        ${match.analysis_desc || 'Részletes elemzés elérhető a Google Drive dokumentumban.'}
+                        ${match.analysis_desc || 'Részletes elemzés elérhető.'}
                     </div>
                 `;
                 container.appendChild(card);
@@ -159,6 +158,9 @@
             container.innerHTML = '<p style="text-align: center; color: #f87171;">Hiba történt az adatok betöltése közben.</p>';
         }
     }
+
+    // Oldal betöltésekor az összes elemzés betöltése
+    document.addEventListener('DOMContentLoaded', () => loadAnalyses('all'));
 </script>
 
 </body>
