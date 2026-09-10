@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sportfogadás Elemző Agent | Prémium Platform</title>
+    <title>Európai Ligák Foci Elemzése</title>
     <!-- Supabase JS Client betöltése -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -15,23 +15,42 @@
             padding: 20px;
         }
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
         }
         h1 {
             text-align: center;
             color: #38bdf8;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
-        .match-grid {
-            display: grid;
-            gap: 20px;
+        .leagues-nav {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .league-btn {
+            background-color: #0284c7;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .league-btn:hover, .league-btn.active {
+            background-color: #0369a1;
+            border: 1px solid #38bdf8;
         }
         .match-card {
             background-color: #1e293b;
             border: 1px solid #334155;
             border-radius: 8px;
             padding: 20px;
+            margin-bottom: 15px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
         .match-header {
@@ -58,41 +77,62 @@
             font-size: 1.25rem;
             font-weight: bold;
             color: #f1f5f9;
+            margin-bottom: 10px;
+        }
+        .analysis-content {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Legfrissebb Meccselemzések</h1>
-    <div id="analyses-container" class="match-grid">
-        <p style="text-align: center; color: #94a3b8;">Adatok betöltése...</p>
+    <h1>Európai Ligák Foci Elemzése</h1>
+    
+    <!-- Liga gombok -->
+    <div class="leagues-nav">
+        <button class="league-btn" onclick="filterLeague('Spanyol La Liga', this)">ES - Spanyol La Liga</button>
+        <button class="league-btn" onclick="filterLeague('Francia Liga 1', this)">FR - Francia Liga 1</button>
+        <button class="league-btn" onclick="filterLeague('Német Bundesliga', this)">DE - Német Bundesliga</button>
+        <button class="league-btn" onclick="filterLeague('Olasz Serie A', this)">IT - Olasz Serie A</button>
+        <button class="league-btn" onclick="filterLeague('Görög Szuperliga', this)">GR - Görög Szuperliga</button>
+        <button class="league-btn" onclick="filterLeague('Holland Eredivisie', this)">NL - Holland Eredivisie</button>
+        <button class="league-btn" onclick="filterLeague('Portugál Liga', this)">PT - Portugál Liga</button>
+    </div>
+
+    <!-- Elemzések listája -->
+    <div id="analyses-container">
+        <p style="text-align: center; color: #94a3b8;">Válassz egy ligát a fenti sávból a meccsek megtekintéséhez.</p>
     </div>
 </div>
 
 <script>
-    // Supabase kapcsolat konfigurációja
     const SUPABASE_URL = 'https://gyozibfurwsbdutwmgrl.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_sz4cCjpwZ6pFNK8J-3d80Q_T8GfpSUy';
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    async function loadMatchAnalyses() {
+    async function filterLeague(leagueName, buttonElement) {
+        // Aktív gomb stílus váltás
+        document.querySelectorAll('.league-btn').forEach(btn => btn.classList.remove('active'));
+        if (buttonElement) buttonElement.classList.add('active');
+
         const container = document.getElementById('analyses-container');
-        
+        container.innerHTML = '<p style="text-align: center; color: #94a3b8;">Adatok betöltése...</p>';
+
         try {
             const { data, error } = await supabaseClient
                 .from('match_analyses')
                 .select('*')
-                .order('id', { ascending: false })
-                .limit(10);
+                .eq('league_name', leagueName)
+                .order('id', { ascending: false });
 
-            if (error) {
-                throw error;
-            }
+            if (error) throw error;
 
             if (!data || data.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #94a3b8;">Jelenleg nincsenek elérhető elemzések.</p>';
+                container.innerHTML = `<p style="text-align: center; color: #94a3b8;">Jelenleg nincsenek elemzések ehhez a ligához (${leagueName}).</p>`;
                 return;
             }
 
@@ -103,22 +143,22 @@
                 card.className = 'match-card';
                 card.innerHTML = `
                     <div class="match-header">
-                        <span class="league-badge">${match.league_name || 'Ismeretlen bajnokság'}</span>
+                        <span class="league-badge">${match.league_name}</span>
                         <span class="match-time">${match.match_time || ''}</span>
                     </div>
-                    <div class="match-title">${match.match_title || 'Mérkőzés'}</div>
+                    <div class="match-title">${match.match_title}</div>
+                    <div class="analysis-content">
+                        ${match.analysis_desc || 'Részletes elemzés elérhető a Google Drive dokumentumban.'}
+                    </div>
                 `;
                 container.appendChild(card);
             });
 
         } catch (err) {
-            console.error('Hiba történt az adatok lekérésekor:', err);
+            console.error('Hiba az adatok lekérésekor:', err);
             container.innerHTML = '<p style="text-align: center; color: #f87171;">Hiba történt az adatok betöltése közben.</p>';
         }
     }
-
-    // Oldal betöltésekor azonnal futtatás
-    document.addEventListener('DOMContentLoaded', loadMatchAnalyses);
 </script>
 
 </body>
