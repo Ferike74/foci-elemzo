@@ -123,7 +123,7 @@
         </footer>
     </div>
 
-    <!-- Liga Meccsei Modal (Átlátszóbb háttérrel) -->
+    <!-- Liga Meccsei Modal -->
     <div id="league-matches-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel bg-slate-950/50 border border-white/20 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl backdrop-blur-md">
             <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-2xl font-bold">&times;</button>
@@ -315,6 +315,12 @@
             
             let htmlContent = currentActiveMatch.full_html || "";
 
+            // Biztos ami biztos: kiszűrjük a teljes HTML kereteket, ha az adatbázisban úgy lennének benne
+            htmlContent = htmlContent.replace(/<!DOCTYPE[^>]*>/gi, '');
+            htmlContent = htmlContent.replace(/<\/?html[^>]*>/gi, '');
+            htmlContent = htmlContent.replace(/<\/?head[^>]*>[\s\S]*?<\/head>/gi, '');
+            htmlContent = htmlContent.replace(/<\/?body[^>]*>/gi, '');
+            htmlContent = htmlContent.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
             htmlContent = htmlContent.replace(/<h1>.*?<\/h1>/gi, '');
 
             let styledHtml = `
@@ -324,13 +330,9 @@
                   .analysis-title { text-align: center; color: #003366; margin-bottom: 25px; font-size: 26px; font-weight: bold; }
                   .match-card { background: #ffffff; border-radius: 10px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 6px solid #0056b3; }
                   .match-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; border-bottom: 2px solid #edf2f7; padding-bottom: 10px; margin-bottom: 15px; }
-                  
                   .match-header h2 { margin: 0; color: #003366; font-size: 22px !important; font-weight: 900 !important; flex-grow: 1; letter-spacing: -0.5px; }
-                  
                   .league { background: #e2e8f0; color: #334155; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 4px; margin-right: 10px; }
-                  
                   .match-header .time { font-size: 15px !important; color: #0f172a !important; font-weight: 700 !important; background: #e2e8f0; padding: 4px 8px; border-radius: 4px; }
-                  
                   .odds-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
                   .odds-table th { background-color: #003366; color: #ffffff; padding: 9px 12px; text-align: center; font-weight: 600; }
                   .odds-table td { padding: 9px 12px; text-align: center; border-bottom: 1px solid #e2e8f0; }
