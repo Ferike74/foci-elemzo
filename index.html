@@ -297,11 +297,7 @@
             
             let htmlContent = currentActiveMatch.full_html || "";
 
-            // Eltávolítjuk a régi h1-et, ha benne van
             htmlContent = htmlContent.replace(/<h1>.*?<\/h1>/gi, '');
-
-            // Kiemeljük a meccs nevét (h2) és a dátumot (time) erős félkövérrel és mérettel, ha esetleg nem lennének
-            // De mivel a HTML-ben benne van a match-header, csak biztosítjuk a CSS-t, hogy a h2 és a time határozottan ki legyen emelve.
 
             let styledHtml = `
                 <style>
@@ -311,12 +307,10 @@
                   .match-card { background: #ffffff; border-radius: 10px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 6px solid #0056b3; }
                   .match-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; border-bottom: 2px solid #edf2f7; padding-bottom: 10px; margin-bottom: 15px; }
                   
-                  /* Kiemelt Meccs Név */
                   .match-header h2 { margin: 0; color: #003366; font-size: 22px !important; font-weight: 900 !important; flex-grow: 1; letter-spacing: -0.5px; }
                   
                   .league { background: #e2e8f0; color: #334155; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 4px; margin-right: 10px; }
                   
-                  /* Kiemelt Dátum és Időpont */
                   .match-header .time { font-size: 15px !important; color: #0f172a !important; font-weight: 700 !important; background: #e2e8f0; padding: 4px 8px; border-radius: 4px; }
                   
                   .odds-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
