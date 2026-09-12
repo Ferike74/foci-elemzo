@@ -336,10 +336,14 @@
             document.getElementById('match-time').innerText = item.match_time || "Közelben";
             document.getElementById('match-league-subtitle').innerText = item.league_name || "Éles Elemzés";
             
-            // Itt kötjük be dinamikusan a meccshez tartozó valós adatokat az adatbázisból:
-            document.getElementById('stat-odds').innerText = item.fair_odds_val || item.odds_val || "1.85";
-            document.getElementById('stat-xg').innerText = item.xg_val || "~3.00 xG";
-            document.getElementById('stat-corners').innerText = item.special_val || item.stats_val || "BTTS: Igen";
+            // Biztosra megyünk: átvizsgáljuk az összes lehetséges oszlopnevet a Supabase táblából a statisztikákhoz
+            const oddsVal = item.fair_odds_val || item.odds_val || item.fair_odds || item.odds || item.valoszinuseg || "1.85";
+            const xgVal = item.xg_val || item.xg || item.varhato_golok || "~3.00 xG";
+            const statsVal = item.special_val || item.stats_val || item.statisztikai_mutato || item.btts || item.mutato || "BTTS: Igen";
+
+            document.getElementById('stat-odds').innerText = oddsVal;
+            document.getElementById('stat-xg').innerText = xgVal;
+            document.getElementById('stat-corners').innerText = statsVal;
             
             let desc = item.analysis_desc || "";
             if (desc.includes("<!DOCTYPE") || desc.includes("<html")) {
