@@ -289,11 +289,10 @@
                 if (rotationQueue.length === 0) return;
                 rotationIndex = (rotationIndex + 1) % rotationQueue.length;
                 renderMatch(rotationQueue[rotationIndex]);
-            }, 5000);
+            }, 15000);
         }
 
         function openLeagueModal(league, leagueMatches) {
-            // Ha a felhasználó rákattint egy ligára, megállítjuk az automatikus váltást, hogy nyugodtan választhasson
             if (rotationInterval) clearInterval(rotationInterval);
 
             document.getElementById('league-modal-title').innerText = `${league.name} - Elemzett Meccsek`;
@@ -326,7 +325,6 @@
 
         function closeLeagueModal() {
             document.getElementById('league-matches-modal').classList.add('hidden');
-            // Újraindítjuk a rotációt bezárás után
             startRotation();
         }
 
