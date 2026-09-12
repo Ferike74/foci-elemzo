@@ -71,11 +71,11 @@
                     Válassz a fenti ligákból...
                 </div>
             </div>
-            <span class="text-xs text-amber-300 font-semibold italic">💡 Kattints bármelyik ligára fent a meccsek listájához!</span>
+            <span class="text-xs text-amber-300 font-semibold italic">💡 Kattints bármelyik ligára fent a meccsek listájához! (Vagy a kártyára a részletekért)</span>
         </div>
 
-        <!-- Fő Kártya -->
-        <main class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl flex-1 flex flex-col justify-between">
+        <!-- Fő Kártya (Interaktív: kattintásra nyitja az elemzést) -->
+        <main onclick="if(currentActiveMatch) openFullAnalysisModal()" class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl flex-1 flex flex-col justify-between cursor-pointer hover:border-sky-400/50 transition">
             <div>
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-4 mb-6">
                     <div>
@@ -105,11 +105,11 @@
                 </div>
 
                 <p class="text-sm text-white bg-black/20 p-4 rounded-xl border border-white/10 mb-6 backdrop-blur-sm drop-shadow" id="match-desc">
-                    A részletes elemzés megnyitásához kattints a ligára fent!
+                    A részletes elemzés megnyitásához kattints ide vagy a ligára fent!
                 </p>
             </div>
 
-            <div onclick="openAuthModal()" class="bg-gradient-to-r from-red-950/30 via-black/20 to-red-950/30 border border-red-500/40 rounded-2xl p-5 text-center cursor-pointer hover:border-red-400 transition shadow-2xl backdrop-blur-sm">
+            <div onclick="event.stopPropagation(); openAuthModal();" class="bg-gradient-to-r from-red-950/30 via-black/20 to-red-950/30 border border-red-500/40 rounded-2xl p-5 text-center cursor-pointer hover:border-red-400 transition shadow-2xl backdrop-blur-sm">
                 <div class="text-amber-400 font-bold text-sm flex items-center justify-center space-x-2 mb-1 drop-shadow">
                     <span>🔒</span>
                     <span>TELJES ODDS MÁTRIX ZÁROLVA</span>
@@ -183,6 +183,9 @@
 
         let allMatches = [];
         let currentActiveMatch = null;
+        let rotationQueue = [];
+        let rotationIndex = 0;
+        let rotationInterval = null;
 
         const leaguesConfig = [
             { key: "premier", name: "Anglia Premier League", synonyms: ["premier league", "anglia premier", "premier"] },
@@ -227,6 +230,7 @@
                 if (!error && analyses && analyses.length > 0) {
                     allMatches = analyses.filter(m => m.match_title && m.match_title.trim() !== "");
                     buildLeagueRibbon(allMatches);
+                    initRotationQueue(allMatches);
                 } else {
                     buildLeagueRibbon([]);
                 }
@@ -263,7 +267,35 @@
             });
         }
 
+        function initRotationQueue(matches) {
+            rotationQueue = [];
+            leaguesConfig.forEach(league => {
+                const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league));
+                leagueMatches.forEach(m => {
+                    rotationQueue.push(m);
+                });
+            });
+
+            if (rotationQueue.length > 0) {
+                rotationIndex = 0;
+                renderMatch(rotationQueue[0]);
+                startRotation();
+            }
+        }
+
+        function startRotation() {
+            if (rotationInterval) clearInterval(rotationInterval);
+            rotationInterval = setInterval(() => {
+                if (rotationQueue.length === 0) return;
+                rotationIndex = (rotationIndex + 1) % rotationQueue.length;
+                renderMatch(rotationQueue[rotationIndex]);
+            }, 5000);
+        }
+
         function openLeagueModal(league, leagueMatches) {
+            // Ha a felhasználó rákattint egy ligára, megállítjuk az automatikus váltást, hogy nyugodtan választhasson
+            if (rotationInterval) clearInterval(rotationInterval);
+
             document.getElementById('league-modal-title').innerText = `${league.name} - Elemzett Meccsek`;
             const listEl = document.getElementById('league-modal-list');
             listEl.innerHTML = '';
@@ -294,6 +326,8 @@
 
         function closeLeagueModal() {
             document.getElementById('league-matches-modal').classList.add('hidden');
+            // Újraindítjuk a rotációt bezárás után
+            startRotation();
         }
 
         function renderMatch(item) {
@@ -307,18 +341,18 @@
             document.getElementById('stat-xg').innerText = item.xg_val || "~3.00 xG";
             document.getElementById('stat-corners').innerText = item.special_val || "BTTS: Igen";
             
-            // Biztonsági szűrés: ha a leírás mező véletlenül teljes HTML kódot tartalmaz, nem írjuk ki nyersen
             let desc = item.analysis_desc || "";
             if (desc.includes("<!DOCTYPE") || desc.includes("<html")) {
-                desc = "A részletes és teljes körű statisztikai elemzés megtekintéséhez kattints a fenti ligákra és nyisd meg a mérkőzést!";
+                desc = "Kattints a kártyára a részletes és teljes körű statisztikai elemzés megtekintéséhez!";
             }
             document.getElementById('match-desc').innerText = desc;
         }
 
         function openFullAnalysisModal() {
             if (!currentActiveMatch) return;
+            if (rotationInterval) clearInterval(rotationInterval);
+
             const container = document.getElementById('modal-html-container');
-            
             let htmlContent = currentActiveMatch.full_html || "";
 
             htmlContent = htmlContent.replace(/<!DOCTYPE[^>]*>/gi, '');
@@ -361,6 +395,7 @@
 
         function closeFullAnalysisModal() {
             document.getElementById('full-analysis-modal').classList.add('hidden');
+            startRotation();
         }
 
         function openAuthModal() { document.getElementById('auth-modal').classList.remove('hidden'); }
