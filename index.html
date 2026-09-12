@@ -19,6 +19,16 @@
             -webkit-backdrop-filter: blur(3px);
             border: 1px solid rgba(255, 255, 255, 0.12);
         }
+        .league-card-custom {
+            background: rgba(14, 165, 233, 0.25);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+        }
+        .league-card-custom:hover {
+            background: rgba(14, 165, 233, 0.4);
+            border-color: rgba(56, 189, 248, 0.7);
+        }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -175,22 +185,31 @@
         let currentActiveMatch = null;
 
         const leaguesConfig = [
-            { key: "ucl", name: "UEFA Bajnokok Ligája", emoji: "🏆", synonyms: ["bajnokok ligája", "champions league", "ucl", "bl"] },
-            { key: "europaliga", name: "UEFA Európa Liga", emoji: "🥈", synonyms: ["európa liga", "europa league", "el"] },
-            { key: "konferencia", name: "UEFA Konferencia Liga", emoji: "🥉", synonyms: ["konferencia liga", "conference league"] },
-            { key: "premier", name: "Anglia Premier Liga", emoji: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", synonyms: ["premier league", "anglia premier", "premier"] },
-            { key: "championship", name: "Anglia Championship", emoji: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", synonyms: ["championship"] },
-            { key: "fakupa", name: "Anglia FA Kupa", emoji: "🏆", synonyms: ["fa kupa", "fa cup"] },
-            { key: "eflkupa", name: "Anglia EFL Kupa", emoji: "🍺", synonyms: ["efl kupa", "efl cup", "league cup"] },
-            { key: "laliga", name: "Spanyol La Liga", emoji: "🇪🇸", synonyms: ["la liga", "spanyol", "laliga"] },
-            { key: "ligue1", name: "Francia Liga 1", emoji: "🇫🇷", synonyms: ["liga 1", "ligue 1", "francia"] },
-            { key: "bundesliga", name: "Német Bundesliga", emoji: "🇩🇪", synonyms: ["bundesliga", "német"] },
-            { key: "seriea", name: "Olasz Serie A", emoji: "🇮🇹", synonyms: ["serie a", "olasz"] },
-            { key: "gorog", name: "Görög Szuperliga", emoji: "🇬🇷", synonyms: ["görög", "szuperliga"] },
-            { key: "holland", name: "Holland Eredivisie", emoji: "🇳🇱", synonyms: ["holland", "eredivisie"] },
-            { key: "portugal", name: "Portugál Liga", emoji: "🇵🇹", synonyms: ["portugál", "liga portugal"] },
-            { key: "superlig", name: "Török Süper Lig", emoji: "🇹🇷", synonyms: ["török", "süper lig", "super lig"] },
-            { key: "belga", name: "Belgium Jupiler Pro", emoji: "🇧🇪", synonyms: ["belga", "jupiler"] }
+            { key: "premier", name: "Anglia Premier League", synonyms: ["premier league", "anglia premier", "premier"] },
+            { key: "laliga", name: "Spanyolország LaLiga", synonyms: ["la liga", "spanyol", "laliga"] },
+            { key: "bundesliga", name: "Németország Bundesliga", synonyms: ["bundesliga", "német"] },
+            { key: "ligue1", name: "Franciaország Liga 1", synonyms: ["liga 1", "ligue 1", "francia"] },
+            { key: "seriea", name: "Olaszország Serie A", synonyms: ["serie a", "olasz"] },
+            { key: "portugal", name: "Portugália Liga Portugal", synonyms: ["portugál", "liga portugal"] },
+            { key: "ausztria", name: "Ausztria Bundesliga", synonyms: ["ausztria", "osztrák"] },
+            { key: "belga", name: "Belgium Jupiler Liga", synonyms: ["belga", "jupiler"] },
+            { key: "gorog", name: "Görögország Szuperliga", synonyms: ["görög", "szuperliga"] },
+            { key: "holland", name: "Hollandia Eredivisie", synonyms: ["holland", "eredivisie"] },
+            { key: "superlig", name: "Törökország Süper Lig", synonyms: ["török", "süper lig", "super lig"] },
+            { key: "championship", name: "Anglia Championship", synonyms: ["championship"] },
+            { key: "ucl", name: "UEFA Bajnokok Ligája", synonyms: ["bajnokok ligája", "champions league", "ucl", "bl"] },
+            { key: "europaliga", name: "UEFA Európa Liga", synonyms: ["európa liga", "europa league", "el"] },
+            { key: "konferencia", name: "UEFA Konferencia Liga", synonyms: ["konferencia liga", "conference league"] },
+            { key: "fakupa", name: "Anglia FA Kupa", synonyms: ["fa kupa", "fa cup"] },
+            { key: "eflkupa", name: "Anglia EFL Kupa", synonyms: ["efl kupa", "efl cup", "league cup"] },
+            { key: "spanyolkupa", name: "Spanyol Kupa", synonyms: ["spanyol kupa", "copa del rey"] },
+            { key: "nemetkupa", name: "Német Kupa", synonyms: ["német kupa", "dfb pokal"] },
+            { key: "franciakupa", name: "Francia Kupa", synonyms: ["francia kupa", "coupe de france"] },
+            { key: "olaszkupa", name: "Olasz Kupa", synonyms: ["olasz kupa", "coppa italia"] },
+            { key: "portugalkupa", name: "Portugál Kupa", synonyms: ["portugál kupa", "taca de portugal"] },
+            { key: "gorogkupa", name: "Görög Kupa", synonyms: ["görög kupa"] },
+            { key: "hollandkupa", name: "Holland Kupa", synonyms: ["holland kupa", "knvb beker"] },
+            { key: "torokkupa", name: "Török Kupa", synonyms: ["török kupa"] }
         ];
 
         window.addEventListener('DOMContentLoaded', async () => {
@@ -230,11 +249,10 @@
                 const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league));
 
                 const btn = document.createElement('button');
-                btn.className = "league-btn flex flex-col items-center justify-center min-w-[150px] h-24 rounded-2xl transition bg-sky-500 hover:bg-sky-600 shadow-xl border border-sky-400 p-2.5 space-y-1 shrink-0 cursor-pointer";
+                btn.className = "league-btn league-card-custom flex flex-col items-center justify-center min-w-[160px] h-24 rounded-2xl transition shadow-xl p-2.5 space-y-1.5 shrink-0 cursor-pointer";
                 btn.innerHTML = `
-                    <span class="text-2xl">${league.emoji}</span>
-                    <span class="text-[11px] font-extrabold uppercase tracking-tight text-white text-center">${league.name}</span>
-                    <span class="text-[9px] text-sky-200">Meccsek (${leagueMatches.length}) ▼</span>
+                    <span class="text-[13px] font-black uppercase tracking-tight text-white text-center drop-shadow">${league.name}</span>
+                    <span class="text-[11px] font-semibold text-sky-200 drop-shadow">Meccsek (${leagueMatches.length}) ▼</span>
                 `;
                 
                 btn.onclick = () => {
@@ -246,7 +264,7 @@
         }
 
         function openLeagueModal(league, leagueMatches) {
-            document.getElementById('league-modal-title').innerText = `${league.emoji} ${league.name} - Elemzett Meccsek`;
+            document.getElementById('league-modal-title').innerText = `${league.name} - Elemzett Meccsek`;
             const listEl = document.getElementById('league-modal-list');
             listEl.innerHTML = '';
 
