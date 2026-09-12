@@ -20,13 +20,13 @@
             border: 1px solid rgba(255, 255, 255, 0.12);
         }
         .league-card-custom {
-            background: rgba(8, 47, 73, 0.82);
+            background: rgba(3, 20, 36, 0.95);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(56, 189, 248, 0.5);
+            border: 1px solid rgba(56, 189, 248, 0.4);
         }
         .league-card-custom:hover {
-            background: rgba(12, 74, 110, 0.92);
+            background: rgba(6, 32, 56, 0.98);
             border-color: rgba(56, 189, 248, 0.8);
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -252,7 +252,7 @@
                 btn.className = "league-btn league-card-custom flex flex-col items-center justify-center min-w-[160px] h-24 rounded-2xl transition shadow-xl p-2.5 space-y-1.5 shrink-0 cursor-pointer";
                 btn.innerHTML = `
                     <span class="text-[13px] font-black uppercase tracking-tight text-white text-center drop-shadow">${league.name}</span>
-                    <span class="text-[11px] font-semibold text-sky-200 drop-shadow">Meccsek (${leagueMatches.length}) ▼</span>
+                    <span class="text-[11px] font-semibold text-white drop-shadow">Meccsek (${leagueMatches.length}) ▼</span>
                 `;
                 
                 btn.onclick = () => {
