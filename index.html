@@ -123,9 +123,9 @@
         </footer>
     </div>
 
-    <!-- Liga Meccsei Modal -->
-    <div id="league-matches-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel bg-slate-900/95 border border-white/20 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl">
+    <!-- Liga Meccsei Modal (Átlátszóbb háttérrel) -->
+    <div id="league-matches-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-slate-950/50 border border-white/20 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl backdrop-blur-md">
             <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-2xl font-bold">&times;</button>
             <h3 id="league-modal-title" class="text-lg font-black text-amber-400 mb-4 border-b border-white/10 pb-2">Válassz meccset</h3>
             <div id="league-modal-list" class="space-y-2 max-h-64 overflow-y-auto no-scrollbar"></div>
