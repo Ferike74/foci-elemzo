@@ -335,9 +335,11 @@
             document.getElementById('badge-match-title').innerText = item.match_title || "Ismeretlen meccs";
             document.getElementById('match-time').innerText = item.match_time || "Közelben";
             document.getElementById('match-league-subtitle').innerText = item.league_name || "Éles Elemzés";
-            document.getElementById('stat-odds').innerText = item.fair_odds_val || "1.85";
+            
+            // Itt kötjük be dinamikusan a meccshez tartozó valós adatokat az adatbázisból:
+            document.getElementById('stat-odds').innerText = item.fair_odds_val || item.odds_val || "1.85";
             document.getElementById('stat-xg').innerText = item.xg_val || "~3.00 xG";
-            document.getElementById('stat-corners').innerText = item.special_val || "BTTS: Igen";
+            document.getElementById('stat-corners').innerText = item.special_val || item.stats_val || "BTTS: Igen";
             
             let desc = item.analysis_desc || "";
             if (desc.includes("<!DOCTYPE") || desc.includes("<html")) {
