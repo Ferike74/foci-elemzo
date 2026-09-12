@@ -306,7 +306,13 @@
             document.getElementById('stat-odds').innerText = item.fair_odds_val || "1.85";
             document.getElementById('stat-xg').innerText = item.xg_val || "~3.00 xG";
             document.getElementById('stat-corners').innerText = item.special_val || "BTTS: Igen";
-            document.getElementById('match-desc').innerText = item.analysis_desc || "Részletes elemzés.";
+            
+            // Biztonsági szűrés: ha a leírás mező véletlenül teljes HTML kódot tartalmaz, nem írjuk ki nyersen
+            let desc = item.analysis_desc || "";
+            if (desc.includes("<!DOCTYPE") || desc.includes("<html")) {
+                desc = "A részletes és teljes körű statisztikai elemzés megtekintéséhez kattints a fenti ligákra és nyisd meg a mérkőzést!";
+            }
+            document.getElementById('match-desc').innerText = desc;
         }
 
         function openFullAnalysisModal() {
@@ -315,7 +321,6 @@
             
             let htmlContent = currentActiveMatch.full_html || "";
 
-            // Biztos ami biztos: kiszűrjük a teljes HTML kereteket, ha az adatbázisban úgy lennének benne
             htmlContent = htmlContent.replace(/<!DOCTYPE[^>]*>/gi, '');
             htmlContent = htmlContent.replace(/<\/?html[^>]*>/gi, '');
             htmlContent = htmlContent.replace(/<\/?head[^>]*>[\s\S]*?<\/head>/gi, '');
