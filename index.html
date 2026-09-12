@@ -336,14 +336,28 @@
             document.getElementById('match-time').innerText = item.match_time || "Közelben";
             document.getElementById('match-league-subtitle').innerText = item.league_name || "Éles Elemzés";
             
-            // Biztosra megyünk: átvizsgáljuk az összes lehetséges oszlopnevet a Supabase táblából a statisztikákhoz
-            const oddsVal = item.fair_odds_val || item.odds_val || item.fair_odds || item.odds || item.valoszinuseg || "1.85";
-            const xgVal = item.xg_val || item.xg || item.varhato_golok || "~3.00 xG";
-            const statsVal = item.special_val || item.stats_val || item.statisztikai_mutato || item.btts || item.mutato || "BTTS: Igen";
+            // Ha létezik külön mező az adatbázisban, azt használjuk, ha nem, kiolvassuk a full_html szövegéből
+            let oddsVal = item.fair_odds_val || item.odds_val || item.fair_odds || item.odds || null;
+            let xgVal = item.xg_val || item.xg || null;
+            let statsVal = item.special_val || item.stats_val || item.statisztikai_mutato || null;
 
-            document.getElementById('stat-odds').innerText = oddsVal;
-            document.getElementById('stat-xg').innerText = xgVal;
-            document.getElementById('stat-corners').innerText = statsVal;
+            // Intelligens HTML kinyerő, ha a számok a full_html-ben vannak rejtve
+            if ((!oddsVal || !xgVal) && item.full_html) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = item.full_html;
+                const textContent = tempDiv.innerText || tempDiv.textContent || "";
+                
+                // Ha találunk odds-szerű mintát vagy xG-t a szövegben
+                const matchOdds = textContent.match(/([1-9]\.[0-9]{2})/);
+                if (matchOdds && !oddsVal) oddsVal = matchOdds[1];
+
+                const matchXg = textContent.match(/([0-9]\.[0-9]{2}\s*xG|xG[:\s]*[0-9]\.[0-9]{2})/i);
+                if (matchXg && !xgVal) xgVal = matchXg[0];
+            }
+
+            document.getElementById('stat-odds').innerText = oddsVal || "1.85";
+            document.getElementById('stat-xg').innerText = xgVal || "~3.00 xG";
+            document.getElementById('stat-corners').innerText = statsVal || "BTTS: Igen";
             
             let desc = item.analysis_desc || "";
             if (desc.includes("<!DOCTYPE") || desc.includes("<html")) {
