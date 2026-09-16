@@ -23,7 +23,7 @@
             background: rgba(3, 10, 20, 0.75);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(74, 222, 128, 0.4);
+            border: 1px solid rgba(52, 211, 153, 0.4);
             align-self: start;
             transition: all 0.3s ease;
         }
@@ -32,10 +32,11 @@
             border-color: rgba(56, 189, 248, 0.8);
             box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
         }
-        /* Visszaállítva az eredeti, legelső ragyogó zöld szín */
-        .original-green-text {
-            color: #4ade80;
+        /* Kicsit világosabb, ragyogó tavaszi zöld szín */
+        .slightly-lighter-green {
+            color: #34d399;
             font-weight: 700;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -155,7 +156,7 @@
     <div id="league-matches-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel bg-slate-950/50 border border-white/20 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl backdrop-blur-md">
             <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-2xl font-bold">&times;</button>
-            <h3 id="league-modal-title" class="text-lg font-black original-green-text mb-4 border-b border-green-500/30 pb-2">Válassz meccset</h3>
+            <h3 id="league-modal-title" class="text-lg font-black slightly-lighter-green mb-4 border-b border-green-500/30 pb-2">Válassz meccset</h3>
             <div id="league-modal-list" class="space-y-2 max-h-64 overflow-y-auto no-scrollbar"></div>
         </div>
     </div>
@@ -345,7 +346,7 @@
                 card.className = "league-card-custom rounded-2xl p-4 flex justify-between items-center shadow-xl cursor-pointer transition";
                 card.innerHTML = `
                     <div>
-                        <div class="text-sm font-black uppercase tracking-tight original-green-text">${cup.name}</div>
+                        <div class="text-sm font-black uppercase tracking-tight slightly-lighter-green">${cup.name}</div>
                         <div class="text-xs text-white font-medium mt-0.5">${cupMatches.length} meccs elemzés</div>
                     </div>
                     <span class="bg-red-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow">${cupMatches.length}</span>
@@ -365,7 +366,7 @@
                     leaguesHtml += `
                         <div onclick="event.stopPropagation(); openLeagueModal(${JSON.stringify(league).replace(/"/g, '&quot;')}, ${JSON.stringify(leagueMatches).replace(/"/g, '&quot;')})" 
                              class="flex justify-between items-center py-2 px-3 hover:bg-red-950/30 rounded-xl text-xs cursor-pointer transition border border-transparent hover:border-red-500/40">
-                            <span class="font-medium original-green-text">⚽ ${league.name}</span>
+                            <span class="font-medium slightly-lighter-green">⚽ ${league.name}</span>
                             <span class="bg-red-600 text-white font-bold px-2 py-0.5 rounded-full shadow">${leagueMatches.length} meccs</span>
                         </div>
                     `;
@@ -379,12 +380,12 @@
                 countryCard.innerHTML = `
                     <div onclick="toggleCountryAccordion('${contentId}', '${iconId}')" class="p-4 flex justify-between items-center cursor-pointer select-none">
                         <div>
-                            <h3 class="font-extrabold text-base original-green-text tracking-wide">${item.country}</h3>
+                            <h3 class="font-extrabold text-base slightly-lighter-green tracking-wide">${item.country}</h3>
                             <p class="text-xs text-white mt-0.5">Összesen: <span class="text-white font-bold">${countryTotalMatches} meccs</span></p>
                         </div>
                         <div class="flex items-center space-x-2">
                             <span class="bg-red-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow">${countryTotalMatches}</span>
-                            <span id="${iconId}" class="text-xs original-green-text transform transition-transform duration-200">▼</span>
+                            <span id="${iconId}" class="text-xs slightly-lighter-green transform transition-transform duration-200">▼</span>
                         </div>
                     </div>
                     <div id="${contentId}" class="country-accordion-content hidden px-3 pb-3 pt-1 border-t border-white/10 bg-black/30 space-y-1">
