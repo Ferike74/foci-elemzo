@@ -24,6 +24,8 @@
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(56, 189, 248, 0.4);
+            /* Biztosítja, hogy a kártyák a rácson belül önállóan nyíljanak le */
+            align-self: start;
         }
         .league-card-custom:hover {
             background: rgba(6, 32, 56, 0.98);
@@ -66,20 +68,20 @@
             </div>
         </header>
 
-        <!-- KÁRTYÁS RÁCS -->
+        <!-- KÁRTYÁS RÁCS (items-start hozzáadva, hogy függetlenek legyenek a sorok) -->
         <div class="space-y-6 mb-8">
             <div>
                 <h2 class="text-lg font-bold text-amber-400 mb-3 drop-shadow flex items-center gap-2">
                     <span>🏆</span> Kiemelt Nemzetközi Kupák
                 </h2>
-                <div id="international-cups-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
+                <div id="international-cups-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start"></div>
             </div>
 
             <div>
                 <h2 class="text-lg font-bold text-sky-400 mb-3 drop-shadow flex items-center gap-2">
                     <span>🌍</span> Országok és Ligák
                 </h2>
-                <div id="countries-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                <div id="countries-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start"></div>
             </div>
         </div>
 
@@ -394,12 +396,10 @@
             icon.classList.toggle('rotate-180');
         }
 
-        // Segédfüggvény az összes lenyitott ország kártya és modal teljes bezárásához
         function closeAllModalsAndAccordions() {
             document.getElementById('league-matches-modal').classList.add('hidden');
             document.getElementById('full-analysis-modal').classList.add('hidden');
             
-            // Minden ország lenyíló tartalmának elrejtése és nyíl visszájára fordítása
             document.querySelectorAll('.country-accordion-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('[id^="country-icon-"]').forEach(el => el.classList.remove('rotate-180'));
         }
