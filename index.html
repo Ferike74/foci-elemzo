@@ -37,13 +37,21 @@
 
     <div class="relative z-10 flex flex-col min-h-screen p-4 md:p-6 max-w-7xl mx-auto w-full">
         
-        <!-- Fejléc -->
-        <header class="glass-panel rounded-full px-6 py-4 flex items-center justify-between shadow-2xl mb-6">
+        <!-- Fejléc (Két soros, alul középre igazított Focielemzése) -->
+        <header class="glass-panel rounded-3xl px-6 py-5 flex flex-col md:flex-row items-center justify-between shadow-2xl mb-6 gap-4">
             <div class="flex items-center space-x-3">
                 <span class="text-3xl">⚽</span>
-                <span class="font-black tracking-wider text-2xl md:text-4xl bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent drop-shadow-lg">EURÓPAI LIGÁK FOCI ELEMZÉSE</span>
             </div>
             
+            <div class="text-center flex-1">
+                <h1 class="font-black tracking-wider text-xl md:text-3xl bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent drop-shadow-lg uppercase">
+                    Európai ligák és kupák
+                </h1>
+                <div class="font-black tracking-widest text-2xl md:text-4xl bg-gradient-to-r from-amber-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg uppercase mt-1">
+                    Focielemzése
+                </div>
+            </div>
+
             <div class="flex items-center space-x-4">
                 <span id="user-status" class="text-xs text-gray-200 hidden md:inline drop-shadow"></span>
                 <button onclick="openAuthModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-5 py-2.5 rounded-full shadow-lg shadow-red-600/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
@@ -52,7 +60,7 @@
             </div>
         </header>
 
-        <!-- ÚJ KÁRTYÁS MÜSZAKI RÁCS (Kiemelt Kupák + Országok Lenyíló Kártyái) -->
+        <!-- KÁRTYÁS RÁCS (Kiemelt Kupák + Országok Lenyíló Kártyái) -->
         <div class="space-y-6 mb-8">
             <!-- 1. Kiemelt Nemzetközi Kupák -->
             <div>
@@ -86,13 +94,13 @@
             <span class="text-xs text-amber-300 font-semibold italic">💡 Kattints bármelyik országra vagy kupára a meccsek listájához!</span>
         </div>
 
-        <!-- Fő Kártya (Interaktív: kattintásra nyitja az elemzést) -->
+        <!-- Fő Kártya -->
         <main onclick="if(currentActiveMatch) openFullAnalysisModal()" class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl flex-1 flex flex-col justify-between cursor-pointer hover:border-sky-400/50 transition">
             <div>
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-4 mb-6">
                     <div>
                         <span class="text-xs text-red-400 uppercase font-bold tracking-wider drop-shadow" id="match-league-subtitle">Éles Elemzés</span>
-                        <h1 class="text-2xl md:text-3xl font-black mt-1 drop-shadow-md" id="match-title">Válassz egy meccset a kártyákból...</h1>
+                        <h3 class="text-2xl md:text-3xl font-black mt-1 drop-shadow-md" id="match-title">Válassz egy meccset a kártyákból...</h3>
                     </div>
                     <div class="mt-2 md:mt-0 text-sm text-white bg-black/20 px-4 py-1.5 rounded-xl border border-white/10 backdrop-blur-sm" id="match-time">--</div>
                 </div>
@@ -199,7 +207,6 @@
         let rotationIndex = 0;
         let rotationInterval = null;
 
-        // Országok szerinti csoportosítás definíciója
         const countriesConfig = [
             {
                 country: "Anglia",
@@ -280,7 +287,6 @@
             }
         ];
 
-        // Kiemelt nemzetközi kupák
         const internationalConfig = [
             { key: "ucl", name: "UEFA Bajnokok Ligája", synonyms: ["bajnokok ligája", "champions league", "ucl", "bl"] },
             { key: "europaliga", name: "UEFA Európa Liga", synonyms: ["európa liga", "europa league", "el"] },
@@ -317,7 +323,6 @@
             return leagueConfig.synonyms.some(syn => lowerDb.includes(syn)) || lowerDb.includes(leagueConfig.name.toLowerCase());
         }
 
-        // Új Dashboard építő (Kártyák + Országok lenyíló szerkezete + Nemzetközi kupák)
         function buildDashboard(matches) {
             const intContainer = document.getElementById('international-cups-grid');
             const countryContainer = document.getElementById('countries-grid');
@@ -325,7 +330,6 @@
             intContainer.innerHTML = '';
             countryContainer.innerHTML = '';
 
-            // 1. Nemzetközi kupák kirajzolása
             internationalConfig.forEach(cup => {
                 const cupMatches = matches.filter(m => matchBelongsToLeague(m.league_name, cup));
                 
@@ -342,7 +346,6 @@
                 intContainer.appendChild(card);
             });
 
-            // 2. Országkártyák és lenyíló ligák kirajzolása
             countriesConfig.forEach((item, index) => {
                 let countryTotalMatches = 0;
                 let leaguesHtml = '';
@@ -385,7 +388,6 @@
             });
         }
 
-        // Országkártya lenyitó / becsukó funkció
         function toggleCountryAccordion(contentId, iconId) {
             const content = document.getElementById(contentId);
             const icon = document.getElementById(iconId);
