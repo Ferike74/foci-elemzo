@@ -401,6 +401,9 @@
             document.getElementById('league-matches-modal').classList.add('hidden');
             document.getElementById('full-analysis-modal').classList.add('hidden');
             
+            // Háttér görgetésének visszaengedése
+            document.body.style.overflow = 'auto';
+            
             document.querySelectorAll('.country-accordion-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('[id^="country-icon-"]').forEach(el => el.classList.remove('rotate-180'));
         }
@@ -434,6 +437,9 @@
 
         function openLeagueModal(league, leagueMatches) {
             if (rotationInterval) clearInterval(rotationInterval);
+
+            // Háttér görgetésének tiltása
+            document.body.style.overflow = 'hidden';
 
             document.getElementById('league-modal-title').innerText = `${league.name} - Elemzett Meccsek`;
             const listEl = document.getElementById('league-modal-list');
@@ -506,6 +512,9 @@
         function openFullAnalysisModal() {
             if (!currentActiveMatch) return;
             if (rotationInterval) clearInterval(rotationInterval);
+
+            // Háttér görgetésének tiltása
+            document.body.style.overflow = 'hidden';
 
             const container = document.getElementById('modal-html-container');
             let htmlContent = currentActiveMatch.full_html || "";
