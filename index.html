@@ -37,7 +37,7 @@
 
     <div class="relative z-10 flex flex-col min-h-screen p-4 md:p-6 max-w-7xl mx-auto w-full">
         
-        <!-- Fejléc (Nagyobb, teljesen középre igazított címekkel) -->
+        <!-- Fejléc -->
         <header class="glass-panel rounded-3xl px-6 py-6 flex flex-col items-center justify-center text-center shadow-2xl mb-6 relative">
             <div class="absolute left-6 top-1/2 -translate-y-1/2 hidden md:flex items-center space-x-3">
                 <span class="text-4xl">⚽</span>
@@ -59,7 +59,6 @@
                 </button>
             </div>
 
-            <!-- Mobil nézet gomb alulra középre ha szükséges -->
             <div class="mt-4 flex md:hidden items-center justify-center space-x-4">
                 <button onclick="openAuthModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-5 py-2.5 rounded-full shadow-lg shadow-red-600/40 uppercase text-xs tracking-wider">
                     3 Nap Ingyenes Próba
@@ -67,26 +66,20 @@
             </div>
         </header>
 
-        <!-- KÁRTYÁS RÁCS (Kiemelt Kupák + Országok Lenyíló Kártyái) -->
+        <!-- KÁRTYÁS RÁCS -->
         <div class="space-y-6 mb-8">
-            <!-- 1. Kiemelt Nemzetközi Kupák -->
             <div>
                 <h2 class="text-lg font-bold text-amber-400 mb-3 drop-shadow flex items-center gap-2">
                     <span>🏆</span> Kiemelt Nemzetközi Kupák
                 </h2>
-                <div id="international-cups-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <!-- Ide generálja a JS a BL, EL, Konferencia kártyákat -->
-                </div>
+                <div id="international-cups-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
             </div>
 
-            <!-- 2. Országok Szerinti Kártyák (Legördülő / Accordion nézet) -->
             <div>
                 <h2 class="text-lg font-bold text-sky-400 mb-3 drop-shadow flex items-center gap-2">
                     <span>🌍</span> Országok és Ligák
                 </h2>
-                <div id="countries-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Ide generálja a JS az országkártyákat és a belső ligákat -->
-                </div>
+                <div id="countries-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
         </div>
 
@@ -386,7 +379,7 @@
                             <span id="${iconId}" class="text-xs text-gray-400 transform transition-transform duration-200">▼</span>
                         </div>
                     </div>
-                    <div id="${contentId}" class="hidden px-3 pb-3 pt-1 border-t border-white/10 bg-black/20 space-y-1">
+                    <div id="${contentId}" class="country-accordion-content hidden px-3 pb-3 pt-1 border-t border-white/10 bg-black/20 space-y-1">
                         ${leaguesHtml}
                     </div>
                 `;
@@ -399,6 +392,16 @@
             const icon = document.getElementById(iconId);
             content.classList.toggle('hidden');
             icon.classList.toggle('rotate-180');
+        }
+
+        // Segédfüggvény az összes lenyitott ország kártya és modal teljes bezárásához
+        function closeAllModalsAndAccordions() {
+            document.getElementById('league-matches-modal').classList.add('hidden');
+            document.getElementById('full-analysis-modal').classList.add('hidden');
+            
+            // Minden ország lenyíló tartalmának elrejtése és nyíl visszájára fordítása
+            document.querySelectorAll('.country-accordion-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('[id^="country-icon-"]').forEach(el => el.classList.remove('rotate-180'));
         }
 
         function initRotationQueue(matches) {
@@ -444,7 +447,7 @@
                     mBtn.onclick = () => {
                         currentActiveMatch = m;
                         renderMatch(m);
-                        closeLeagueModal();
+                        document.getElementById('league-matches-modal').classList.add('hidden');
                         openFullAnalysisModal();
                     };
                     listEl.appendChild(mBtn);
@@ -460,7 +463,7 @@
         }
 
         function closeLeagueModal() {
-            document.getElementById('league-matches-modal').classList.add('hidden');
+            closeAllModalsAndAccordions();
             startRotation();
         }
 
@@ -545,7 +548,7 @@
         }
 
         function closeFullAnalysisModal() {
-            document.getElementById('full-analysis-modal').classList.add('hidden');
+            closeAllModalsAndAccordions();
             startRotation();
         }
 
