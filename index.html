@@ -32,7 +32,6 @@
             border-color: rgba(56, 189, 248, 0.8);
             box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
         }
-        /* Kicsit világosabb, ragyogó tavaszi zöld szín */
         .slightly-lighter-green {
             color: #34d399;
             font-weight: 700;
@@ -61,17 +60,31 @@
                 </div>
             </div>
 
-            <div class="absolute right-6 top-1/2 -translate-y-1/2 hidden md:flex items-center space-x-4">
-                <span id="user-status" class="text-xs text-gray-200 drop-shadow"></span>
-                <button onclick="openAuthModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-5 py-2.5 rounded-full shadow-lg shadow-red-600/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
-                    3 Nap Ingyenes Próba
-                </button>
+            <!-- Jobb oldali gombok asztali nézetben -->
+            <div class="absolute right-6 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-end space-y-1">
+                <span id="user-status" class="text-xs text-gray-200 drop-shadow mb-1"></span>
+                <span class="text-[10px] text-amber-300 font-bold uppercase tracking-wider drop-shadow">Regisztráció után az első 3 nap ingyenes</span>
+                <div class="flex items-center space-x-2">
+                    <a href="https://buy.stripe.com/test_afa14n2xs12wy4Y8ejK00" target="_blank" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 transition transform hover:scale-105 uppercase text-xs tracking-wider text-center">
+                        Regisztráció
+                    </a>
+                    <button onclick="openAuthModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 transition transform hover:scale-105 uppercase text-xs tracking-wider">
+                        Belépés
+                    </button>
+                </div>
             </div>
 
-            <div class="mt-4 flex md:hidden items-center justify-center space-x-4">
-                <button onclick="openAuthModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-5 py-2.5 rounded-full shadow-lg shadow-red-600/40 uppercase text-xs tracking-wider">
-                    3 Nap Ingyenes Próba
-                </button>
+            <!-- Mobil nézetű gombok -->
+            <div class="mt-4 flex flex-col md:hidden items-center justify-center space-y-1 w-full">
+                <span class="text-[10px] text-amber-300 font-bold uppercase tracking-wider drop-shadow">Regisztráció után az első 3 nap ingyenes</span>
+                <div class="flex items-center space-x-2 mt-1">
+                    <a href="https://buy.stripe.com/test_afa14n2xs12wy4Y8ejK00" target="_blank" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 uppercase text-xs tracking-wider text-center">
+                        Regisztráció
+                    </a>
+                    <button onclick="openAuthModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 uppercase text-xs tracking-wider">
+                        Belépés
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -138,13 +151,13 @@
                 </p>
             </div>
 
-            <div onclick="event.stopPropagation(); openAuthModal();" class="bg-gradient-to-r from-red-950/30 via-black/20 to-red-950/30 border border-red-500/40 rounded-2xl p-5 text-center cursor-pointer hover:border-red-400 transition shadow-2xl backdrop-blur-sm">
+            <a href="https://buy.stripe.com/test_afa14n2xs12wy4Y8ejK00" target="_blank" onclick="event.stopPropagation();" class="block bg-gradient-to-r from-red-950/30 via-black/20 to-red-950/30 border border-red-500/40 rounded-2xl p-5 text-center cursor-pointer hover:border-red-400 transition shadow-2xl backdrop-blur-sm">
                 <div class="text-amber-400 font-bold text-sm flex items-center justify-center space-x-2 mb-1 drop-shadow">
                     <span>🔒</span>
                     <span>TELJES ODDS MÁTRIX ZÁROLVA</span>
                 </div>
                 <p class="text-xs text-white drop-shadow">Regisztrálj most és tekintsd meg mind a 40+ kielemzett fogadási piacot a 3 napos ingyenes próbaidőszakkal!</p>
-            </div>
+            </a>
         </main>
 
         <footer class="mt-6 text-center text-xs text-gray-200 pb-2 drop-shadow">
@@ -174,13 +187,13 @@
         </div>
     </div>
 
-    <!-- Regisztrációs Modal -->
+    <!-- Belépési Modal -->
     <div id="auth-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-white/20 shadow-2xl">
             <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-xl font-bold">&times;</button>
             <div class="text-center mb-6">
                 <span class="text-3xl">⚽</span>
-                <h3 class="text-xl font-extrabold mt-2 drop-shadow">Kezdd el a 3 napos próbaidőszakot</h3>
+                <h3 class="text-xl font-extrabold mt-2 drop-shadow">Bejelentkezés a fiókodba</h3>
             </div>
             <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-4">
                 <div>
@@ -192,7 +205,7 @@
                     <input type="password" id="password" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="••••••••">
                 </div>
                 <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-red-600/40 transition text-sm uppercase tracking-wider">
-                    Fiók létrehozása / Belépés
+                    Belépés
                 </button>
             </form>
             <div id="auth-message" class="text-center text-xs mt-4"></div>
@@ -576,12 +589,7 @@
             msgEl.innerHTML = '<span class="text-gray-200">Folyamatban...</span>';
             let { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (error) {
-                let signUpRes = await supabaseClient.auth.signUp({ email, password });
-                if (signUpRes.error) {
-                    msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${signUpRes.error.message}</span>`;
-                } else {
-                    msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres regisztráció!</span>';
-                }
+                msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${error.message}</span>`;
             } else {
                 msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres bejelentkezés!</span>';
                 setTimeout(() => { closeAuthModal(); location.reload(); }, 1500);
