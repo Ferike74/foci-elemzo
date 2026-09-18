@@ -63,7 +63,6 @@
             <!-- Jobb oldali gombok asztali nézetben -->
             <div class="absolute right-6 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-end space-y-1">
                 <span id="user-status" class="text-xs text-gray-200 drop-shadow mb-1"></span>
-                <!-- Két külön soros, fekete hátteres felirat -->
                 <div class="flex flex-col items-center space-y-1 mb-1">
                     <span class="text-[9px] slightly-lighter-green uppercase tracking-wider bg-black/80 px-1.5 py-0.5 rounded shadow">REGISZTRÁCIÓ UTÁN AZ ELSŐ</span>
                     <span class="text-[11px] slightly-lighter-green font-black uppercase tracking-wider bg-black/80 px-2 py-0.5 rounded shadow">3 NAP INGYENES</span>
@@ -224,7 +223,7 @@
         </div>
     </div>
 
-    <!-- Belépési Modal (Elfelejtett jelszó opcióval) -->
+    <!-- Belépési Modal -->
     <div id="login-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-white/20 shadow-2xl">
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-xl font-bold">&times;</button>
@@ -233,7 +232,6 @@
                 <h3 id="login-modal-title" class="text-xl font-extrabold mt-2 drop-shadow">Bejelentkezés a fiókodba</h3>
             </div>
             
-            <!-- Normál Bejelentkezési Űrlap -->
             <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Email cím</label>
@@ -251,7 +249,6 @@
                 </button>
             </form>
 
-            <!-- Elfelejtett Jelszó Űrlap (Alapból rejtett) -->
             <form id="forgot-form" onsubmit="handleForgotPassword(event)" class="space-y-4 hidden">
                 <p class="text-xs text-gray-300 text-center mb-2">Add meg az email címed, és küldünk egy linket a jelszó visszaállításához.</p>
                 <div>
@@ -407,7 +404,7 @@
             }
 
             return leagueConfig.synonyms.some(syn => lowerDb.includes(syn)) || lowerDb.includes(leagueConfig.name.toLowerCase());
-         }
+        }
 
         function buildDashboard(matches) {
             const intContainer = document.getElementById('international-cups-grid');
@@ -440,8 +437,9 @@
                     const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league, item.country));
                     countryTotalMatches += leagueMatches.length;
 
+                    // Itt tároljuk el biztonságosan, globális keresőhöz kötve a ligát
                     leaguesHtml += `
-                        <div onclick="event.stopPropagation(); openLeagueModal('${league.name.replace(/'/g, "\\'")}', ${encodeURIComponent(JSON.stringify(leagueMatches))})" 
+                        <div onclick="event.stopPropagation(); openLeagueModalForConfig('${item.country.replace(/'/g, "\\'")}', '${league.key}')" 
                              class="flex justify-between items-center py-2 px-3 hover:bg-red-950/30 rounded-xl text-xs cursor-pointer transition border border-transparent hover:border-red-500/40">
                             <span class="font-medium slightly-lighter-green">⚽ ${league.name}</span>
                             <span class="bg-red-600 text-white font-bold px-2 py-0.5 rounded-full shadow">${leagueMatches.length} meccs</span>
@@ -517,21 +515,31 @@
             }, 15000);
         }
 
-        function openLeagueModal(leagueName, leagueMatchesEncoded) {
+        // Segédfüggvény a konfiguráció alapján történő biztonságos modal megnyitáshoz
+        function openLeagueModalForConfig(countryName, leagueKey) {
+            let foundLeagueName = "";
+            let leagueMatches = [];
+
+            const countryObj = countriesConfig.find(c => c.country === countryName);
+            if (countryObj) {
+                const leagueObj = countryObj.leagues.find(l => l.key === leagueKey);
+                if (leagueObj) {
+                    foundLeagueName = leagueObj.name;
+                    leagueMatches = allMatches.filter(m => matchBelongsToLeague(m.league_name, leagueObj, countryName));
+                }
+            }
+
+            openLeagueModal(`${countryName} - ${foundLeagueName}`, leagueMatches);
+        }
+
+        function openLeagueModal(titleText, leagueMatches) {
             if (rotationInterval) clearInterval(rotationInterval);
 
             document.body.style.overflow = 'hidden';
 
-            document.getElementById('league-modal-title').innerText = `${leagueName} - Elemzett Meccsek`;
+            document.getElementById('league-modal-title').innerText = titleText;
             const listEl = document.getElementById('league-modal-list');
             listEl.innerHTML = '';
-
-            let leagueMatches = [];
-            try {
-                leagueMatches = typeof leagueMatchesEncoded === 'string' ? JSON.parse(decodeURIComponent(leagueMatchesEncoded)) : leagueMatchesEncoded;
-            } catch(e) {
-                leagueMatches = [];
-            }
 
             if (leagueMatches && leagueMatches.length > 0) {
                 leagueMatches.forEach(m => {
@@ -659,7 +667,6 @@
         }
         function closeLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }
 
-        // Elfelejtett jelszó nézet váltások
         function showForgotPassword() {
             document.getElementById('login-form').classList.add('hidden');
             document.getElementById('forgot-form').classList.remove('hidden');
@@ -674,7 +681,6 @@
             document.getElementById('login-message').innerHTML = '';
         }
 
-        // Regisztráció logika dupla jelszó ellenőrzéssel és Stripe átirányítással
         async function handleRegister(event) {
             event.preventDefault();
             const email = document.getElementById('reg-email').value;
@@ -701,10 +707,9 @@
             }
         }
 
-        // Bejelentkezés logika
         async function handleLogin(event) {
             event.preventDefault();
-            const email = document.getElementById('login-email').value;
+            const email = document.getElementById('login-email-input') || document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             const msgEl = document.getElementById('login-message');
             msgEl.innerHTML = '<span class="text-gray-200">Bejelentkezés...</span>';
@@ -712,6 +717,7 @@
             let { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             
             if (error) {
+                msgEl.npm = `<span class="text-red-400 font-bold">Hiba: ${error.message}</span>`;
                 msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${error.message}</span>`;
             } else {
                 msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres bejelentkezés!</span>';
@@ -719,7 +725,6 @@
             }
         }
 
-        // Jelszó-visszaállítás küldése
         async function handleForgotPassword(event) {
             event.preventDefault();
             const email = document.getElementById('forgot-email').value;
