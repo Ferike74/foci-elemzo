@@ -397,9 +397,16 @@
             }
         });
 
-        function matchBelongsToLeague(dbLeagueName, leagueConfig) {
+        function matchBelongsToLeague(dbLeagueName, leagueConfig, countryName = "") {
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
+            
+            // Szigorú szűrés a Bundesliga nevek ütközésének elkerülésére
+            if (leagueConfig.name === "Bundesliga") {
+                if (countryName === "Ausztria" && !(lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria"))) return false;
+                if (countryName === "Németország" && (lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria"))) return false;
+            }
+
             return leagueConfig.synonyms.some(syn => lowerDb.includes(syn)) || lowerDb.includes(leagueConfig.name.toLowerCase());
         }
 
@@ -411,7 +418,7 @@
             countryContainer.innerHTML = '';
 
             internationalConfig.forEach(cup => {
-                const cupMatches = matches.filter(m => matchBelongsToLeague(m.league_name, cup));
+                const cupMatches = matches.filter(m => matchBelongsToLeague(m.league_name, cup, "International"));
                 
                 const card = document.createElement('div');
                 card.className = "league-card-custom rounded-2xl p-4 flex justify-between items-center shadow-xl cursor-pointer transition";
@@ -431,7 +438,7 @@
                 let leaguesHtml = '';
 
                 item.leagues.forEach(league => {
-                    const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league));
+                    const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league, item.country));
                     countryTotalMatches += leagueMatches.length;
 
                     leaguesHtml += `
@@ -487,11 +494,11 @@
         function initRotationQueue(matches) {
             rotationQueue = [];
             internationalConfig.forEach(cup => {
-                matches.filter(m => matchBelongsToLeague(m.league_name, cup)).forEach(m => rotationQueue.push(m));
+                matches.filter(m => matchBelongsToLeague(m.league_name, cup, "International")).forEach(m => rotationQueue.push(m));
             });
             countriesConfig.forEach(c => {
                 c.leagues.forEach(league => {
-                    matches.filter(m => matchBelongsToLeague(m.league_name, league)).forEach(m => rotationQueue.push(m));
+                    matches.filter(m => matchBelongsToLeague(m.league_name, league, c.country)).forEach(m => rotationQueue.push(m));
                 });
             });
 
