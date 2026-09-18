@@ -304,7 +304,7 @@
             {
                 country: "Németország",
                 leagues: [
-                    { key: "bundesliga", name: "Bundesliga", synonyms: ["bundesliga", "német"] },
+                    { key: "bundesliga", name: "Német Bundesliga", synonyms: ["német bundesliga", "német", "bundesliga"] },
                     { key: "nemetkupa", name: "Német Kupa", synonyms: ["német kupa", "dfb pokal"] }
                 ]
             },
@@ -353,7 +353,7 @@
             {
                 country: "Ausztria",
                 leagues: [
-                    { key: "ausztria", name: "Bundesliga", synonyms: ["ausztria", "osztrák"] }
+                    { key: "ausztria", name: "Osztrák Bundesliga", synonyms: ["osztrák bundesliga", "osztrák", "ausztria"] }
                 ]
             },
             {
@@ -418,9 +418,18 @@
             }
         });
 
-        function matchBelongsToLeague(dbLeagueName, leagueConfig) {
+        function matchBelongsToLeague(dbLeagueName, leagueConfig, countryName) {
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
+            
+            // Szigorú szétválasztás a német és osztrák Bundesliga között
+            if (leagueConfig.name === "Német Bundesliga") {
+                if (lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria")) return false;
+            }
+            if (leagueConfig.name === "Osztrák Bundesliga") {
+                if (!lowerDb.includes("osztrák") && !lowerDb.includes("ausztria") && !lowerDb.includes("austria")) return false;
+            }
+
             return leagueConfig.synonyms.some(syn => lowerDb.includes(syn)) || lowerDb.includes(leagueConfig.name.toLowerCase());
         }
 
@@ -452,7 +461,7 @@
                 let leaguesHtml = '';
 
                 item.leagues.forEach(league => {
-                    const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league));
+                    const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league, item.country));
                     countryTotalMatches += leagueMatches.length;
 
                     leaguesHtml += `
@@ -512,7 +521,7 @@
             });
             countriesConfig.forEach(c => {
                 c.leagues.forEach(league => {
-                    matches.filter(m => matchBelongsToLeague(m.league_name, league)).forEach(m => rotationQueue.push(m));
+                    matches.filter(m => matchBelongsToLeague(m.league_name, league, c.country)).forEach(m => rotationQueue.push(m));
                 });
             });
 
