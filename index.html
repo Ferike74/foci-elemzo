@@ -6,6 +6,10 @@
     <title>Sportfogadás Elemző Agent | Prémium Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Vercel Web Analytics Szkript -->
+    <script defer src="/_vercel/insights/script.js"></script>
+
     <style>
         body {
             background-image: url('stadion.jpg');
@@ -422,7 +426,6 @@
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
             
-            // Szigorú szétválasztás a német és osztrák Bundesliga között
             if (leagueConfig.name === "Német Bundesliga") {
                 if (lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria")) return false;
             }
@@ -744,6 +747,7 @@
             });
 
             if (error) {
+                msgEl.json.error = error.message;
                 msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${error.message}</span>`;
             } else {
                 msgEl.innerHTML = '<span class="text-green-400 font-bold">A jelszó-visszaállító emailt elküldtük! Ellenőrizd a postaládád.</span>';
