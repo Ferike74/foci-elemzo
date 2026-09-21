@@ -98,6 +98,16 @@
             </div>
         </header>
 
+        <!-- FONTOS INFORMÁCIÓS PANEL (A FEJLÉC ÉS A LIGÁK KÖZÖTT) -->
+        <section class="glass-panel rounded-3xl p-5 md:p-6 shadow-2xl mb-6 border border-amber-500/30 bg-black/40 backdrop-blur-md">
+            <h2 class="text-amber-400 font-extrabold text-sm md:text-base uppercase tracking-wider mb-2 flex items-center gap-2 drop-shadow">
+                <span>📌</span> Fontos Információk a Platformról
+            </h2>
+            <p class="text-xs md:text-sm text-gray-200 leading-relaxed drop-shadow">
+                Üdvözöljük a Prémium Sportfogadás Elemző Platformon! Itt írhatod be a látogatóknak szánt fontos üzeneteket, szabályokat vagy útmutatókat (pl. a napi frissítések időpontjáról, a szimulációk működéséről vagy a próbaidőszak részleteiről). Ezt a szöveget bármikor tetszés szerint átírhatod a kódban.
+            </p>
+        </section>
+
         <!-- KÁRTYÁS RÁCS -->
         <div class="space-y-6 mb-8">
             <div>
@@ -800,7 +810,7 @@
             }
         }
 
-        async function handleLogin(event) {
+        async class handleLogin(event) {
             event.preventDefault();
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
