@@ -258,6 +258,19 @@
                     <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Jelszó mégegyszer</label>
                     <input type="password" id="reg-password-confirm" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="••••••••">
                 </div>
+                
+                <!-- Elfogadó jelölőnégyzetek -->
+                <div class="space-y-2 pt-1 text-xs text-gray-200">
+                    <label class="flex items-start space-x-2 cursor-pointer">
+                        <input type="checkbox" id="reg-privacy-check" required class="mt-0.5 rounded border-white/20 bg-black/20 text-red-600 focus:ring-0">
+                        <span>Elfogadom az <button type="button" onclick="openPrivacyModal()" class="text-amber-300 underline hover:text-amber-200">Adatvédelmi nyilatkozatot</button>.</span>
+                    </label>
+                    <label class="flex items-start space-x-2 cursor-pointer">
+                        <input type="checkbox" id="reg-terms-check" required class="mt-0.5 rounded border-white/20 bg-black/20 text-red-600 focus:ring-0">
+                        <span>Elfogadom a <button type="button" onclick="openTermsModal()" class="text-amber-300 underline hover:text-amber-200">Felhasználási feltételeket</button>.</span>
+                    </label>
+                </div>
+
                 <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-red-600/40 transition text-sm uppercase tracking-wider">
                     Regisztráció és Tovább a Próbához
                 </button>
@@ -759,7 +772,14 @@
             const email = document.getElementById('reg-email').value;
             const password = document.getElementById('reg-password').value;
             const passwordConfirm = document.getElementById('reg-password-confirm').value;
+            const privacyChecked = document.getElementById('reg-privacy-check').checked;
+            const termsChecked = document.getElementById('reg-terms-check').checked;
             const msgEl = document.getElementById('register-message');
+
+            if (!privacyChecked || !termsChecked) {
+                msgEl.innerHTML = '<span class="text-red-400 font-bold">Hiba: Az adatvédelmi nyilatkozat és a feltételek elfogadása kötelező!</span>';
+                return;
+            }
 
             if (password !== passwordConfirm) {
                 msgEl.innerHTML = '<span class="text-red-400 font-bold">Hiba: A két jelszó nem egyezik meg!</span>';
