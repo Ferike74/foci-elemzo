@@ -23,13 +23,6 @@
             -webkit-backdrop-filter: blur(3px);
             border: 1px solid rgba(255, 255, 255, 0.12);
         }
-        .high-contrast-panel {
-            background: rgba(3, 7, 18, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 2px solid rgba(245, 158, 11, 0.4);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-        }
         .league-card-custom {
             background: rgba(3, 10, 20, 0.75);
             backdrop-filter: blur(12px);
@@ -97,21 +90,21 @@
             </div>
         </header>
 
-        <!-- 2. INFORMÁCIÓS PANEL (Magas kontrasztú, kiemelkedő megjelenés) -->
-        <section class="high-contrast-panel rounded-3xl p-6 md:p-8 space-y-4 text-center">
-            <h2 class="text-amber-400 font-black text-lg md:text-2xl uppercase tracking-wide drop-shadow-md">
+        <!-- 2. INFORMÁCIÓS PANEL (Áttetsző, magas kontrasztú design) -->
+        <section class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl space-y-4 text-center border border-white/20">
+            <h2 class="text-amber-300 font-black text-lg md:text-2xl uppercase tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                 ⚽ Üdvözlünk a professzionális elemző oldalon!
             </h2>
-            <div class="inline-block bg-red-600 border border-red-400 px-5 py-2 rounded-2xl shadow-lg">
+            <div class="inline-block bg-red-600/90 border border-red-400 px-5 py-2 rounded-2xl shadow-2xl">
                 <span class="text-xs md:text-sm font-black text-white uppercase tracking-widest drop-shadow">
                     ⚠️ Ez nem egy TIPP adó oldal!
                 </span>
             </div>
-            <p class="text-sm md:text-base text-white font-medium leading-relaxed drop-shadow max-w-3xl mx-auto">
-                Regisztráció után az első <span class="text-emerald-400 font-bold underline">3 nap ingyenes</span>, majd <span class="text-amber-300 font-bold underline">7999 Ft/hó</span>! Itt minden információt megtalálsz a tökéletes fogadás elkészítéséhez.
+            <p class="text-sm md:text-base text-white font-bold leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] max-w-3xl mx-auto">
+                Regisztráció után az első <span class="text-emerald-400 underline decoration-2">3 nap ingyenes</span>, majd <span class="text-amber-300 underline decoration-2">7999 Ft/hó</span>! Itt minden információt megtalálsz a tökéletes fogadás elkészítéséhez.
             </p>
             <div class="pt-2">
-                <button onclick="openRegisterModal()" class="bg-gradient-to-r from-red-600 hover:from-red-500 to-amber-500 hover:to-amber-400 text-white font-black px-8 py-3.5 rounded-2xl shadow-2xl shadow-red-600/50 transition transform hover:scale-105 uppercase text-xs md:text-sm tracking-widest border border-amber-400/60">
+                <button onclick="openRegisterModal()" class="bg-gradient-to-r from-red-600 hover:from-red-500 to-amber-500 hover:to-amber-400 text-white font-black px-8 py-3.5 rounded-2xl shadow-2xl shadow-red-600/60 transition transform hover:scale-105 uppercase text-xs md:text-sm tracking-widest border border-amber-400/60">
                     Regisztrálj most! 🚀
                 </button>
             </div>
