@@ -1,1515 +1,818 @@
 <!DOCTYPE html>
-
 <html lang="hu">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Sportfogadás Elemző Agent | Prémium Platform</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     
-
     <!-- Vercel Web Analytics Szkript -->
-
     <script defer src="/_vercel/insights/script.js"></script>
 
-
-
     <style>
-
         body {
-
             background-image: url('stadion.jpg');
-
             background-size: cover;
-
             background-position: center;
-
             background-attachment: fixed;
-
         }
-
         .glass-panel {
-
             background: rgba(5, 10, 20, 0.02);
-
             backdrop-filter: blur(3px);
-
             -webkit-backdrop-filter: blur(3px);
-
             border: 1px solid rgba(255, 255, 255, 0.12);
-
         }
-
         .league-card-custom {
-
             background: rgba(3, 10, 20, 0.75);
-
             backdrop-filter: blur(12px);
-
             -webkit-backdrop-filter: blur(12px);
-
             border: 1px solid rgba(52, 211, 153, 0.4);
-
             align-self: start;
-
             transition: all 0.3s ease;
-
         }
-
         .league-card-custom:hover {
-
             background: rgba(5, 18, 35, 0.85);
-
             border-color: rgba(56, 189, 248, 0.8);
-
             box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
-
         }
-
         .slightly-lighter-green {
-
             color: #34d399;
-
             font-weight: 700;
-
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-
         }
-
         .no-scrollbar::-webkit-scrollbar { display: none; }
-
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
     </style>
-
 </head>
-
 <body class="min-h-screen text-white font-sans antialiased flex flex-col justify-between">
 
-
-
     <div class="relative z-10 flex flex-col min-h-screen p-4 md:p-6 max-w-7xl mx-auto w-full">
-
         
-
         <!-- Fejléc -->
-
         <header class="glass-panel rounded-3xl px-6 py-6 flex flex-col items-center justify-center text-center shadow-2xl mb-6 relative">
-
             <div class="absolute left-6 top-1/2 -translate-y-1/2 hidden md:flex items-center space-x-3">
-
                 <span class="text-4xl">⚽</span>
-
             </div>
-
             
-
             <div class="w-full">
-
                 <h1 class="font-black tracking-wider text-3xl md:text-5xl bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent drop-shadow-lg uppercase">
-
                     Európai ligák és kupák
-
                 </h1>
-
                 <div class="font-black tracking-widest text-3xl md:text-5xl bg-gradient-to-r from-amber-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg uppercase mt-2">
-
                     Focielemzése
-
                 </div>
-
             </div>
-
-
 
             <!-- Jobb oldali gombok asztali nézetben -->
-
             <div class="absolute right-6 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-end space-y-1">
-
                 <span id="user-status" class="text-xs text-gray-200 drop-shadow mb-1"></span>
-
                 <div class="flex flex-col items-center space-y-1 mb-1">
-
                     <span class="text-[9px] slightly-lighter-green uppercase tracking-wider bg-black/80 px-1.5 py-0.5 rounded shadow">REGISZTRÁCIÓ UTÁN AZ ELSŐ</span>
-
                     <span class="text-[11px] slightly-lighter-green font-black uppercase tracking-wider bg-black/80 px-2 py-0.5 rounded shadow">3 NAP INGYENES</span>
-
                 </div>
-
                 <div class="flex items-center space-x-2">
-
                     <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
-
                         Regisztráció
-
                     </button>
-
                     <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 transition transform hover:scale-105 uppercase text-xs tracking-wider">
-
                         Belépés
-
                     </button>
-
                 </div>
-
             </div>
-
-
 
             <!-- Mobil nézetű gombok -->
-
             <div class="mt-4 flex flex-col md:hidden items-center justify-center space-y-1 w-full">
-
                 <div class="flex flex-col items-center space-y-1 mb-1">
-
                     <span class="text-[9px] slightly-lighter-green uppercase tracking-wider bg-black/80 px-1.5 py-0.5 rounded shadow">REGISZTRÁCIÓ UTÁN AZ ELSŐ</span>
-
                     <span class="text-[11px] slightly-lighter-green font-black uppercase tracking-wider bg-black/80 px-2 py-0.5 rounded shadow">3 NAP INGYENES</span>
-
                 </div>
-
                 <div class="flex items-center space-x-2 mt-1">
-
                     <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 uppercase text-xs tracking-wider">
-
                         Regisztráció
-
                     </button>
-
                     <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 uppercase text-xs tracking-wider">
-
                         Belépés
-
                     </button>
-
                 </div>
-
             </div>
-
         </header>
 
-
-
         <!-- KÁRTYÁS RÁCS -->
-
         <div class="space-y-6 mb-8">
-
             <div>
-
                 <h2 class="text-lg font-bold text-amber-400 mb-3 drop-shadow flex items-center gap-2">
-
                     <span>🏆</span> Kiemelt Nemzetközi Kupák
-
                 </h2>
-
                 <div id="international-cups-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start"></div>
-
             </div>
-
-
 
             <div>
-
                 <h2 class="text-lg font-bold text-sky-400 mb-3 drop-shadow flex items-center gap-2">
-
                     <span>🌍</span> Országok és Ligák
-
                 </h2>
-
                 <div id="countries-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start"></div>
-
             </div>
-
         </div>
-
-
 
         <!-- Aktív Meccs sáv -->
-
         <div class="mb-4 flex items-center justify-between">
-
             <div class="flex items-center space-x-3">
-
                 <span class="text-xs uppercase tracking-widest text-red-400 font-bold drop-shadow-md">Kiválasztott Elemzés:</span>
-
                 <div class="bg-red-600 text-white text-xs px-3 py-1 rounded-full font-semibold shadow" id="badge-match-title">
-
                     Válassz a kártyák közül...
-
                 </div>
-
             </div>
-
             <span class="text-xs text-amber-300 font-semibold italic">💡 Kattints bármelyik országra vagy kupára a meccsek listájához!</span>
-
         </div>
-
-
 
         <!-- Fő Kártya -->
-
         <main onclick="if(currentActiveMatch) openFullAnalysisModal()" class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl flex-1 flex flex-col justify-between cursor-pointer hover:border-sky-400/50 transition">
-
             <div>
-
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-4 mb-6">
-
                     <div>
-
                         <span class="text-xs text-red-400 uppercase font-bold tracking-wider drop-shadow" id="match-league-subtitle">Éles Elemzés</span>
-
                         <h3 class="text-2xl md:text-3xl font-black mt-1 drop-shadow-md" id="match-title">Válassz egy meccset a kártyákból...</h3>
-
                     </div>
-
                     <div class="mt-2 md:mt-0 text-sm text-white bg-black/20 px-4 py-1.5 rounded-xl border border-white/10 backdrop-blur-sm" id="match-time">--</div>
-
                 </div>
-
-
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-
                     <div class="bg-black/20 border border-green-500/40 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
-
                         <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Valószínűség (Fair Odds)</div>
-
                         <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-odds">--</div>
-
                     </div>
-
                     <div class="bg-black/20 border border-green-500/40 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
-
                         <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Várható Gólok (xG Átlag)</div>
-
                         <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-xg">--</div>
-
                     </div>
-
                     <div class="bg-black/20 border border-green-500/40 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
-
                         <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Statisztikai Mutató</div>
-
                         <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-corners">--</div>
-
                     </div>
-
                     <div class="bg-black/20 border border-green-500/40 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
-
                         <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Szimulációs Minőség</div>
-
                         <div class="text-2xl font-black text-white mt-1 drop-shadow-md">100 000 Futás</div>
-
                     </div>
-
                 </div>
-
-
 
                 <p class="text-sm text-white bg-black/20 p-4 rounded-xl border border-white/10 mb-6 backdrop-blur-sm drop-shadow" id="match-desc">
-
                     A részletes elemzés megnyitásához kattints ide vagy válassz a mérkőzések közül!
-
                 </p>
-
             </div>
-
-
 
             <div onclick="event.stopPropagation(); openRegisterModal();" class="block bg-gradient-to-r from-red-950/30 via-black/20 to-red-950/30 border border-red-500/40 rounded-2xl p-5 text-center cursor-pointer hover:border-red-400 transition shadow-2xl backdrop-blur-sm">
-
                 <div class="text-amber-400 font-bold text-sm flex items-center justify-center space-x-2 mb-1 drop-shadow">
-
                     <span>🔒</span>
-
                     <span>TELJES ODDS MÁTRIX ZÁROLVA</span>
-
                 </div>
-
                 <p class="text-xs text-white drop-shadow">Regisztrálj most és tekintsd meg mind a 40+ kielemzett fogadási piacot a 3 napos ingyenes próbaidőszakkal!</p>
-
             </div>
-
         </main>
 
-
-
-        <footer class="mt-6 text-center text-xs text-gray-200 pb-2 drop-shadow">
-
-            &copy; 2026 Sportfogadás Elemző Agent. Minden jog fenntartva.
-
+        <footer class="mt-6 text-center text-xs text-gray-200 pb-2 drop-shadow space-y-2">
+            <div>&copy; 2026 Sportfogadás Elemző Agent. Minden jog fenntartva.</div>
+            <div class="flex justify-center space-x-4 text-gray-300">
+                <button onclick="openPrivacyModal()" class="hover:text-amber-400 underline transition">Adatvédelmi nyilatkozat</button>
+                <span>|</span>
+                <button onclick="openTermsModal()" class="hover:text-amber-400 underline transition">Felhasználási feltételek</button>
+            </div>
         </footer>
-
     </div>
-
-
 
     <!-- Liga Meccsei Modal -->
-
     <div id="league-matches-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-
         <div class="glass-panel bg-slate-950/50 border border-white/20 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl backdrop-blur-md">
-
             <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-2xl font-bold">&times;</button>
-
             <h3 id="league-modal-title" class="text-lg font-black slightly-lighter-green mb-4 border-b border-green-500/30 pb-2">Válassz meccset</h3>
-
             <div id="league-modal-list" class="space-y-2 max-h-64 overflow-y-auto no-scrollbar"></div>
-
         </div>
-
     </div>
-
-
 
     <!-- Teljes HTML Elemzés Modal -->
-
     <div id="full-analysis-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 md:p-6">
-
         <div class="bg-[#f0f2f5] text-[#1c1e21] w-full max-w-5xl max-h-[92vh] rounded-3xl p-4 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto font-sans">
-
             <button onclick="closeFullAnalysisModal()" class="absolute top-4 right-6 text-slate-700 hover:text-red-600 text-4xl font-black z-50 bg-white/90 px-3 py-1 rounded-full shadow">&times;</button>
-
             <div id="modal-html-container" class="mt-2"></div>
-
             <div class="mt-6 text-center border-t pt-4 bg-[#f0f2f5]">
-
                 <button onclick="closeFullAnalysisModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-lg transition text-xs uppercase tracking-wider">
-
                     Bezárás
-
                 </button>
-
             </div>
-
         </div>
-
     </div>
 
+    <!-- Adatvédelmi Nyilatkozat Modal -->
+    <div id="privacy-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 text-gray-200 border border-white/20 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
+            <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-white hover:text-red-400 text-3xl font-bold">&times;</button>
+            <h3 class="text-xl font-black text-amber-400 mb-4 border-b border-white/10 pb-2">Adatvédelmi Nyilatkozat</h3>
+            <div class="space-y-4 text-xs leading-relaxed text-gray-300">
+                <p><strong>1. Adatkezelő adatai:</strong> A Focielemzések platform üzemeltetője elkötelezett a felhasználók személyes adatainak védelme mellett. Jelen adatvédelmi nyilatkozat rögzíti a szolgáltatás igénybevétele során gyűjtött adatok kezelésének elveit.</p>
+                <p><strong>2. Kezelt adatok köre:</strong> A regisztráció során kizárólag az Ön által megadott e-mail címet és a biztonságos hitelesítéshez szükséges titkosított jelszóadatokat tároljuk (Supabase rendszeren keresztül). A fizetési folyamatokat a Stripe biztonságos rendszere kezeli, bankkártyaadatokat a szervereink nem tárolnak.</p>
+                <p><strong>3. Az adatkezelés célja:</strong> A megadott e-mail címet kizárólag a fiók azonosítása, a belépés biztosítása, valamint a prémium előfizetés és a próbaidőszak kezelése céljából használjuk.</p>
+                <p><strong>4. Adatbiztonság:</strong> Minden adatátvitel titkosított csatornákon (HTTPS) történik, és a hozzáférést szigorú biztonsági protokollok védik.</p>
+            </div>
+            <div class="mt-6 text-center border-t border-white/10 pt-4">
+                <button onclick="closePrivacyModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider">Bezárás</button>
+            </div>
+        </div>
+    </div>
 
+    <!-- Felhasználási Feltételek Modal -->
+    <div id="terms-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 text-gray-200 border border-white/20 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
+            <button onclick="closeTermsModal()" class="absolute top-4 right-6 text-white hover:text-red-400 text-3xl font-bold">&times;</button>
+            <h3 class="text-xl font-black text-amber-400 mb-4 border-b border-white/10 pb-2">Felhasználási Feltételek és Jogi Nyilatkozat</h3>
+            <div class="space-y-4 text-xs leading-relaxed text-gray-300">
+                <p><strong>1. A szolgáltatás jellege:</strong> A Focielemzések egy mesterséges intelligencián és kvantitatív statisztikai szimulációkon alapuló sportfogadási elemző platform. Az oldalon megjelenő adatok, szimulációk és "fair odds" értékek kizárólag tájékoztató jellegűek.</p>
+                <p><strong>2. Felelősségvállalás korlátozása:</strong> A platformon található információk felhasználása a felhasználó saját felelősségére történik. Az üzemeltető semmilyen pénzügyi felelősséget nem vállal a sportfogadásokból eredő esetleges veszteségekért.</p>
+                <p><strong>3. Előfizetés és próbaidőszak:</strong> A regisztrációt követő 3 napos ingyenes próbaidőszak lejárta után a szolgáltatás fenntartásához az aktív előfizetés fenntartása szükséges. Az előfizetés bármikor lemondható.</p>
+                <p><strong>4. Szerzői jogok:</strong> A weboldalon található egyedi elemzések, elrendezések és szoftveres megoldások az üzemeltető szellemi tulajdonát képezik, azok illetéktelen másolása vagy terjesztése tilos.</p>
+            </div>
+            <div class="mt-6 text-center border-t border-white/10 pt-4">
+                <button onclick="closeTermsModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider">Bezárás</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Regisztrációs Modal -->
-
     <div id="register-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-
         <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-white/20 shadow-2xl">
-
             <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-xl font-bold">&times;</button>
-
             <div class="text-center mb-6">
-
                 <span class="text-3xl">⚽</span>
-
                 <h3 class="text-xl font-extrabold mt-2 drop-shadow">Fiók létrehozása</h3>
-
                 <p class="text-xs text-amber-300 mt-1">A regisztráció után átirányítunk a 3 napos ingyenes próba aktiválásához!</p>
-
             </div>
-
             <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4">
-
                 <div>
-
                     <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Email cím</label>
-
                     <input type="email" id="reg-email" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="pelda@email.hu">
-
                 </div>
-
                 <div>
-
                     <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Jelszó</label>
-
                     <input type="password" id="reg-password" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="••••••••">
-
                 </div>
-
                 <div>
-
                     <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Jelszó mégegyszer</label>
-
                     <input type="password" id="reg-password-confirm" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="••••••••">
-
                 </div>
-
                 <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-red-600/40 transition text-sm uppercase tracking-wider">
-
                     Regisztráció és Tovább a Próbához
-
                 </button>
-
             </form>
-
             <div id="register-message" class="text-center text-xs mt-4"></div>
-
         </div>
-
     </div>
-
-
 
     <!-- Belépési Modal -->
-
     <div id="login-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-
         <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-white/20 shadow-2xl">
-
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-xl font-bold">&times;</button>
-
             <div class="text-center mb-6">
-
                 <span class="text-3xl">⚽</span>
-
                 <h3 id="login-modal-title" class="text-xl font-extrabold mt-2 drop-shadow">Bejelentkezés a fiókodba</h3>
-
             </div>
-
             
-
             <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
-
                 <div>
-
                     <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Email cím</label>
-
                     <input type="email" id="login-email" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="pelda@email.hu">
-
                 </div>
-
                 <div>
-
                     <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Jelszó</label>
-
                     <input type="password" id="login-password" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="••••••••">
-
                 </div>
-
                 <div class="text-right">
-
                     <button type="button" onclick="showForgotPassword()" class="text-xs text-amber-300 hover:underline">Elfelejtetted a jelszavad?</button>
-
                 </div>
-
                 <button type="submit" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl shadow-lg border border-white/20 transition text-sm uppercase tracking-wider">
-
                     Belépés
-
                 </button>
-
             </form>
-
-
 
             <form id="forgot-form" onsubmit="handleForgotPassword(event)" class="space-y-4 hidden">
-
                 <p class="text-xs text-gray-300 text-center mb-2">Add meg az email címed, és küldünk egy linket a jelszó visszaállításához.</p>
-
                 <div>
-
                     <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Email cím</label>
-
                     <input type="email" id="forgot-email" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="pelda@email.hu">
-
                 </div>
-
                 <div class="text-left">
-
                     <button type="button" onclick="showLoginForm()" class="text-xs text-amber-300 hover:underline">&larr; Vissza a bejelentkezéshez</button>
-
                 </div>
-
                 <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl shadow-lg transition text-sm uppercase tracking-wider">
-
                     Új jelszó küldése
-
                 </button>
-
             </form>
 
-
-
             <div id="login-message" class="text-center text-xs mt-4"></div>
-
         </div>
-
     </div>
 
-
-
     <script>
-
         const SUPABASE_URL = 'https://gyozibfurwsbdutwmgrl.supabase.co';
-
         const SUPABASE_ANON_KEY = 'sb_publishable_sz4cCjpwZ6pFNK8J-3d80Q_T8GfpSUy';
-
         
-
         let supabaseClient = null;
-
         try {
-
             supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
         } catch (e) {
-
             console.error("Supabase hiba:", e);
-
         }
-
-
 
         let allMatches = [];
-
         let currentActiveMatch = null;
-
         let rotationQueue = [];
-
         let rotationIndex = 0;
-
         let rotationInterval = null;
 
-
-
         const countriesConfig = [
-
             {
-
                 country: "Anglia",
-
                 leagues: [
-
                     { key: "premier", name: "Premier League", synonyms: ["premier league", "anglia premier", "premier"] },
-
                     { key: "championship", name: "Championship", synonyms: ["championship"] },
-
                     { key: "fakupa", name: "FA Kupa", synonyms: ["fa kupa", "fa cup"] },
-
                     { key: "eflkupa", name: "EFL Kupa", synonyms: ["efl kupa", "efl cup", "league cup"] }
-
                 ]
-
             },
-
             {
-
                 country: "Spanyolország",
-
                 leagues: [
-
                     { key: "laliga", name: "La Liga", synonyms: ["la liga", "spanyol", "laliga"] },
-
                     { key: "spanyolkupa", name: "Spanyol Kupa", synonyms: ["spanyol kupa", "copa del rey"] }
-
                 ]
-
             },
-
             {
-
                 country: "Németország",
-
                 leagues: [
-
                     { key: "bundesliga", name: "Német Bundesliga", synonyms: ["német bundesliga", "német", "bundesliga"] },
-
                     { key: "nemetkupa", name: "Német Kupa", synonyms: ["német kupa", "dfb pokal"] }
-
                 ]
-
             },
-
             {
-
                 country: "Olaszország",
-
                 leagues: [
-
                     { key: "seriea", name: "Serie A", synonyms: ["serie a", "olasz"] },
-
                     { key: "olaszkupa", name: "Olasz Kupa", synonyms: ["olasz kupa", "coppa italia"] }
-
                 ]
-
             },
-
             {
-
                 country: "Franciaország",
-
                 leagues: [
-
                     { key: "ligue1", name: "Liga 1", synonyms: ["liga 1", "ligue 1", "francia"] },
-
                     { key: "franciakupa", name: "Francia Kupa", synonyms: ["francia kupa", "coupe de france"] }
-
                 ]
-
             },
-
             {
-
                 country: "Hollandia",
-
                 leagues: [
-
                     { key: "holland", name: "Eredivisie", synonyms: ["holland", "eredivisie"] },
-
                     { key: "hollandkupa", name: "Holland Kupa", synonyms: ["holland kupa", "knvb beker"] }
-
                 ]
-
             },
-
             {
-
                 country: "Portugália",
-
                 leagues: [
-
                     { key: "portugal", name: "Liga Portugal", synonyms: ["portugál", "liga portugal"] },
-
                     { key: "portugalkupa", name: "Portugál Kupa", synonyms: ["portugál kupa", "taca de portugal"] }
-
                 ]
-
             },
-
             {
-
                 country: "Törökország",
-
                 leagues: [
-
                     { key: "superlig", name: "Süper Lig", synonyms: ["török", "süper lig", "super lig"] },
-
                     { key: "torokkupa", name: "Török Kupa", synonyms: ["török kupa"] }
-
                 ]
-
             },
-
             {
-
                 country: "Görögország",
-
                 leagues: [
-
                     { key: "gorog", name: "Szuperliga", synonyms: ["görög", "szuperliga"] },
-
                     { key: "gorogkupa", name: "Görög Kupa", synonyms: ["görög kupa"] }
-
                 ]
-
             },
-
             {
-
                 country: "Ausztria",
-
                 leagues: [
-
                     { key: "ausztria", name: "Osztrák Bundesliga", synonyms: ["osztrák bundesliga", "osztrák", "ausztria"] }
-
                 ]
-
             },
-
             {
-
                 country: "Belgium",
-
                 leagues: [
-
                     { key: "belga", name: "Jupiler Liga", synonyms: ["belga", "jupiler", "belgium first div"] }
-
                 ]
-
             },
-
             {
-
                 country: "Svájc",
-
                 leagues: [
-
                     { key: "svajc", name: "Super League", synonyms: ["svájc", "svájci", "super league"] }
-
                 ]
-
             },
-
             {
-
                 country: "Skócia",
-
                 leagues: [
-
                     { key: "skocia", name: "Premiership", synonyms: ["skócia", "skót", "premiership"] }
-
                 ]
-
             },
-
             {
-
                 country: "Dánia",
-
                 leagues: [
-
                     { key: "dania", name: "Superliga", synonyms: ["dánia", "dán", "superliga"] }
-
                 ]
-
             },
-
             {
-
                 country: "Svédország",
-
                 leagues: [
-
                     { key: "svedorszag", name: "Allsvenskan", synonyms: ["svédország", "svéd", "allsvenskan"] }
-
                 ]
-
             }
-
         ];
-
-
 
         const internationalConfig = [
-
             { key: "ucl", name: "UEFA Bajnokok Ligája", synonyms: ["bajnokok ligája", "champions league", "ucl", "bl"] },
-
             { key: "europaliga", name: "UEFA Európa Liga", synonyms: ["európa liga", "europa league"] },
-
             { key: "konferencia", name: "UEFA Konferencia Liga", synonyms: ["konferencia liga", "conference league"] }
-
         ];
 
-
-
         window.addEventListener('DOMContentLoaded', async () => {
-
             if (supabaseClient) {
-
                 const { data: { session } } = await supabaseClient.auth.getSession();
-
                 if (session) {
-
                     document.getElementById('user-status').innerText = `Bejelentkezve: ${session.user.email}`;
-
                 }
-
-
 
                 const { data: analyses, error } = await supabaseClient
-
                     .from('match_analyses')
-
                     .select('*')
-
                     .order('id', { ascending: true });
 
-
-
                 if (!error && analyses && analyses.length > 0) {
-
                     allMatches = analyses.filter(m => m.match_title && m.match_title.trim() !== "");
-
                     buildDashboard(allMatches);
-
                     initRotationQueue(allMatches);
-
                 } else {
-
                     buildDashboard([]);
-
                 }
-
             } else {
-
                 buildDashboard([]);
-
             }
-
         });
 
-
-
         function matchBelongsToLeague(dbLeagueName, leagueConfig, countryName) {
-
             if (!dbLeagueName) return false;
-
             const lowerDb = dbLeagueName.toLowerCase();
-
             
-
             if (leagueConfig.name === "Német Bundesliga") {
-
                 if (lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria")) return false;
-
             }
-
             if (leagueConfig.name === "Osztrák Bundesliga") {
-
                 if (!lowerDb.includes("osztrák") && !lowerDb.includes("ausztria") && !lowerDb.includes("austria")) return false;
-
             }
-
-
 
             return leagueConfig.synonyms.some(syn => lowerDb.includes(syn)) || lowerDb.includes(leagueConfig.name.toLowerCase());
-
         }
-
-
 
         function buildDashboard(matches) {
-
             const intContainer = document.getElementById('international-cups-grid');
-
             const countryContainer = document.getElementById('countries-grid');
-
             
-
             intContainer.innerHTML = '';
-
             countryContainer.innerHTML = '';
 
-
-
             internationalConfig.forEach(cup => {
-
                 const cupMatches = matches.filter(m => matchBelongsToLeague(m.league_name, cup));
-
                 
-
                 const card = document.createElement('div');
-
                 card.className = "league-card-custom rounded-2xl p-4 flex justify-between items-center shadow-xl cursor-pointer transition";
-
                 card.innerHTML = `
-
                     <div>
-
                         <div class="text-sm font-black uppercase tracking-tight slightly-lighter-green">${cup.name}</div>
-
                         <div class="text-xs text-white font-medium mt-0.5">${cupMatches.length} meccs elemzés</div>
-
                     </div>
-
                     <span class="bg-red-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow">${cupMatches.length}</span>
-
                 `;
-
                 card.onclick = () => openLeagueModal(cup, cupMatches);
-
                 intContainer.appendChild(card);
-
             });
-
-
 
             countriesConfig.forEach((item, index) => {
-
                 let countryTotalMatches = 0;
-
                 let leaguesHtml = '';
 
-
-
                 item.leagues.forEach(league => {
-
                     const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league, item.country));
-
                     countryTotalMatches += leagueMatches.length;
 
-
-
                     leaguesHtml += `
-
                         <div onclick="event.stopPropagation(); openLeagueModal(${JSON.stringify(league).replace(/"/g, '&quot;')}, ${JSON.stringify(leagueMatches).replace(/"/g, '&quot;')})" 
-
                              class="flex justify-between items-center py-2 px-3 hover:bg-red-950/30 rounded-xl text-xs cursor-pointer transition border border-transparent hover:border-red-500/40">
-
                             <span class="font-medium slightly-lighter-green">⚽ ${league.name}</span>
-
                             <span class="bg-red-600 text-white font-bold px-2 py-0.5 rounded-full shadow">${leagueMatches.length} meccs</span>
-
                         </div>
-
                     `;
-
                 });
-
-
 
                 const contentId = `country-content-${index}`;
-
                 const iconId = `country-icon-${index}`;
 
-
-
                 const countryCard = document.createElement('div');
-
                 countryCard.className = "league-card-custom rounded-2xl shadow-xl overflow-hidden transition";
-
                 countryCard.innerHTML = `
-
                     <div onclick="toggleCountryAccordion('${contentId}', '${iconId}')" class="p-4 flex justify-between items-center cursor-pointer select-none">
-
                         <div>
-
                             <h3 class="font-extrabold text-base slightly-lighter-green tracking-wide">${item.country}</h3>
-
                             <p class="text-xs text-white mt-0.5">Összesen: <span class="text-white font-bold">${countryTotalMatches} meccs</span></p>
-
                         </div>
-
                         <div class="flex items-center space-x-2">
-
                             <span class="bg-red-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow">${countryTotalMatches}</span>
-
                             <span id="${iconId}" class="text-xs slightly-lighter-green transform transition-transform duration-200">▼</span>
-
                         </div>
-
                     </div>
-
                     <div id="${contentId}" class="country-accordion-content hidden px-3 pb-3 pt-1 border-t border-white/10 bg-black/30 space-y-1">
-
                         ${leaguesHtml}
-
                     </div>
-
                 `;
-
                 countryContainer.appendChild(countryCard);
-
             });
-
         }
-
-
 
         function toggleCountryAccordion(contentId, iconId) {
-
             const content = document.getElementById(contentId);
-
             const icon = document.getElementById(iconId);
-
             content.classList.toggle('hidden');
-
             icon.classList.toggle('rotate-180');
-
         }
-
-
 
         function closeAllModalsAndAccordions() {
-
             document.getElementById('league-matches-modal').classList.add('hidden');
-
             document.getElementById('full-analysis-modal').classList.add('hidden');
-
+            document.getElementById('privacy-modal').classList.add('hidden');
+            document.getElementById('terms-modal').classList.add('hidden');
             
-
             document.body.style.overflow = 'auto';
-
             
-
             document.querySelectorAll('.country-accordion-content').forEach(el => el.classList.add('hidden'));
-
             document.querySelectorAll('[id^="country-icon-"]').forEach(el => el.classList.remove('rotate-180'));
-
         }
-
-
 
         function initRotationQueue(matches) {
-
             rotationQueue = [];
-
             internationalConfig.forEach(cup => {
-
                 matches.filter(m => matchBelongsToLeague(m.league_name, cup)).forEach(m => rotationQueue.push(m));
-
             });
-
             countriesConfig.forEach(c => {
-
                 c.leagues.forEach(league => {
-
                     matches.filter(m => matchBelongsToLeague(m.league_name, league, c.country)).forEach(m => rotationQueue.push(m));
-
                 });
-
             });
-
-
 
             if (rotationQueue.length > 0) {
-
                 rotationIndex = 0;
-
                 renderMatch(rotationQueue[0]);
-
                 startRotation();
-
             }
-
         }
-
-
 
         function startRotation() {
-
             if (rotationInterval) clearInterval(rotationInterval);
-
             rotationInterval = setInterval(() => {
-
                 if (rotationQueue.length === 0) return;
-
                 rotationIndex = (rotationIndex + 1) % rotationQueue.length;
-
                 renderMatch(rotationQueue[rotationIndex]);
-
             }, 15000);
-
         }
-
-
 
         function openLeagueModal(league, leagueMatches) {
-
             if (rotationInterval) clearInterval(rotationInterval);
 
-
-
             document.body.style.overflow = 'hidden';
-
-
 
             document.getElementById('league-modal-title').innerText = `${league.name} - Elemzett Meccsek`;
-
             const listEl = document.getElementById('league-modal-list');
-
             listEl.innerHTML = '';
 
-
-
             if (leagueMatches.length > 0) {
-
                 leagueMatches.forEach(m => {
-
                     const mBtn = document.createElement('button');
-
                     mBtn.className = "w-full text-left px-4 py-3 text-sm text-white bg-black/40 hover:bg-red-950/50 border border-green-500/30 rounded-xl transition flex items-center justify-between cursor-pointer shadow";
-
                     mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-xs text-red-400 font-bold">Megnyitás &rarr;</span>`;
-
                     
-
                     mBtn.onclick = () => {
-
                         currentActiveMatch = m;
-
                         renderMatch(m);
-
                         document.getElementById('league-matches-modal').classList.add('hidden');
-
                         openFullAnalysisModal();
-
                     };
-
                     listEl.appendChild(mBtn);
-
                 });
-
             } else {
-
                 const emptyEl = document.createElement('div');
-
                 emptyEl.className = "px-4 py-4 text-xs text-gray-400 italic text-center bg-black/20 rounded-xl";
-
                 emptyEl.innerText = "Ehhez a ligához nincsenek még feltöltött elemzések ma.";
-
                 listEl.appendChild(emptyEl);
-
             }
-
-
 
             document.getElementById('league-matches-modal').classList.remove('hidden');
-
         }
-
-
 
         function closeLeagueModal() {
-
             closeAllModalsAndAccordions();
-
             startRotation();
-
         }
-
-
 
         function renderMatch(item) {
-
             if (!item) return;
-
             currentActiveMatch = item;
-
             document.getElementById('match-title').innerText = item.match_title || "Ismeretlen meccs";
-
             document.getElementById('badge-match-title').innerText = item.match_title || "Ismeretlen meccs";
-
             document.getElementById('match-time').innerText = item.match_time || "Közelben";
-
             document.getElementById('match-league-subtitle').innerText = item.league_name || "Éles Elemzés";
-
             
-
             let oddsVal = item.fair_odds_val || item.odds_val || item.fair_odds || item.odds || null;
-
             let xgVal = item.xg_val || item.xg || null;
-
             let statsVal = item.special_val || item.stats_val || item.statisztikai_mutato || null;
 
-
-
             if ((!oddsVal || !xgVal) && item.full_html) {
-
                 const tempDiv = document.createElement('div');
-
                 tempDiv.innerHTML = item.full_html;
-
                 const textContent = tempDiv.innerText || tempDiv.textContent || "";
-
                 
-
                 const matchOdds = textContent.match(/([1-9]\.[0-9]{2})/);
-
                 if (matchOdds && !oddsVal) oddsVal = matchOdds[1];
 
-
-
                 const matchXg = textContent.match(/([0-9]\.[0-9]{2}\s*xG|xG[:\s]*[0-9]\.[0-9]{2})/i);
-
                 if (matchXg && !xgVal) xgVal = matchXg[0];
-
             }
-
-
 
             document.getElementById('stat-odds').innerText = oddsVal || "1.85";
-
             document.getElementById('stat-xg').innerText = xgVal || "~3.00 xG";
-
             document.getElementById('stat-corners').innerText = statsVal || "BTTS: Igen";
-
             
-
             let desc = item.analysis_desc || "";
-
             if (desc.includes("<!DOCTYPE") || desc.includes("<html")) {
-
                 desc = "Kattints a kártyára a részletes és teljes körű statisztikai elemzés megtekintéséhez!";
-
             }
-
             document.getElementById('match-desc').innerText = desc;
-
         }
 
-
-
         function openFullAnalysisModal() {
-
             if (!currentActiveMatch) return;
-
             if (rotationInterval) clearInterval(rotationInterval);
-
-
 
             document.body.style.overflow = 'hidden';
 
-
-
             const container = document.getElementById('modal-html-container');
-
             let htmlContent = currentActiveMatch.full_html || "";
 
-
-
             htmlContent = htmlContent.replace(/<!DOCTYPE[^>]*>/gi, '');
-
             htmlContent = htmlContent.replace(/<\/?html[^>]*>/gi, '');
-
             htmlContent = htmlContent.replace(/<\/?head[^>]*>[\s\S]*?<\/head>/gi, '');
-
             htmlContent = htmlContent.replace(/<\/?body[^>]*>/gi, '');
-
             htmlContent = htmlContent.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
-
             htmlContent = htmlContent.replace(/<h1>.*?<\/h1>/gi, '');
 
-
-
             let styledHtml = `
-
                 <style>
-
                   .analysis-body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; background-color: #f0f2f5; color: #1c1e21; margin: 0; padding: 10px; }
-
                   .analysis-container { max-width: 950px; margin: 0 auto; }
-
                   .analysis-title { text-align: center; color: #003366; margin-bottom: 25px; font-size: 26px; font-weight: bold; }
-
                   .match-card { background: #ffffff; border-radius: 10px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 6px solid #0056b3; }
-
                   .match-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; border-bottom: 2px solid #edf2f7; padding-bottom: 10px; margin-bottom: 15px; }
-
                   .match-header h2 { margin: 0; color: #003366; font-size: 22px !important; font-weight: 900 !important; flex-grow: 1; letter-spacing: -0.5px; }
-
                   .league { background: #e2e8f0; color: #334155; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 4px; margin-right: 10px; }
-
                   .match-header .time { font-size: 15px !important; color: #0f172a !important; font-weight: 700 !important; background: #e2e8f0; padding: 4px 8px; border-radius: 4px; }
-
                   .odds-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
-
                   .odds-table th { background-color: #003366; color: #ffffff; padding: 9px 12px; text-align: center; font-weight: 600; }
-
                   .odds-table td { padding: 9px 12px; text-align: center; border-bottom: 1px solid #e2e8f0; }
-
                   .odds-table tr:nth-child(even) { background-color: #f8fafc; }
-
                   .odds-table td:first-child { text-align: left; }
-
                   .analysis-box { background-color: #f8fafc; border-radius: 6px; padding: 12px 16px; margin-top: 12px; border: 1px solid #e2e8f0; }
-
                   .analysis-box p { margin: 6px 0; font-size: 14px; line-height: 1.5; }
-
                   .analysis-box strong { color: #0f172a; }
-
                 </style>
-
                 <div class="analysis-body">
-
                   <div class="analysis-container">
-
                     <div class="analysis-title">Napi Sportfogadási Elemzések</div>
-
                     ${htmlContent}
-
                   </div>
-
                 </div>
-
             `;
 
-
-
             container.innerHTML = styledHtml;
-
             document.getElementById('full-analysis-modal').classList.remove('hidden');
-
         }
-
-
 
         function closeFullAnalysisModal() {
-
             closeAllModalsAndAccordions();
-
             startRotation();
-
         }
-
-
 
         // Modal vezérlők
-
         function openRegisterModal() { document.getElementById('register-modal').classList.remove('hidden'); }
-
         function closeRegisterModal() { document.getElementById('register-modal').classList.add('hidden'); }
 
-
-
         function openLoginModal() { 
-
             showLoginForm();
-
             document.getElementById('login-modal').classList.remove('hidden'); 
-
         }
-
         function closeLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }
 
+        function openPrivacyModal() {
+            if (rotationInterval) clearInterval(rotationInterval);
+            document.body.style.overflow = 'hidden';
+            document.getElementById('privacy-modal').classList.remove('hidden');
+        }
+        function closePrivacyModal() {
+            closeAllModalsAndAccordions();
+            startRotation();
+        }
 
+        function openTermsModal() {
+            if (rotationInterval) clearInterval(rotationInterval);
+            document.body.style.overflow = 'hidden';
+            document.getElementById('terms-modal').classList.remove('hidden');
+        }
+        function closeTermsModal() {
+            closeAllModalsAndAccordions();
+            startRotation();
+        }
 
         function showForgotPassword() {
-
             document.getElementById('login-form').classList.add('hidden');
-
             document.getElementById('forgot-form').classList.remove('hidden');
-
             document.getElementById('login-modal-title').innerText = 'Jelszó visszaállítása';
-
             document.getElementById('login-message').innerHTML = '';
-
         }
-
-
 
         function showLoginForm() {
-
             document.getElementById('forgot-form').classList.add('hidden');
-
             document.getElementById('login-form').classList.remove('hidden');
-
             document.getElementById('login-modal-title').innerText = 'Bejelentkezés a fiókodba';
-
             document.getElementById('login-message').innerHTML = '';
-
         }
 
-
-
         async function handleRegister(event) {
-
             event.preventDefault();
-
             const email = document.getElementById('reg-email').value;
-
             const password = document.getElementById('reg-password').value;
-
             const passwordConfirm = document.getElementById('reg-password-confirm').value;
-
             const msgEl = document.getElementById('register-message');
 
-
-
             if (password !== passwordConfirm) {
-
                 msgEl.innerHTML = '<span class="text-red-400 font-bold">Hiba: A két jelszó nem egyezik meg!</span>';
-
                 return;
-
             }
-
-
 
             msgEl.innerHTML = '<span class="text-gray-200">Fiók létrehozása folyamatban...</span>';
 
-
-
             let { data, error } = await supabaseClient.auth.signUp({ email, password });
-
             
-
             if (error) {
-
                 msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${error.message}</span>`;
-
             } else {
-
                 msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres regisztráció! Átirányítás a fizetésre...</span>';
-
                 setTimeout(() => {
-
                     window.location.href = 'https://buy.stripe.com/test_afa14n2xs12wy4Y8ejK00';
-
                 }, 1200);
-
             }
-
         }
-
-
 
         async function handleLogin(event) {
-
             event.preventDefault();
-
             const email = document.getElementById('login-email').value;
-
             const password = document.getElementById('login-password').value;
-
             const msgEl = document.getElementById('login-message');
-
             msgEl.innerHTML = '<span class="text-gray-200">Bejelentkezés...</span>';
 
-
-
             let { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
             
-
             if (error) {
-
                 msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${error.message}</span>`;
-
             } else {
-
                 msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres bejelentkezés!</span>';
-
                 setTimeout(() => { closeLoginModal(); location.reload(); }, 1200);
-
             }
-
         }
-
-
 
         async function handleForgotPassword(event) {
-
             event.preventDefault();
-
             const email = document.getElementById('forgot-email').value;
-
             const msgEl = document.getElementById('login-message');
-
             msgEl.innerHTML = '<span class="text-gray-200">Email küldése folyamatban...</span>';
 
-
-
             let { data, error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-
                 redirectTo: window.location.origin,
-
             });
 
-
-
             if (error) {
-
-                msgEl.json.error = error.message;
-
                 msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${error.message}</span>`;
-
             } else {
-
                 msgEl.innerHTML = '<span class="text-green-400 font-bold">A jelszó-visszaállító emailt elküldtük! Ellenőrizd a postaládád.</span>';
-
             }
-
         }
-
     </script>
-
 </body>
-
 </html>
