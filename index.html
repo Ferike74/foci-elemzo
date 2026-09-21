@@ -48,39 +48,39 @@
 
     <div class="relative z-10 flex flex-col min-h-screen p-4 md:p-6 max-w-7xl mx-auto w-full">
         
-        <header class="glass-panel rounded-3xl px-6 py-6 flex flex-col md:flex-row items-center justify-between shadow-2xl mb-6 relative gap-4">
+        <header class="glass-panel rounded-3xl px-6 py-4 flex flex-col lg:flex-row items-center justify-between shadow-2xl mb-4 relative gap-3">
             
-            <div class="hidden md:flex items-center space-x-3">
-                <span class="text-4xl">⚽</span>
+            <div class="hidden lg:flex items-center space-x-3">
+                <span class="text-3xl">⚽</span>
             </div>
             
-            <div class="text-center flex-1 px-2">
-                <h1 class="font-black tracking-wider text-2xl md:text-3xl lg:text-4xl bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent drop-shadow-lg uppercase leading-tight">
+            <div class="text-center lg:absolute lg:left-1/2 lg:transform lg:-translate-x-1/2 px-2 max-w-xl">
+                <h1 class="font-black tracking-wide text-xl md:text-2xl bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent drop-shadow-lg uppercase leading-snug">
                     Európai topp ligák és kupák
                 </h1>
-                <div class="font-black tracking-widest text-2xl md:text-3xl lg:text-4xl bg-gradient-to-r from-amber-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg uppercase mt-2 leading-tight">
+                <div class="font-black tracking-wider text-xl md:text-2xl bg-gradient-to-r from-amber-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg uppercase leading-snug">
                     professzionális elemzése
                 </div>
             </div>
 
-            <div class="flex flex-col items-center md:items-end space-y-1">
-                <span id="user-status" class="text-xs text-gray-200 drop-shadow mb-1"></span>
-                <div class="flex flex-col items-center space-y-1 mb-1">
+            <div class="flex flex-col items-center lg:items-end space-y-1 w-full lg:w-auto lg:absolute lg:right-6 lg:top-1/2 lg:transform lg:-translate-y-1/2">
+                <span id="user-status" class="text-xs text-gray-200 drop-shadow mb-0.5"></span>
+                <div class="flex flex-col items-center space-y-0.5 mb-0.5">
                     <span class="text-[9px] slightly-lighter-green uppercase tracking-wider bg-black/80 px-1.5 py-0.5 rounded shadow">REGISZTRÁCIÓ UTÁN AZ ELSŐ</span>
                     <span class="text-[11px] slightly-lighter-green font-black uppercase tracking-wider bg-black/80 px-2 py-0.5 rounded shadow">3 NAP INGYENES</span>
                 </div>
                 <div class="flex items-center space-x-2">
-                    <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
+                    <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-3 py-1.5 rounded-xl shadow-lg shadow-red-600/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
                         Regisztráció
                     </button>
-                    <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 transition transform hover:scale-105 uppercase text-xs tracking-wider">
+                    <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-3 py-1.5 rounded-xl shadow-lg border border-white/20 transition transform hover:scale-105 uppercase text-xs tracking-wider">
                         Belépés
                     </button>
                 </div>
             </div>
         </header>
 
-        <div class="space-y-6 mb-8">
+        <div class="space-y-6 mb-8 mt-2">
             <div>
                 <h2 class="text-lg font-bold text-amber-400 mb-3 drop-shadow flex items-center gap-2">
                     <span>🏆</span> Kiemelt Nemzetközi Kupák
@@ -218,50 +218,4 @@
                 </div>
                 <div>
                     <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Jelszó</label>
-                    <input type="password" id="login-password" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="••••••••">
-                </div>
-                <div class="text-right">
-                    <button type="button" onclick="showForgotPassword()" class="text-xs text-amber-300 hover:underline">Elfelejtetted a jelszavad?</button>
-                </div>
-                <button type="submit" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl shadow-lg border border-white/20 transition text-sm uppercase tracking-wider">
-                    Belépés
-                </button>
-            </form>
-
-            <form id="forgot-form" onsubmit="handleForgotPassword(event)" class="space-y-4 hidden">
-                <p class="text-xs text-gray-300 text-center mb-2">Add meg az email címed, és küldünk egy linket a jelszó visszaállításához.</p>
-                <div>
-                    <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Email cím</label>
-                    <input type="email" id="forgot-email" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="pelda@email.hu">
-                </div>
-                <div class="text-left">
-                    <button type="button" onclick="showLoginForm()" class="text-xs text-amber-300 hover:underline">&larr; Vissza a bejelentkezéshez</button>
-                </div>
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl shadow-lg transition text-sm uppercase tracking-wider">
-                    Új jelszó küldése
-                </button>
-            </form>
-
-            <div id="login-message" class="text-center text-xs mt-4"></div>
-        </div>
-    </div>
-
-    <script>
-        const SUPABASE_URL = 'https://gyozibfurwsbdutwmgrl.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_sz4cCjpwZ6pFNK8J-3d80Q_T8GfpSUy';
-        
-        let supabaseClient = null;
-        try {
-            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        } catch (e) {
-            console.error("Supabase hiba:", e);
-        }
-
-        let allMatches = [];
-        let currentActiveMatch = null;
-        let rotationQueue = [];
-        let rotationIndex = 0;
-        let rotationInterval = null;
-
-        const countriesConfig = [
-            {
+                    <input type="password" id="login-password" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-
