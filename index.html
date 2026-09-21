@@ -6,6 +6,9 @@
     <title>Sportfogadás Elemző Agent | Prémium Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script defer src="/_vercel/insights/script.js"></script>
+
     <style>
         body {
             background-image: url('stadion.jpg');
@@ -45,23 +48,22 @@
 
     <div class="relative z-10 flex flex-col min-h-screen p-4 md:p-6 max-w-7xl mx-auto w-full">
         
-        <!-- Fejléc -->
-        <header class="glass-panel rounded-3xl px-6 py-6 flex flex-col items-center justify-center text-center shadow-2xl mb-6 relative">
-            <div class="absolute left-6 top-1/2 -translate-y-1/2 hidden md:flex items-center space-x-3">
+        <header class="glass-panel rounded-3xl px-6 py-6 flex flex-col md:flex-row items-center justify-between shadow-2xl mb-6 relative">
+            
+            <div class="hidden md:flex items-center space-x-3">
                 <span class="text-4xl">⚽</span>
             </div>
             
-            <div class="w-full">
-                <h1 class="font-black tracking-wider text-3xl md:text-5xl bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent drop-shadow-lg uppercase">
-                    Európai ligák és kupák
+            <div class="text-center md:absolute md:left-1/2 md:transform md:-translate-x-1/2 my-2 md:my-0 px-2 max-w-xl">
+                <h1 class="font-black tracking-wide text-sm md:text-base lg:text-xl bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent drop-shadow-lg uppercase leading-tight">
+                    Európai topp ligák és kupák
                 </h1>
-                <div class="font-black tracking-widest text-3xl md:text-5xl bg-gradient-to-r from-amber-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg uppercase mt-2">
-                    Focielemzése
+                <div class="font-black tracking-wider text-sm md:text-base lg:text-xl bg-gradient-to-r from-amber-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg uppercase mt-0.5 leading-tight">
+                    professzionális elemzése
                 </div>
             </div>
 
-            <!-- Jobb oldali gombok asztali nézetben -->
-            <div class="absolute right-6 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-end space-y-1">
+            <div class="flex flex-col items-center md:items-end space-y-1 w-full md:w-auto mt-2 md:mt-0 md:absolute md:right-6 md:top-1/2 md:transform md:-translate-y-1/2">
                 <span id="user-status" class="text-xs text-gray-200 drop-shadow mb-1"></span>
                 <div class="flex flex-col items-center space-y-1 mb-1">
                     <span class="text-[9px] slightly-lighter-green uppercase tracking-wider bg-black/80 px-1.5 py-0.5 rounded shadow">REGISZTRÁCIÓ UTÁN AZ ELSŐ</span>
@@ -76,26 +78,9 @@
                     </button>
                 </div>
             </div>
-
-            <!-- Mobil nézetű gombok -->
-            <div class="mt-4 flex flex-col md:hidden items-center justify-center space-y-1 w-full">
-                <div class="flex flex-col items-center space-y-1 mb-1">
-                    <span class="text-[9px] slightly-lighter-green uppercase tracking-wider bg-black/80 px-1.5 py-0.5 rounded shadow">REGISZTRÁCIÓ UTÁN AZ ELSŐ</span>
-                    <span class="text-[11px] slightly-lighter-green font-black uppercase tracking-wider bg-black/80 px-2 py-0.5 rounded shadow">3 NAP INGYENES</span>
-                </div>
-                <div class="flex items-center space-x-2 mt-1">
-                    <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 uppercase text-xs tracking-wider">
-                        Regisztráció
-                    </button>
-                    <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 uppercase text-xs tracking-wider">
-                        Belépés
-                    </button>
-                </div>
-            </div>
         </header>
 
-        <!-- KÁRTYÁS RÁCS -->
-        <div class="space-y-6 mb-8">
+        <div class="space-y-6 mb-8 mt-4 md:mt-2">
             <div>
                 <h2 class="text-lg font-bold text-amber-400 mb-3 drop-shadow flex items-center gap-2">
                     <span>🏆</span> Kiemelt Nemzetközi Kupák
@@ -111,7 +96,6 @@
             </div>
         </div>
 
-        <!-- Aktív Meccs sáv -->
         <div class="mb-4 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <span class="text-xs uppercase tracking-widest text-red-400 font-bold drop-shadow-md">Kiválasztott Elemzés:</span>
@@ -122,7 +106,6 @@
             <span class="text-xs text-amber-300 font-semibold italic">💡 Kattints bármelyik országra vagy kupára a meccsek listájához!</span>
         </div>
 
-        <!-- Fő Kártya -->
         <main onclick="if(currentActiveMatch) openFullAnalysisModal()" class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl flex-1 flex flex-col justify-between cursor-pointer hover:border-sky-400/50 transition">
             <div>
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-4 mb-6">
@@ -171,7 +154,6 @@
         </footer>
     </div>
 
-    <!-- Liga Meccsei Modal -->
     <div id="league-matches-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel bg-slate-950/50 border border-white/20 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl backdrop-blur-md">
             <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-2xl font-bold">&times;</button>
@@ -180,7 +162,6 @@
         </div>
     </div>
 
-    <!-- Teljes HTML Elemzés Modal -->
     <div id="full-analysis-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 md:p-6">
         <div class="bg-[#f0f2f5] text-[#1c1e21] w-full max-w-5xl max-h-[92vh] rounded-3xl p-4 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto font-sans">
             <button onclick="closeFullAnalysisModal()" class="absolute top-4 right-6 text-slate-700 hover:text-red-600 text-4xl font-black z-50 bg-white/90 px-3 py-1 rounded-full shadow">&times;</button>
@@ -193,7 +174,6 @@
         </div>
     </div>
 
-    <!-- Regisztrációs Modal -->
     <div id="register-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-white/20 shadow-2xl">
             <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-xl font-bold">&times;</button>
@@ -223,7 +203,6 @@
         </div>
     </div>
 
-    <!-- Belépési Modal -->
     <div id="login-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-white/20 shadow-2xl">
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-xl font-bold">&times;</button>
@@ -304,7 +283,7 @@
             {
                 country: "Németország",
                 leagues: [
-                    { key: "bundesliga", name: "Bundesliga", synonyms: ["bundesliga", "német"] },
+                    { key: "bundesliga", name: "Német Bundesliga", synonyms: ["német bundesliga", "német", "bundesliga"] },
                     { key: "nemetkupa", name: "Német Kupa", synonyms: ["német kupa", "dfb pokal"] }
                 ]
             },
@@ -353,13 +332,37 @@
             {
                 country: "Ausztria",
                 leagues: [
-                    { key: "ausztria", name: "Bundesliga", synonyms: ["ausztria", "osztrák"] }
+                    { key: "ausztria", name: "Osztrák Bundesliga", synonyms: ["osztrák bundesliga", "osztrák", "ausztria"] }
                 ]
             },
             {
                 country: "Belgium",
                 leagues: [
                     { key: "belga", name: "Jupiler Liga", synonyms: ["belga", "jupiler", "belgium first div"] }
+                ]
+            },
+            {
+                country: "Svájc",
+                leagues: [
+                    { key: "svajc", name: "Super League", synonyms: ["svájc", "svájci", "super league"] }
+                ]
+            },
+            {
+                country: "Skócia",
+                leagues: [
+                    { key: "skocia", name: "Premiership", synonyms: ["skócia", "skót", "premiership"] }
+                ]
+            },
+            {
+                country: "Dánia",
+                leagues: [
+                    { key: "dania", name: "Superliga", synonyms: ["dánia", "dán", "superliga"] }
+                ]
+            },
+            {
+                country: "Svédország",
+                leagues: [
+                    { key: "svedorszag", name: "Allsvenskan", synonyms: ["svédország", "svéd", "allsvenskan"] }
                 ]
             }
         ];
@@ -394,9 +397,17 @@
             }
         });
 
-        function matchBelongsToLeague(dbLeagueName, leagueConfig) {
+        function matchBelongsToLeague(dbLeagueName, leagueConfig, countryName) {
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
+            
+            if (leagueConfig.name === "Német Bundesliga") {
+                if (lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria")) return false;
+            }
+            if (leagueConfig.name === "Osztrák Bundesliga") {
+                if (!lowerDb.includes("osztrák") && !lowerDb.includes("ausztria") && !lowerDb.includes("austria")) return false;
+            }
+
             return leagueConfig.synonyms.some(syn => lowerDb.includes(syn)) || lowerDb.includes(leagueConfig.name.toLowerCase());
         }
 
@@ -428,7 +439,7 @@
                 let leaguesHtml = '';
 
                 item.leagues.forEach(league => {
-                    const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league));
+                    const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league, item.country));
                     countryTotalMatches += leagueMatches.length;
 
                     leaguesHtml += `
@@ -488,7 +499,7 @@
             });
             countriesConfig.forEach(c => {
                 c.leagues.forEach(league => {
-                    matches.filter(m => matchBelongsToLeague(m.league_name, league)).forEach(m => rotationQueue.push(m));
+                    matches.filter(m => matchBelongsToLeague(m.league_name, league, c.country)).forEach(m => rotationQueue.push(m));
                 });
             });
 
@@ -711,6 +722,7 @@
             });
 
             if (error) {
+                msgEl.json.error = error.message;
                 msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${error.message}</span>`;
             } else {
                 msgEl.innerHTML = '<span class="text-green-400 font-bold">A jelszó-visszaállító emailt elküldtük! Ellenőrizd a postaládád.</span>';
