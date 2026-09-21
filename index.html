@@ -48,42 +48,39 @@
 
     <div class="relative z-10 flex flex-col min-h-screen p-4 md:p-6 max-w-7xl mx-auto w-full">
         
-        <header class="glass-panel rounded-3xl px-6 py-5 shadow-2xl mb-6">
-            <div class="grid grid-cols-1 lg:grid-cols-12 items-center gap-4">
-                
-                <div class="hidden lg:flex lg:col-span-2 items-center space-x-3">
-                    <span class="text-4xl">⚽</span>
+        <header class="glass-panel rounded-3xl px-6 py-4 flex flex-col lg:flex-row items-center justify-between shadow-2xl mb-4 relative gap-3">
+            
+            <div class="hidden lg:flex items-center space-x-3">
+                <span class="text-4xl">⚽</span>
+            </div>
+            
+            <div class="text-center lg:absolute lg:left-1/2 lg:transform lg:-translate-x-1/2 px-2 max-w-2xl">
+                <h1 class="font-black tracking-wide text-lg md:text-xl lg:text-2xl bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent drop-shadow-lg uppercase leading-snug">
+                    Európai topp ligák és kupák
+                </h1>
+                <div class="font-black tracking-wider text-lg md:text-xl lg:text-2xl bg-gradient-to-r from-amber-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg uppercase leading-snug">
+                    professzionális elemzése
                 </div>
-                
-                <div class="text-center lg:col-span-8 px-2">
-                    <h1 class="font-black tracking-wide text-lg md:text-xl lg:text-2xl bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent drop-shadow-lg uppercase leading-tight">
-                        Európai topp ligák és kupák
-                    </h1>
-                    <div class="font-black tracking-wider text-lg md:text-xl lg:text-2xl bg-gradient-to-r from-amber-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg uppercase mt-1 leading-tight">
-                        professzionális elemzése
-                    </div>
-                </div>
+            </div>
 
-                <div class="flex flex-col items-center lg:items-end lg:col-span-2 space-y-1">
-                    <span id="user-status" class="text-xs text-gray-200 drop-shadow mb-1"></span>
-                    <div class="flex flex-col items-center space-y-1 mb-1">
-                        <span class="text-[9px] slightly-lighter-green uppercase tracking-wider bg-black/80 px-1.5 py-0.5 rounded shadow">REGISZTRÁCIÓ UTÁN AZ ELSŐ</span>
-                        <span class="text-[11px] slightly-lighter-green font-black uppercase tracking-wider bg-black/80 px-2 py-0.5 rounded shadow">3 NAP INGYENES</span>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
-                            Regisztráció
-                        </button>
-                        <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 transition transform hover:scale-105 uppercase text-xs tracking-wider">
-                            Belépés
-                        </button>
-                    </div>
+            <div class="flex flex-col items-center lg:items-end space-y-1 w-full lg:w-auto lg:absolute lg:right-6 lg:top-1/2 lg:transform lg:-translate-y-1/2">
+                <span id="user-status" class="text-xs text-gray-200 drop-shadow mb-0.5"></span>
+                <div class="flex flex-col items-center space-y-0.5 mb-0.5">
+                    <span class="text-[9px] slightly-lighter-green uppercase tracking-wider bg-black/80 px-1.5 py-0.5 rounded shadow">REGISZTRÁCIÓ UTÁN AZ ELSŐ</span>
+                    <span class="text-[11px] slightly-lighter-green font-black uppercase tracking-wider bg-black/80 px-2 py-0.5 rounded shadow">3 NAP INGYENES</span>
                 </div>
-
+                <div class="flex items-center space-x-2">
+                    <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-3 py-1.5 rounded-xl shadow-lg shadow-red-600/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
+                        Regisztráció
+                    </button>
+                    <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-3 py-1.5 rounded-xl shadow-lg border border-white/20 transition transform hover:scale-105 uppercase text-xs tracking-wider">
+                        Belépés
+                    </button>
+                </div>
             </div>
         </header>
 
-        <div class="space-y-6 mb-8">
+        <div class="space-y-6 mb-8 mt-2">
             <div>
                 <h2 class="text-lg font-bold text-amber-400 mb-3 drop-shadow flex items-center gap-2">
                     <span>🏆</span> Kiemelt Nemzetközi Kupák
@@ -413,157 +410,3 @@
 
             return leagueConfig.synonyms.some(syn => lowerDb.includes(syn)) || lowerDb.includes(leagueConfig.name.toLowerCase());
         }
-
-        function buildDashboard(matches) {
-            const intContainer = document.getElementById('international-cups-grid');
-            const countryContainer = document.getElementById('countries-grid');
-            
-            intContainer.innerHTML = '';
-            countryContainer.innerHTML = '';
-
-            internationalConfig.forEach(cup => {
-                const cupMatches = matches.filter(m => matchBelongsToLeague(m.league_name, cup));
-                
-                const card = document.createElement('div');
-                card.className = "league-card-custom rounded-2xl p-4 flex justify-between items-center shadow-xl cursor-pointer transition";
-                card.innerHTML = `
-                    <div>
-                        <div class="text-sm font-black uppercase tracking-tight slightly-lighter-green">${cup.name}</div>
-                        <div class="text-xs text-white font-medium mt-0.5">${cupMatches.length} meccs elemzés</div>
-                    </div>
-                    <span class="bg-red-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow">${cupMatches.length}</span>
-                `;
-                card.onclick = () => openLeagueModal(cup, cupMatches);
-                intContainer.appendChild(card);
-            });
-
-            countriesConfig.forEach((item, index) => {
-                let countryTotalMatches = 0;
-                let leaguesHtml = '';
-
-                item.leagues.forEach(league => {
-                    const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league, item.country));
-                    countryTotalMatches += leagueMatches.length;
-
-                    leaguesHtml += `
-                        <div onclick="event.stopPropagation(); openLeagueModal(${JSON.stringify(league).replace(/"/g, '&quot;')}, ${JSON.stringify(leagueMatches).replace(/"/g, '&quot;')})" 
-                             class="flex justify-between items-center py-2 px-3 hover:bg-red-950/30 rounded-xl text-xs cursor-pointer transition border border-transparent hover:border-red-500/40">
-                            <span class="font-medium slightly-lighter-green">⚽ ${league.name}</span>
-                            <span class="bg-red-600 text-white font-bold px-2 py-0.5 rounded-full shadow">${leagueMatches.length} meccs</span>
-                        </div>
-                    `;
-                });
-
-                const contentId = `country-content-${index}`;
-                const iconId = `country-icon-${index}`;
-
-                const countryCard = document.createElement('div');
-                countryCard.className = "league-card-custom rounded-2xl shadow-xl overflow-hidden transition";
-                countryCard.innerHTML = `
-                    <div onclick="toggleCountryAccordion('${contentId}', '${iconId}')" class="p-4 flex justify-between items-center cursor-pointer select-none">
-                        <div>
-                            <h3 class="font-extrabold text-base slightly-lighter-green tracking-wide">${item.country}</h3>
-                            <p class="text-xs text-white mt-0.5">Összesen: <span class="text-white font-bold">${countryTotalMatches} meccs</span></p>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <span class="bg-red-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow">${countryTotalMatches}</span>
-                            <span id="${iconId}" class="text-xs slightly-lighter-green transform transition-transform duration-200">▼</span>
-                        </div>
-                    </div>
-                    <div id="${contentId}" class="country-accordion-content hidden px-3 pb-3 pt-1 border-t border-white/10 bg-black/30 space-y-1">
-                        ${leaguesHtml}
-                    </div>
-                `;
-                countryContainer.appendChild(countryCard);
-            });
-        }
-
-        function toggleCountryAccordion(contentId, iconId) {
-            const content = document.getElementById(contentId);
-            const icon = document.getElementById(iconId);
-            content.classList.toggle('hidden');
-            icon.classList.toggle('rotate-180');
-        }
-
-        function closeAllModalsAndAccordions() {
-            document.getElementById('league-matches-modal').classList.add('hidden');
-            document.getElementById('full-analysis-modal').classList.add('hidden');
-            
-            document.body.style.overflow = 'auto';
-            
-            document.querySelectorAll('.country-accordion-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('[id^="country-icon-"]').forEach(el => el.classList.remove('rotate-180'));
-        }
-
-        function initRotationQueue(matches) {
-            rotationQueue = [];
-            internationalConfig.forEach(cup => {
-                matches.filter(m => matchBelongsToLeague(m.league_name, cup)).forEach(m => rotationQueue.push(m));
-            });
-            countriesConfig.forEach(c => {
-                c.leagues.forEach(league => {
-                    matches.filter(m => matchBelongsToLeague(m.league_name, league, c.country)).forEach(m => rotationQueue.push(m));
-                });
-            });
-
-            if (rotationQueue.length > 0) {
-                rotationIndex = 0;
-                renderMatch(rotationQueue[0]);
-                startRotation();
-            }
-        }
-
-        function startRotation() {
-            if (rotationInterval) clearInterval(rotationInterval);
-            rotationInterval = setInterval(() => {
-                if (rotationQueue.length === 0) return;
-                rotationIndex = (rotationIndex + 1) % rotationQueue.length;
-                renderMatch(rotationQueue[rotationIndex]);
-            }, 15000);
-        }
-
-        function openLeagueModal(league, leagueMatches) {
-            if (rotationInterval) clearInterval(rotationInterval);
-
-            document.body.style.overflow = 'hidden';
-
-            document.getElementById('league-modal-title').innerText = `${league.name} - Elemzett Meccsek`;
-            const listEl = document.getElementById('league-modal-list');
-            listEl.innerHTML = '';
-
-            if (leagueMatches.length > 0) {
-                leagueMatches.forEach(m => {
-                    const mBtn = document.createElement('button');
-                    mBtn.className = "w-full text-left px-4 py-3 text-sm text-white bg-black/40 hover:bg-red-950/50 border border-green-500/30 rounded-xl transition flex items-center justify-between cursor-pointer shadow";
-                    mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-xs text-red-400 font-bold">Megnyitás &rarr;</span>`;
-                    
-                    mBtn.onclick = () => {
-                        currentActiveMatch = m;
-                        renderMatch(m);
-                        document.getElementById('league-matches-modal').classList.add('hidden');
-                        openFullAnalysisModal();
-                    };
-                    listEl.appendChild(mBtn);
-                });
-            } else {
-                const emptyEl = document.createElement('div');
-                emptyEl.className = "px-4 py-4 text-xs text-gray-400 italic text-center bg-black/20 rounded-xl";
-                emptyEl.innerText = "Ehhez a ligához nincsenek még feltöltött elemzések ma.";
-                listEl.appendChild(emptyEl);
-            }
-
-            document.getElementById('league-matches-modal').classList.remove('hidden');
-        }
-
-        function closeLeagueModal() {
-            closeAllModalsAndAccordions();
-            startRotation();
-        }
-
-        function renderMatch(item) {
-            if (!item) return;
-            currentActiveMatch = item;
-            document.getElementById('match-title').innerText = item.match_title || "Ismeretlen meccs";
-            document.getElementById('badge-match-title').innerText = item.match_title || "Ismeretlen meccs";
-            document.getElementById('match-time').innerText = item.match_time || "Közelben";
-            document.getElementById('match-league-subtitle').innerText = item.league
