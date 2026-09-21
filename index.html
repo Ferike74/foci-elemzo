@@ -48,16 +48,16 @@
 
     <div class="relative z-10 flex flex-col min-h-screen p-4 md:p-6 max-w-7xl mx-auto w-full">
         
-        <header class="glass-panel rounded-3xl px-6 py-6 flex flex-col items-center justify-center text-center shadow-2xl mb-6 relative">
+        <header class="glass-panel rounded-3xl px-6 py-5 flex flex-col items-center justify-center text-center shadow-2xl mb-6 relative">
             <div class="absolute left-6 top-1/2 -translate-y-1/2 hidden md:flex items-center space-x-3">
                 <span class="text-4xl">⚽</span>
             </div>
             
             <div class="w-full">
-                <h1 class="font-black tracking-wider text-2xl md:text-3xl bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent drop-shadow-lg uppercase">
+                <h1 class="font-black tracking-wider text-xl md:text-3xl bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent drop-shadow-lg uppercase">
                     Európai topp ligák és kupák
                 </h1>
-                <div class="font-black tracking-widest text-2xl md:text-3xl bg-gradient-to-r from-amber-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg uppercase mt-2">
+                <div class="font-black tracking-widest text-xl md:text-3xl bg-gradient-to-r from-amber-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg uppercase mt-1">
                     Professzionális elemzése
                 </div>
             </div>
@@ -78,7 +78,7 @@
                 </div>
             </div>
 
-            <div class="mt-4 flex flex-col md:hidden items-center justify-center space-y-1 w-full">
+            <div class="mt-3 flex flex-col md:hidden items-center justify-center space-y-1 w-full">
                 <div class="flex flex-col items-center space-y-1 mb-1">
                     <span class="text-[9px] slightly-lighter-green uppercase tracking-wider bg-black/80 px-1.5 py-0.5 rounded shadow">REGISZTRÁCIÓ UTÁN AZ ELSŐ</span>
                     <span class="text-[11px] slightly-lighter-green font-black uppercase tracking-wider bg-black/80 px-2 py-0.5 rounded shadow">3 NAP INGYENES</span>
@@ -346,116 +346,4 @@
             {
                 country: "Ausztria",
                 leagues: [
-                    { key: "ausztria", name: "Osztrák Bundesliga", synonyms: ["osztrák bundesliga", "osztrák", "ausztria"] }
-                ]
-            },
-            {
-                country: "Belgium",
-                leagues: [
-                    { key: "belga", name: "Jupiler Liga", synonyms: ["belga", "jupiler", "belgium first div"] }
-                ]
-            },
-            {
-                country: "Svájc",
-                leagues: [
-                    { key: "svajc", name: "Super League", synonyms: ["svájc", "svájci", "super league"] }
-                ]
-            },
-            {
-                country: "Skócia",
-                leagues: [
-                    { key: "skocia", name: "Premiership", synonyms: ["skócia", "skót", "premiership"] }
-                ]
-            },
-            {
-                country: "Dánia",
-                leagues: [
-                    { key: "dania", name: "Superliga", synonyms: ["dánia", "dán", "superliga"] }
-                ]
-            },
-            {
-                country: "Svédország",
-                leagues: [
-                    { key: "svedorszag", name: "Allsvenskan", synonyms: ["svédország", "svéd", "allsvenskan"] }
-                ]
-            }
-        ];
-
-        const internationalConfig = [
-            { key: "ucl", name: "UEFA Bajnokok Ligája", synonyms: ["bajnokok ligája", "champions league", "ucl", "bl"] },
-            { key: "europaliga", name: "UEFA Európa Liga", synonyms: ["európa liga", "europa league"] },
-            { key: "konferencia", name: "UEFA Konferencia Liga", synonyms: ["konferencia liga", "conference league"] }
-        ];
-
-        window.addEventListener('DOMContentLoaded', async () => {
-            if (supabaseClient) {
-                const { data: { session } } = await supabaseClient.auth.getSession();
-                if (session) {
-                    document.getElementById('user-status').innerText = `Bejelentkezve: ${session.user.email}`;
-                }
-
-                const { data: analyses, error } = await supabaseClient
-                    .from('match_analyses')
-                    .select('*')
-                    .order('id', { ascending: true });
-
-                if (!error && analyses && analyses.length > 0) {
-                    allMatches = analyses.filter(m => m.match_title && m.match_title.trim() !== "");
-                    buildDashboard(allMatches);
-                    initRotationQueue(allMatches);
-                } else {
-                    buildDashboard([]);
-                }
-            } else {
-                buildDashboard([]);
-            }
-        });
-
-        function matchBelongsToLeague(dbLeagueName, leagueConfig, countryName) {
-            if (!dbLeagueName) return false;
-            const lowerDb = dbLeagueName.toLowerCase();
-            
-            if (leagueConfig.name === "Német Bundesliga") {
-                if (lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria")) return false;
-            }
-            if (leagueConfig.name === "Osztrák Bundesliga") {
-                if (!lowerDb.includes("osztrák") && !lowerDb.includes("ausztria") && !lowerDb.includes("austria")) return false;
-            }
-
-            return leagueConfig.synonyms.some(syn => lowerDb.includes(syn)) || lowerDb.includes(leagueConfig.name.toLowerCase());
-        }
-
-        function buildDashboard(matches) {
-            const intContainer = document.getElementById('international-cups-grid');
-            const countryContainer = document.getElementById('countries-grid');
-            
-            intContainer.innerHTML = '';
-            countryContainer.innerHTML = '';
-
-            internationalConfig.forEach(cup => {
-                const cupMatches = matches.filter(m => matchBelongsToLeague(m.league_name, cup));
-                
-                const card = document.createElement('div');
-                card.className = "league-card-custom rounded-2xl p-4 flex justify-between items-center shadow-xl cursor-pointer transition";
-                card.innerHTML = `
-                    <div>
-                        <div class="text-sm font-black uppercase tracking-tight slightly-lighter-green">${cup.name}</div>
-                        <div class="text-xs text-white font-medium mt-0.5">${cupMatches.length} meccs elemzés</div>
-                    </div>
-                    <span class="bg-red-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow">${cupMatches.length}</span>
-                `;
-                card.onclick = () => openLeagueModal(cup, cupMatches);
-                intContainer.appendChild(card);
-            });
-
-            countriesConfig.forEach((item, index) => {
-                let countryTotalMatches = 0;
-                let leaguesHtml = '';
-
-                item.leagues.forEach(league => {
-                    const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league, item.country));
-                    countryTotalMatches += leagueMatches.length;
-
-                    leaguesHtml += `
-                        <div onclick="event.stopPropagation(); openLeagueModal(${JSON.stringify(league).replace(/"/g, '&quot;')}, ${JSON.stringify(leagueMatches).replace(/"/g, '&quot;')})" 
-                             class="flex justify-between items-center py-2 px-3 hover:bg-red-950/30
+                    { key:
