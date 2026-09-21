@@ -48,34 +48,38 @@
 
     <div class="relative z-10 flex flex-col min-h-screen p-4 md:p-6 max-w-7xl mx-auto w-full">
         
-        <header class="glass-panel rounded-3xl px-6 py-6 flex flex-col md:flex-row items-center justify-between shadow-2xl mb-6 relative gap-4">
-            <div class="hidden md:flex items-center space-x-3">
-                <span class="text-4xl">⚽</span>
-            </div>
-            
-            <div class="text-center flex-1 px-2">
-                <h1 class="font-black tracking-wide text-lg md:text-2xl lg:text-3xl bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent drop-shadow-lg uppercase leading-tight">
-                    Európai topp ligák és kupák
-                </h1>
-                <div class="font-black tracking-wider text-lg md:text-2xl lg:text-3xl bg-gradient-to-r from-amber-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg uppercase mt-1 leading-tight">
-                    professzionális elemzése
+        <header class="glass-panel rounded-3xl px-6 py-5 shadow-2xl mb-6">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
+                
+                <div class="flex items-center space-x-3">
+                    <span class="text-4xl">⚽</span>
                 </div>
-            </div>
+                
+                <div class="text-center flex-1">
+                    <h1 class="font-black tracking-wide text-xl md:text-2xl lg:text-3xl bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent drop-shadow-lg uppercase leading-tight">
+                        Európai topp ligák és kupák
+                    </h1>
+                    <div class="font-black tracking-wider text-xl md:text-2xl lg:text-3xl bg-gradient-to-r from-amber-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg uppercase mt-1 leading-tight">
+                        professzionális elemzése
+                    </div>
+                </div>
 
-            <div class="flex flex-col items-center md:items-end space-y-1">
-                <span id="user-status" class="text-xs text-gray-200 drop-shadow mb-1"></span>
-                <div class="flex flex-col items-center space-y-1 mb-1">
-                    <span class="text-[9px] slightly-lighter-green uppercase tracking-wider bg-black/80 px-1.5 py-0.5 rounded shadow">REGISZTRÁCIÓ UTÁN AZ ELSŐ</span>
-                    <span class="text-[11px] slightly-lighter-green font-black uppercase tracking-wider bg-black/80 px-2 py-0.5 rounded shadow">3 NAP INGYENES</span>
+                <div class="flex flex-col items-center lg:items-end space-y-1">
+                    <span id="user-status" class="text-xs text-gray-200 drop-shadow mb-1"></span>
+                    <div class="flex flex-col items-center space-y-1 mb-1">
+                        <span class="text-[9px] slightly-lighter-green uppercase tracking-wider bg-black/80 px-1.5 py-0.5 rounded shadow">REGISZTRÁCIÓ UTÁN AZ ELSŐ</span>
+                        <span class="text-[11px] slightly-lighter-green font-black uppercase tracking-wider bg-black/80 px-2 py-0.5 rounded shadow">3 NAP INGYENES</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
+                            Regisztráció
+                        </button>
+                        <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 transition transform hover:scale-105 uppercase text-xs tracking-wider">
+                            Belépés
+                        </button>
+                    </div>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
-                        Regisztráció
-                    </button>
-                    <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 transition transform hover:scale-105 uppercase text-xs tracking-wider">
-                        Belépés
-                    </button>
-                </div>
+
             </div>
         </header>
 
@@ -222,4 +226,79 @@
                 <div class="text-right">
                     <button type="button" onclick="showForgotPassword()" class="text-xs text-amber-300 hover:underline">Elfelejtetted a jelszavad?</button>
                 </div>
-                <button type="submit" class="w-full bg-slate-800 hover:bg-slate-700 text
+                <button type="submit" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl shadow-lg border border-white/20 transition text-sm uppercase tracking-wider">
+                    Belépés
+                </button>
+            </form>
+
+            <form id="forgot-form" onsubmit="handleForgotPassword(event)" class="space-y-4 hidden">
+                <p class="text-xs text-gray-300 text-center mb-2">Add meg az email címed, és küldünk egy linket a jelszó visszaállításához.</p>
+                <div>
+                    <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Email cím</label>
+                    <input type="email" id="forgot-email" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="pelda@email.hu">
+                </div>
+                <div class="text-left">
+                    <button type="button" onclick="showLoginForm()" class="text-xs text-amber-300 hover:underline">&larr; Vissza a bejelentkezéshez</button>
+                </div>
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl shadow-lg transition text-sm uppercase tracking-wider">
+                    Új jelszó küldése
+                </button>
+            </form>
+
+            <div id="login-message" class="text-center text-xs mt-4"></div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://gyozibfurwsbdutwmgrl.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_sz4cCjpwZ6pFNK8J-3d80Q_T8GfpSUy';
+        
+        let supabaseClient = null;
+        try {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        } catch (e) {
+            console.error("Supabase hiba:", e);
+        }
+
+        let allMatches = [];
+        let currentActiveMatch = null;
+        let rotationQueue = [];
+        let rotationIndex = 0;
+        let rotationInterval = null;
+
+        const countriesConfig = [
+            {
+                country: "Anglia",
+                leagues: [
+                    { key: "premier", name: "Premier League", synonyms: ["premier league", "anglia premier", "premier"] },
+                    { key: "championship", name: "Championship", synonyms: ["championship"] },
+                    { key: "fakupa", name: "FA Kupa", synonyms: ["fa kupa", "fa cup"] },
+                    { key: "eflkupa", name: "EFL Kupa", synonyms: ["efl kupa", "efl cup", "league cup"] }
+                ]
+            },
+            {
+                country: "Spanyolország",
+                leagues: [
+                    { key: "laliga", name: "La Liga", synonyms: ["la liga", "spanyol", "laliga"] },
+                    { key: "spanyolkupa", name: "Spanyol Kupa", synonyms: ["spanyol kupa", "copa del rey"] }
+                ]
+            },
+            {
+                country: "Németország",
+                leagues: [
+                    { key: "bundesliga", name: "Német Bundesliga", synonyms: ["német bundesliga", "német", "bundesliga"] },
+                    { key: "nemetkupa", name: "Német Kupa", synonyms: ["német kupa", "dfb pokal"] }
+                ]
+            },
+            {
+                country: "Olaszország",
+                leagues: [
+                    { key: "seriea", name: "Serie A", synonyms: ["serie a", "olasz"] },
+                    { key: "olaszkupa", name: "Olasz Kupa", synonyms: ["olasz kupa", "coppa italia"] }
+                ]
+            },
+            {
+                country: "Franciaország",
+                leagues: [
+                    { key: "ligue1", name: "Liga 1", synonyms: ["liga 1", "ligue 1", "francia"] },
+                    { key: "franciakupa", name: "Francia Kupa", synonyms: ["francia kupa",
