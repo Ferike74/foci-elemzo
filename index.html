@@ -118,7 +118,7 @@
                 Regisztráció után az első 
                 <span class="bg-emerald-500/30 border border-emerald-400/60 text-emerald-300 font-black text-sm md:text-base px-4 py-2 rounded-xl shadow uppercase text-center inline-block">3 nap ingyenes</span>, 
                 majd 
-                <span class="bg-emerald-500/30 border border-emerald-400/60 text-emerald-300 font-black text-lg md:text-xl px-4 py-2 rounded-xl shadow-2xl uppercase text-center inline-block">7999 FT/HÓ!</span> 
+                <span class="bg-emerald-500/30 border border-emerald-400/60 text-emerald-300 font-black text-lg md:text-xl px-4 py-2 rounded-xl shadow-2xl uppercase text-center inline-block">7999 FT/HÓ</span> 
                 Itt minden információt megtalálsz a tökéletes fogadás elkészítéséhez.
             </p>
             <div class="pt-2">
@@ -705,7 +705,7 @@
             const password = document.getElementById('reg-password').value;
             const passwordConfirm = document.getElementById('reg-password-confirm').value;
             const privacyChecked = document.getElementById('reg-privacy-check').checked;
-            const termsChecked = document.getElementById('reg-terms-check').checked;
+            const termsChecked = document.getElementById('reg-terms-check'].checked;
             const msgEl = document.getElementById('register-message');
 
             if (!privacyChecked || !termsChecked) {
@@ -727,7 +727,7 @@
             } else {
                 msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres regisztráció! Átirányítás a fizetésre...</span>';
                 setTimeout(() => {
-                    window.location.href = 'https://buy.stripe.com/test_afa14n2xs12wy4Y8ejK00';
+                    window.location.href = 'https://buy.stripe.com/test_14AaEXbtYeWYcZ03U4eJk01';
                 }, 1200);
             }
         }
