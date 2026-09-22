@@ -112,41 +112,7 @@
             </div>
         </section>
 
-        <!-- 3. FŐ KÁRTYA (A felső sáv eltávolítva) -->
-        <div>
-            <main onclick="if(currentActiveMatch) openFullAnalysisModal()" class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col justify-between cursor-pointer hover:border-sky-400/50 transition">
-                <div>
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-4 mb-6">
-                        <div>
-                            <span class="text-xs text-red-400 uppercase font-bold tracking-wider drop-shadow" id="match-league-subtitle">Éles Elemzés</span>
-                            <h3 class="text-2xl md:text-3xl font-black mt-1 drop-shadow-md" id="match-title">Válassz egy meccset a kártyákból...</h3>
-                        </div>
-                        <div class="mt-2 md:mt-0 text-sm text-white bg-black/20 px-4 py-1.5 rounded-xl border border-white/10 backdrop-blur-sm" id="match-time">--</div>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div class="bg-black/20 border border-green-500/40 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
-                            <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Valószínűség (Fair Odds)</div>
-                            <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-odds">--</div>
-                        </div>
-                        <div class="bg-black/20 border border-green-500/40 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
-                            <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Várható Gólok (xG Átlag)</div>
-                            <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-xg">--</div>
-                        </div>
-                        <div class="bg-black/20 border border-green-500/40 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
-                            <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Statisztikai Mutató</div>
-                            <div class="text-2xl font-black text-green-400 mt-1 drop-shadow-md" id="stat-corners">--</div>
-                        </div>
-                        <div class="bg-black/20 border border-green-500/40 rounded-2xl p-4 shadow-inner backdrop-blur-sm">
-                            <div class="text-[10px] uppercase text-gray-200 font-bold drop-shadow">Szimulációs Minőség</div>
-                            <div class="text-2xl font-black text-white mt-1 drop-shadow-md">100 000 Futás</div>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-
-        <!-- 4. LIGAVÁLASZTÓ KÁRTYÁK -->
+        <!-- 3. LIGAVÁLASZTÓ KÁRTYÁK -->
         <div class="space-y-6">
             <div>
                 <h2 class="text-lg font-bold text-amber-400 mb-3 drop-shadow flex items-center gap-2">
@@ -330,9 +296,6 @@
 
         let allMatches = [];
         let currentActiveMatch = null;
-        let rotationQueue = [];
-        let rotationIndex = 0;
-        let rotationInterval = null;
 
         const countriesConfig = [
             {
@@ -453,7 +416,6 @@
                 if (!error && analyses && analyses.length > 0) {
                     allMatches = analyses.filter(m => m.match_title && m.match_title.trim() !== "");
                     buildDashboard(allMatches);
-                    initRotationQueue(allMatches);
                 } else {
                     buildDashboard([]);
                 }
@@ -559,36 +521,7 @@
             document.querySelectorAll('[id^="country-icon-"]').forEach(el => el.classList.remove('rotate-180'));
         }
 
-        function initRotationQueue(matches) {
-            rotationQueue = [];
-            internationalConfig.forEach(cup => {
-                matches.filter(m => matchBelongsToLeague(m.league_name, cup)).forEach(m => rotationQueue.push(m));
-            });
-            countriesConfig.forEach(c => {
-                c.leagues.forEach(league => {
-                    matches.filter(m => matchBelongsToLeague(m.league_name, league, c.country)).forEach(m => rotationQueue.push(m));
-                });
-            });
-
-            if (rotationQueue.length > 0) {
-                rotationIndex = 0;
-                renderMatch(rotationQueue[0]);
-                startRotation();
-            }
-        }
-
-        function startRotation() {
-            if (rotationInterval) clearInterval(rotationInterval);
-            rotationInterval = setInterval(() => {
-                if (rotationQueue.length === 0) return;
-                rotationIndex = (rotationIndex + 1) % rotationQueue.length;
-                renderMatch(rotationQueue[rotationIndex]);
-            }, 15000);
-        }
-
         function openLeagueModal(league, leagueMatches) {
-            if (rotationInterval) clearInterval(rotationInterval);
-
             document.body.style.overflow = 'hidden';
 
             document.getElementById('league-modal-title').innerText = `${league.name} - Elemzett Meccsek`;
@@ -603,7 +536,6 @@
                     
                     mBtn.onclick = () => {
                         currentActiveMatch = m;
-                        renderMatch(m);
                         document.getElementById('league-matches-modal').classList.add('hidden');
                         openFullAnalysisModal();
                     };
@@ -621,41 +553,10 @@
 
         function closeLeagueModal() {
             closeAllModalsAndAccordions();
-            startRotation();
-        }
-
-        function renderMatch(item) {
-            if (!item) return;
-            currentActiveMatch = item;
-            document.getElementById('match-title').innerText = item.match_title || "Ismeretlen meccs";
-            document.getElementById('match-time').innerText = item.match_time || "Közelben";
-            document.getElementById('match-league-subtitle').innerText = item.league_name || "Éles Elemzés";
-            
-            let oddsVal = item.fair_odds_val || item.odds_val || item.fair_odds || item.odds || null;
-            let xgVal = item.xg_val || item.xg || null;
-            let statsVal = item.special_val || item.stats_val || item.statisztikai_mutato || null;
-
-            if ((!oddsVal || !xgVal) && item.full_html) {
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = item.full_html;
-                const textContent = tempDiv.innerText || tempDiv.textContent || "";
-                
-                const matchOdds = textContent.match(/([1-9]\.[0-9]{2})/);
-                if (matchOdds && !oddsVal) oddsVal = matchOdds[1];
-
-                const matchXg = textContent.match(/([0-9]\.[0-9]{2}\s*xG|xG[:\s]*[0-9]\.[0-9]{2})/i);
-                if (matchXg && !xgVal) xgVal = matchXg[0];
-            }
-
-            document.getElementById('stat-odds').innerText = oddsVal || "1.85";
-            document.getElementById('stat-xg').innerText = xgVal || "~3.00 xG";
-            document.getElementById('stat-corners').innerText = statsVal || "BTTS: Igen";
         }
 
         function openFullAnalysisModal() {
             if (!currentActiveMatch) return;
-            if (rotationInterval) clearInterval(rotationInterval);
-
             document.body.style.overflow = 'hidden';
 
             const container = document.getElementById('modal-html-container');
@@ -701,7 +602,6 @@
 
         function closeFullAnalysisModal() {
             closeAllModalsAndAccordions();
-            startRotation();
         }
 
         // Modal vezérlők
@@ -715,23 +615,19 @@
         function closeLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }
 
         function openPrivacyModal() {
-            if (rotationInterval) clearInterval(rotationInterval);
             document.body.style.overflow = 'hidden';
             document.getElementById('privacy-modal').classList.remove('hidden');
         }
         function closePrivacyModal() {
             closeAllModalsAndAccordions();
-            startRotation();
         }
 
         function openTermsModal() {
-            if (rotationInterval) clearInterval(rotationInterval);
             document.body.style.overflow = 'hidden';
             document.getElementById('terms-modal').classList.remove('hidden');
         }
         function closeTermsModal() {
             closeAllModalsAndAccordions();
-            startRotation();
         }
 
         function showForgotPassword() {
