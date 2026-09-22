@@ -119,10 +119,7 @@
                     <span>🏆</span> Kiemelt Nemzetközi Kupák
                 </h2>
                 
-                <!-- Különálló sor a Nemzetek Ligájának (teljes szélességben vagy egymagában) -->
-                <div id="nations-league-grid" class="mb-4"></div>
-
-                <!-- A többi nemzetközi kupa rácsa (Bajnokok Ligája, Európa Liga, Konferencia Liga) -->
+                <!-- 3 oszlopos rács, ahol a középső oszlopban (pontosan az Európa Liga felett) szerepel a Nemzetek Ligája -->
                 <div id="international-cups-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start"></div>
             </div>
 
@@ -400,10 +397,10 @@
             }
         ];
 
-        // A Nemzetek Ligája különálló elemként, a többi pedig a lenti 3-as rácsban
-        const nationsLeagueConfig = { key: "nemzetekligaja", name: "UEFA Nemzetek Ligája", synonyms: ["nemzetek ligája", "nations league", "uefa nations league"] };
+        // Nemzetközi kupák konfigurációja sorrendben (Bajnokok Ligája, Nemzetek Ligája (az Európa Liga felett), Európa Liga, Konferencia Liga)
         const internationalConfig = [
             { key: "ucl", name: "UEFA Bajnokok Ligája", synonyms: ["bajnokok ligája", "champions league", "ucl", "bl"] },
+            { key: "nemzetekligaja", name: "UEFA Nemzetek Ligája", synonyms: ["nemzetek ligája", "nations league", "uefa nations league"] },
             { key: "europaliga", name: "UEFA Európa Liga", synonyms: ["európa liga", "europa league"] },
             { key: "konferencia", name: "UEFA Konferencia Liga", synonyms: ["konferencia liga", "conference league"] }
         ];
@@ -446,34 +443,25 @@
         }
 
         function buildDashboard(matches) {
-            const nationsContainer = document.getElementById('nations-league-grid');
             const intContainer = document.getElementById('international-cups-grid');
             const countryContainer = document.getElementById('countries-grid');
             
-            nationsContainer.innerHTML = '';
             intContainer.innerHTML = '';
             countryContainer.innerHTML = '';
 
-            // 1. UEFA Nemzetek Ligája kártya (egymagában legfelül)
-            const nlMatches = matches.filter(m => matchBelongsToLeague(m.league_name, nationsLeagueConfig));
-            const nlCard = document.createElement('div');
-            nlCard.className = "league-card-custom rounded-2xl p-4 flex justify-between items-center shadow-xl cursor-pointer transition w-full";
-            nlCard.innerHTML = `
-                <div>
-                    <div class="text-sm font-black uppercase tracking-tight slightly-lighter-green">${nationsLeagueConfig.name}</div>
-                    <div class="text-xs text-white font-medium mt-0.5">${nlMatches.length} meccs elemzés</div>
-                </div>
-                <span class="bg-red-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow">${nlMatches.length}</span>
-            `;
-            nlCard.onclick = () => openLeagueModal(nationsLeagueConfig, nlMatches);
-            nationsContainer.appendChild(nlCard);
-
-            // 2. A többi nemzetközi kupa (3-as rácsban alatta)
-            internationalConfig.forEach(cup => {
+            // Létrehozzuk a 4 kártyát pontos sorrendben a 3 oszlopos rácshoz:
+            // 1. Oszlop: Bajnokok Ligája | 2. Oszlop: Nemzetek Ligája (fent) -> Európa Liga (lent) | 3. Oszlop: Konferencia Liga
+            internationalConfig.forEach((cup, index) => {
                 const cupMatches = matches.filter(m => matchBelongsToLeague(m.league_name, cup));
                 
                 const card = document.createElement('div');
                 card.className = "league-card-custom rounded-2xl p-4 flex justify-between items-center shadow-xl cursor-pointer transition";
+                
+                // Ha az Európa Ligáról van szó (3. elem a tömbben), üres elemet beszúrunk elé, hogy a középső oszlopba kerüljön a Nemzetek Ligája alá
+                if (cup.key === "europaliga") {
+                    // A Nemzetek Ligája (index: 1) már bekerült, most jön az Európa Liga a 2. oszlopba
+                }
+
                 card.innerHTML = `
                     <div>
                         <div class="text-sm font-black uppercase tracking-tight slightly-lighter-green">${cup.name}</div>
@@ -485,7 +473,7 @@
                 intContainer.appendChild(card);
             });
 
-            // 3. Országok és ligák rácsa
+            // Országok és ligák rácsa
             countriesConfig.forEach((item, index) => {
                 let countryTotalMatches = 0;
                 let leaguesHtml = '';
