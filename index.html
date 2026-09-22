@@ -118,7 +118,7 @@
                 <h2 class="text-lg font-bold text-amber-400 mb-3 drop-shadow flex items-center gap-2">
                     <span>🏆</span> Kiemelt Nemzetközi Kupák
                 </h2>
-                <div id="international-cups-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start"></div>
+                <div id="international-cups-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-start"></div>
             </div>
 
             <div>
@@ -397,6 +397,7 @@
 
         const internationalConfig = [
             { key: "ucl", name: "UEFA Bajnokok Ligája", synonyms: ["bajnokok ligája", "champions league", "ucl", "bl"] },
+            { key: "nemzetekligaja", name: "UEFA Nemzetek Ligája", synonyms: ["nemzetek ligája", "nations league", "uefa nations league"] },
             { key: "europaliga", name: "UEFA Európa Liga", synonyms: ["európa liga", "europa league"] },
             { key: "konferencia", name: "UEFA Konferencia Liga", synonyms: ["konferencia liga", "conference league"] }
         ];
@@ -696,7 +697,7 @@
 
         async function handleForgotPassword(event) {
             event.preventDefault();
-            const email = document.getElementById('forgot-email').value;
+            const email = document.getElementById('forgot-email'].value;
             const msgEl = document.getElementById('login-message');
             msgEl.innerHTML = '<span class="text-gray-200">Email küldése folyamatban...</span>';
 
