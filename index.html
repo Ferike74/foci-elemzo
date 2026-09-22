@@ -18,13 +18,13 @@
             background-attachment: fixed;
         }
         .glass-panel {
-            background: rgba(3, 7, 15, 0.75);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(5, 10, 20, 0.02);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
         .league-card-custom {
-            background: rgba(3, 10, 20, 0.85);
+            background: rgba(3, 10, 20, 0.75);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(52, 211, 153, 0.4);
@@ -32,9 +32,9 @@
             transition: all 0.3s ease;
         }
         .league-card-custom:hover {
-            background: rgba(5, 18, 35, 0.95);
+            background: rgba(5, 18, 35, 0.85);
             border-color: rgba(56, 189, 248, 0.8);
-            box-shadow: 0 0 25px rgba(56, 189, 248, 0.3);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
         }
         .slightly-lighter-green {
             color: #34d399;
@@ -50,7 +50,7 @@
     <div class="relative z-10 flex flex-col min-h-screen p-4 md:p-6 max-w-7xl mx-auto w-full space-y-6">
         
         <!-- 1. FEJLÉC -->
-        <header class="glass-panel rounded-3xl px-6 py-12 md:py-16 flex flex-col items-center justify-center text-center shadow-2xl relative">
+        <header class="glass-panel rounded-3xl px-6 py-14 md:py-20 flex flex-col items-center justify-center text-center shadow-2xl relative">
             <!-- Bal felső sarok focilabda -->
             <div class="absolute left-6 top-6 hidden md:flex items-center space-x-3 z-20">
                 <span class="text-3xl">⚽</span>
@@ -58,7 +58,7 @@
 
             <!-- Bal oldali Kapcsolat gomb asztali nézetben -->
             <div class="absolute left-6 bottom-6 hidden md:flex items-center space-x-3 z-20">
-                <button onclick="openContactModal()" class="bg-black/60 hover:bg-black text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 transition transform hover:scale-105 uppercase text-xs tracking-wider">
+                <button onclick="openContactModal()" class="bg-black hover:bg-slate-900 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 transition transform hover:scale-105 uppercase text-xs tracking-wider">
                     Kapcsolat
                 </button>
             </div>
@@ -72,33 +72,35 @@
                 </div>
             </div>
 
-            <!-- Élő Kvantitatív Ticker / Sáv -->
-            <div class="mt-4 inline-flex flex-wrap items-center justify-center gap-4 bg-black/40 border border-emerald-500/30 px-4 py-1.5 rounded-full text-[11px] text-gray-300 tracking-wider shadow-inner">
-                <span class="flex items-center gap-1 text-emerald-400 font-bold">🟢 AI Agent Aktív</span>
-                <span>•</span>
-                <span>100,000+ Monte Carlo futtatás</span>
-                <span>•</span>
-                <span class="text-amber-400 font-bold">+EV Értékalapú Modell</span>
-            </div>
-
             <!-- Jobb felső sarok focilabda -->
             <div class="absolute right-6 top-6 hidden md:flex items-center space-x-3 z-20">
                 <span class="text-3xl">⚽</span>
             </div>
 
-            <!-- Jobb oldali gombok / Felhasználói állapot asztali nézetben -->
+            <!-- Jobb oldali gombok asztali nézetben -->
             <div class="absolute right-6 bottom-6 hidden md:flex flex-col items-end space-y-1 z-20">
-                <div id="desktop-auth-container" class="flex items-center space-x-2">
-                    <!-- Dinamikusan töltődik be JS-ből -->
+                <span id="user-status" class="text-xs text-gray-200 drop-shadow mb-1"></span>
+                <div class="flex items-center space-x-2">
+                    <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
+                        Regisztráció
+                    </button>
+                    <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 transition transform hover:scale-105 uppercase text-xs tracking-wider">
+                        Belépés
+                    </button>
                 </div>
             </div>
 
             <!-- Mobil nézetű gombok -->
-            <div class="mt-6 flex flex-col md:hidden items-center justify-center space-y-2 w-full">
-                <div id="mobile-auth-container" class="flex items-center space-x-2">
-                    <!-- Dinamikusan töltődik be JS-ből -->
+            <div class="mt-8 flex flex-col md:hidden items-center justify-center space-y-2 w-full">
+                <div class="flex items-center space-x-2">
+                    <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 uppercase text-xs tracking-wider">
+                        Regisztráció
+                    </button>
+                    <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 uppercase text-xs tracking-wider">
+                        Belépés
+                    </button>
                 </div>
-                <button onclick="openContactModal()" class="bg-black/60 hover:bg-black text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 uppercase text-xs tracking-wider">
+                <button onclick="openContactModal()" class="bg-black hover:bg-slate-900 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 uppercase text-xs tracking-wider">
                     Kapcsolat
                 </button>
             </div>
@@ -119,13 +121,9 @@
                 <span class="bg-emerald-500/30 border border-emerald-400/60 text-emerald-300 font-black text-lg md:text-xl px-4 py-2 rounded-xl shadow-2xl uppercase text-center inline-block">7999 FT/HÓ</span> 
                 Itt minden információt megtalálsz a tökéletes fogadás elkészítéséhez.
             </p>
-            
-            <div class="pt-2 flex flex-wrap items-center justify-center gap-4">
-                <button onclick="openRegisterModal()" class="bg-gradient-to-r from-red-600 hover:from-red-500 to-amber-500 hover:to-amber-400 text-white font-black px-8 py-3.5 rounded-2xl shadow-2xl shadow-red-600/60 transition transform hover:scale-105 uppercase text-xs md:text-sm tracking-widest border border-amber-400/65">
+            <div class="pt-2">
+                <button onclick="openRegisterModal()" class="bg-gradient-to-r from-red-600 hover:from-red-500 to-amber-500 hover:to-amber-400 text-white font-black px-8 py-3.5 rounded-2xl shadow-2xl shadow-red-600/60 transition transform hover:scale-105 uppercase text-xs md:text-sm tracking-widest border border-amber-400/60">
                     Regisztrálj most! 🚀
-                </button>
-                <button onclick="openDemoAnalysis()" class="bg-slate-800/90 hover:bg-slate-700 text-sky-300 font-bold px-6 py-3.5 rounded-2xl shadow-xl transition transform hover:scale-105 uppercase text-xs md:text-sm tracking-wider border border-sky-400/40">
-                    👁️ Ingyenes Minta Elemzés
                 </button>
             </div>
         </section>
@@ -148,7 +146,7 @@
         </div>
 
         <!-- LÁBLÉC -->
-        <footer class="text-center text-xs text-gray-300 pb-2 drop-shadow space-y-2">
+        <footer class="text-center text-xs text-gray-200 pb-2 drop-shadow space-y-2">
             <div>&copy; 2026 Sportfogadás Elemző Agent. Minden jog fenntartva.</div>
             <div class="flex justify-center space-x-4 text-gray-300">
                 <button onclick="openPrivacyModal()" class="hover:text-amber-400 underline transition">Adatvédelmi nyilatkozat</button>
@@ -178,7 +176,7 @@
 
     <!-- Liga Meccsei Modal -->
     <div id="league-matches-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel bg-slate-950/80 border border-white/20 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl backdrop-blur-md">
+        <div class="glass-panel bg-slate-950/50 border border-white/20 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl backdrop-blur-md">
             <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-2xl font-bold">&times;</button>
             <h3 id="league-modal-title" class="text-lg font-black slightly-lighter-green mb-4 border-b border-green-500/30 pb-2">Válassz meccset</h3>
             <div id="league-modal-list" class="space-y-2 max-h-64 overflow-y-auto no-scrollbar"></div>
@@ -450,7 +448,9 @@
         window.addEventListener('DOMContentLoaded', async () => {
             if (supabaseClient) {
                 const { data: { session } } = await supabaseClient.auth.getSession();
-                updateAuthUI(session);
+                if (session) {
+                    document.getElementById('user-status').innerText = `Bejelentkezve: ${session.user.email}`;
+                }
 
                 const { data: analyses, error } = await supabaseClient
                     .from('match_analyses')
@@ -464,45 +464,9 @@
                     buildDashboard([]);
                 }
             } else {
-                updateAuthUI(null);
                 buildDashboard([]);
             }
         });
-
-        function updateAuthUI(session) {
-            const desktopContainer = document.getElementById('desktop-auth-container');
-            const mobileContainer = document.getElementById('mobile-auth-container');
-
-            if (session) {
-                const authHtml = `
-                    <div class="flex items-center space-x-3 bg-black/50 border border-emerald-500/40 px-4 py-2 rounded-xl shadow-lg">
-                        <span class="text-xs text-emerald-400 font-bold">🟢 Prémium Fiók</span>
-                        <span class="text-xs text-gray-300">(${session.user.email})</span>
-                        <button onclick="handleLogout()" class="bg-red-600/80 hover:bg-red-600 text-white font-bold px-3 py-1 rounded-lg text-xs uppercase tracking-wider transition">Kilépés</button>
-                    </div>
-                `;
-                desktopContainer.innerHTML = authHtml;
-                mobileContainer.innerHTML = authHtml;
-            } else {
-                const guestHtml = `
-                    <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
-                        Regisztráció
-                    </button>
-                    <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 transition transform hover:scale-105 uppercase text-xs tracking-wider">
-                        Belépés
-                    </button>
-                `;
-                desktopContainer.innerHTML = guestHtml;
-                mobileContainer.innerHTML = guestHtml;
-            }
-        }
-
-        async function handleLogout() {
-            if (supabaseClient) {
-                await supabaseClient.auth.signOut();
-                location.reload();
-            }
-        }
 
         function matchBelongsToLeague(dbLeagueName, leagueConfig, countryName) {
             if (!dbLeagueName) return false;
@@ -584,7 +548,7 @@
                             <span id="${iconId}" class="text-xs slightly-lighter-green transform transition-transform duration-200">▼</span>
                         </div>
                     </div>
-                    <div id="${contentId}" class="country-accordion-content hidden px-3 pb-3 pt-1 border-t border-white/10 bg-black/40 space-y-1">
+                    <div id="${contentId}" class="country-accordion-content hidden px-3 pb-3 pt-1 border-t border-white/10 bg-black/30 space-y-1">
                         ${leaguesHtml}
                     </div>
                 `;
@@ -622,7 +586,7 @@
             if (leagueMatches.length > 0) {
                 leagueMatches.forEach(m => {
                     const mBtn = document.createElement('button');
-                    mBtn.className = "w-full text-left px-4 py-3 text-sm text-white bg-black/50 hover:bg-red-950/50 border border-green-500/30 rounded-xl transition flex items-center justify-between cursor-pointer shadow";
+                    mBtn.className = "w-full text-left px-4 py-3 text-sm text-white bg-black/40 hover:bg-red-950/50 border border-green-500/30 rounded-xl transition flex items-center justify-between cursor-pointer shadow";
                     mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-xs text-red-400 font-bold">Megnyitás &rarr;</span>`;
                     
                     mBtn.onclick = () => {
@@ -644,15 +608,6 @@
 
         function closeLeagueModal() {
             closeAllModalsAndAccordions();
-        }
-
-        function openDemoAnalysis() {
-            if (allMatches.length > 0) {
-                currentActiveMatch = allMatches[0];
-                openFullAnalysisModal();
-            } else {
-                alert("Hamarosan elérhető a minta elemzés!");
-            }
         }
 
         function openFullAnalysisModal() {
