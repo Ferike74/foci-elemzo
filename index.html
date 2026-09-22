@@ -748,7 +748,8 @@
             } else {
                 msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres regisztráció! Átirányítás a fizetésre...</span>';
                 setTimeout(() => {
-                    window.location.href = 'https://buy.stripe.com/test_6oUcN5cy23eg7EG4Y8ejK04';
+                    const stripeUrl = `https://buy.stripe.com/test_6oUcN5cy23eg7EG4Y8ejK04?prefilled_email=${encodeURIComponent(email)}`;
+                    window.location.href = stripeUrl;
                 }, 1200);
             }
         }
