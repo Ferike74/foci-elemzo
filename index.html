@@ -50,9 +50,14 @@
     <div class="relative z-10 flex flex-col min-h-screen p-4 md:p-6 max-w-7xl mx-auto w-full space-y-6">
         
         <!-- 1. FEJLÉC -->
-        <header class="glass-panel rounded-3xl px-6 py-12 md:py-16 flex flex-col items-center justify-center text-center shadow-2xl relative">
-            <!-- Bal oldali Kapcsolat gomb asztali nézetben (lejjebb igazítva: top-1/2 -translate-y-1/2) -->
-            <div class="absolute left-6 top-1/2 -translate-y-1/2 hidden md:flex items-center space-x-3 z-20">
+        <header class="glass-panel rounded-3xl px-6 py-14 md:py-20 flex flex-col items-center justify-center text-center shadow-2xl relative">
+            <!-- Bal felső sarok focilabda -->
+            <div class="absolute left-6 top-6 hidden md:flex items-center space-x-3 z-20">
+                <span class="text-3xl">⚽</span>
+            </div>
+
+            <!-- Bal oldali Kapcsolat gomb asztali nézetben (mégjebb igazítva) -->
+            <div class="absolute left-6 bottom-6 hidden md:flex items-center space-x-3 z-20">
                 <button onclick="openContactModal()" class="bg-emerald-700 hover:bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 transition transform hover:scale-105 uppercase text-xs tracking-wider">
                     Kapcsolat
                 </button>
@@ -67,8 +72,13 @@
                 </div>
             </div>
 
-            <!-- Jobb oldali gombok asztali nézetben (lejjebb igazítva: top-1/2 -translate-y-1/2) -->
-            <div class="absolute right-6 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-end space-y-1 z-20">
+            <!-- Jobb felső sarok focilabda -->
+            <div class="absolute right-6 top-6 hidden md:flex items-center space-x-3 z-20">
+                <span class="text-3xl">⚽</span>
+            </div>
+
+            <!-- Jobb oldali gombok asztali nézetben (mégjebb igazítva) -->
+            <div class="absolute right-6 bottom-6 hidden md:flex flex-col items-end space-y-1 z-20">
                 <span id="user-status" class="text-xs text-gray-200 drop-shadow mb-1"></span>
                 <div class="flex items-center space-x-2">
                     <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
@@ -81,7 +91,7 @@
             </div>
 
             <!-- Mobil nézetű gombok -->
-            <div class="mt-6 flex flex-col md:hidden items-center justify-center space-y-2 w-full">
+            <div class="mt-8 flex flex-col md:hidden items-center justify-center space-y-2 w-full">
                 <div class="flex items-center space-x-2">
                     <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 uppercase text-xs tracking-wider">
                         Regisztráció
