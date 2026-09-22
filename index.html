@@ -112,18 +112,8 @@
             </div>
         </section>
 
-        <!-- 3. KÖZÉPSŐ SÁV ÉS FŐ KÁRTYA -->
+        <!-- 3. FŐ KÁRTYA (A felső sáv eltávolítva) -->
         <div>
-            <div class="mb-2 flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <span class="text-xs uppercase tracking-widest text-red-400 font-bold drop-shadow-md">Kiválasztott Elemzés:</span>
-                    <div class="bg-red-600 text-white text-xs px-3 py-1 rounded-full font-semibold shadow" id="badge-match-title">
-                        Válassz a kártyák közül...
-                    </div>
-                </div>
-                <span class="text-xs text-amber-300 font-semibold italic hidden sm:inline">💡 Kattints bármelyik országra vagy kupára a meccsek listájához!</span>
-            </div>
-
             <main onclick="if(currentActiveMatch) openFullAnalysisModal()" class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col justify-between cursor-pointer hover:border-sky-400/50 transition">
                 <div>
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-4 mb-6">
@@ -638,7 +628,6 @@
             if (!item) return;
             currentActiveMatch = item;
             document.getElementById('match-title').innerText = item.match_title || "Ismeretlen meccs";
-            document.getElementById('badge-match-title').innerText = item.match_title || "Ismeretlen meccs";
             document.getElementById('match-time').innerText = item.match_time || "Közelben";
             document.getElementById('match-league-subtitle').innerText = item.league_name || "Éles Elemzés";
             
@@ -661,12 +650,6 @@
             document.getElementById('stat-odds').innerText = oddsVal || "1.85";
             document.getElementById('stat-xg').innerText = xgVal || "~3.00 xG";
             document.getElementById('stat-corners').innerText = statsVal || "BTTS: Igen";
-            
-            let desc = item.analysis_desc || "";
-            if (desc.includes("<!DOCTYPE") || desc.includes("<html")) {
-                desc = "Kattints a kártyára a részletes és teljes körű statisztikai elemzés megtekintéséhez!";
-            }
-            document.getElementById('match-desc').innerText = desc;
         }
 
         function openFullAnalysisModal() {
@@ -727,7 +710,7 @@
 
         function openLoginModal() { 
             showLoginForm();
-            document.getElementById('login-modal').classList.add('hidden'); 
+            document.getElementById('login-modal').classList.remove('hidden'); 
         }
         function closeLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }
 
