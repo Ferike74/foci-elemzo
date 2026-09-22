@@ -134,7 +134,6 @@
                 <h2 class="text-lg font-bold text-amber-400 mb-3 drop-shadow flex items-center gap-2">
                     <span>🏆</span> Kiemelt Nemzetközi Kupák
                 </h2>
-                
                 <div id="international-cups-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start"></div>
             </div>
 
@@ -705,7 +704,7 @@
             const password = document.getElementById('reg-password').value;
             const passwordConfirm = document.getElementById('reg-password-confirm').value;
             const privacyChecked = document.getElementById('reg-privacy-check').checked;
-            const termsChecked = document.getElementById('reg-terms-check'].checked;
+            const termsChecked = document.getElementById('reg-terms-check').checked;
             const msgEl = document.getElementById('register-message');
 
             if (!privacyChecked || !termsChecked) {
@@ -727,7 +726,7 @@
             } else {
                 msgEl.innerHTML = '<span class="text-green-400 font-bold">Sikeres regisztráció! Átirányítás a fizetésre...</span>';
                 setTimeout(() => {
-                    window.location.href = 'https://buy.stripe.com/test_14AaEXbtYeWYcZ03U4eJk01';
+                    window.location.href = 'https://buy.stripe.com/test_9B6CN50Pk7uwe34a1seJk03';
                 }, 1200);
             }
         }
