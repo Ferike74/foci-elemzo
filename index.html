@@ -119,7 +119,9 @@
                     <span>🏆</span> Kiemelt Nemzetközi Kupák
                 </h2>
                 
-                <!-- Egyedi grid: 3 oszlop asztali nézetben, ahol pontosan beállítjuk a helyeket -->
+                <!-- Nemzetközi kupák elrendezése: 
+                     1. Sor: Nemzetek Ligája (középen, 3 oszlopos gridben a 2. helyen) 
+                     2. Sor: Bajnokok Ligája, Európa Liga, Konferencia Liga -->
                 <div id="international-cups-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start"></div>
             </div>
 
@@ -397,15 +399,14 @@
             }
         ];
 
-        // A kupák sorrendje a rácsban: 
-        // 1. Oszlop: Bajnokok Ligája
-        // 2. Oszlop: Nemzetek Ligája (fent) -> Európa Liga (lent)
-        // 3. Oszlop: Konferencia Liga
+        // A kupák pontos sorrendje a 3 oszlopos rácsban:
+        // 1. Sor: [Üres helykitöltő], [UEFA Nemzetek Ligája], [Üres helykitöltő] -> így középre kerül egyedül a Nemzetek Ligája
+        // 2. Sor: [UEFA Bajnokok Ligája], [UEFA Európa Liga], [UEFA Konferencia Liga]
         const internationalConfig = [
-            { key: "ucl", name: "UEFA Bajnokok Ligája", synonyms: ["bajnokok ligája", "champions league", "ucl", "bl"] },
             { key: "nemzetekligaja", name: "UEFA Nemzetek Ligája", synonyms: ["nemzetek ligája", "nations league", "uefa nations league"] },
-            { key: "konferencia", name: "UEFA Konferencia Liga", synonyms: ["konferencia liga", "conference league"] },
-            { key: "europaliga", name: "UEFA Európa Liga", synonyms: ["európa liga", "europa league"] }
+            { key: "ucl", name: "UEFA Bajnokok Ligája", synonyms: ["bajnokok ligája", "champions league", "ucl", "bl"] },
+            { key: "europaliga", name: "UEFA Európa Liga", synonyms: ["európa liga", "europa league"] },
+            { key: "konferencia", name: "UEFA Konferencia Liga", synonyms: ["konferencia liga", "conference league"] }
         ];
 
         window.addEventListener('DOMContentLoaded', async () => {
@@ -452,20 +453,19 @@
             intContainer.innerHTML = '';
             countryContainer.innerHTML = '';
 
-            // Hozzáadjuk a kártyákat a kívánt rácsstruktúrához:
-            // 0: Bajnokok Ligája (1. oszlop, 1. sor)
-            // 1: Nemzetek Ligája (2. oszlop, 1. sor)
-            // 2: Konferencia Liga (3. oszlop, 1. sor)
-            // 3: Üres helykitöltő (1. oszlop, 2. sor)
-            // 4: Európa Liga (2. oszlop, 2. sor -> közvetlenül a Nemzetek Ligája alatt)
+            // Helykitöltési sorrend a 3 oszlopos rácshoz:
+            // index 0: Nemzetek Ligája -> a 2. oszlopba kerül, ha elé rakunk egy üres cellát (-1)
+            // index 1: Bajnokok Ligája (2. sor, 1. oszlop)
+            // index 2: Európa Liga (2. sor, 2. oszlop)
+            // index 3: Konferencia Liga (2. sor, 3. oszlop)
             
-            const cardOrder = [0, 1, 2, -1, 3]; // -1 jelenti az üres cellát az 1. oszlopban a 2. sorban
+            const layoutIndices = [-1, 0, -1, 1, 2, 3]; 
+            // Jelölések: -1 = üres cella, 0 = Nemzetek Ligája, 1 = BL, 2 = EL, 3 = Konferencia
 
-            cardOrder.forEach(idx => {
+            layoutIndices.forEach(idx => {
                 if (idx === -1) {
-                    // Üres cella helykitöltéshez az első oszlopban a második sorban
                     const emptyDiv = document.createElement('div');
-                    emptyDiv.className = "hidden sm:block"; // mobilon elrejtve, asztali nézetben kitölti a helyet
+                    emptyDiv.className = "hidden sm:block"; 
                     intContainer.appendChild(emptyDiv);
                     return;
                 }
