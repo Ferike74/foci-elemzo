@@ -118,7 +118,12 @@
                 <h2 class="text-lg font-bold text-amber-400 mb-3 drop-shadow flex items-center gap-2">
                     <span>🏆</span> Kiemelt Nemzetközi Kupák
                 </h2>
-                <div id="international-cups-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-start"></div>
+                
+                <!-- Különálló sor a Nemzetek Ligájának (teljes szélességben vagy egymagában) -->
+                <div id="nations-league-grid" class="mb-4"></div>
+
+                <!-- A többi nemzetközi kupa rácsa (Bajnokok Ligája, Európa Liga, Konferencia Liga) -->
+                <div id="international-cups-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start"></div>
             </div>
 
             <div>
@@ -395,9 +400,10 @@
             }
         ];
 
+        // A Nemzetek Ligája különálló elemként, a többi pedig a lenti 3-as rácsban
+        const nationsLeagueConfig = { key: "nemzetekligaja", name: "UEFA Nemzetek Ligája", synonyms: ["nemzetek ligája", "nations league", "uefa nations league"] };
         const internationalConfig = [
             { key: "ucl", name: "UEFA Bajnokok Ligája", synonyms: ["bajnokok ligája", "champions league", "ucl", "bl"] },
-            { key: "nemzetekligaja", name: "UEFA Nemzetek Ligája", synonyms: ["nemzetek ligája", "nations league", "uefa nations league"] },
             { key: "europaliga", name: "UEFA Európa Liga", synonyms: ["európa liga", "europa league"] },
             { key: "konferencia", name: "UEFA Konferencia Liga", synonyms: ["konferencia liga", "conference league"] }
         ];
@@ -440,12 +446,29 @@
         }
 
         function buildDashboard(matches) {
+            const nationsContainer = document.getElementById('nations-league-grid');
             const intContainer = document.getElementById('international-cups-grid');
             const countryContainer = document.getElementById('countries-grid');
             
+            nationsContainer.innerHTML = '';
             intContainer.innerHTML = '';
             countryContainer.innerHTML = '';
 
+            // 1. UEFA Nemzetek Ligája kártya (egymagában legfelül)
+            const nlMatches = matches.filter(m => matchBelongsToLeague(m.league_name, nationsLeagueConfig));
+            const nlCard = document.createElement('div');
+            nlCard.className = "league-card-custom rounded-2xl p-4 flex justify-between items-center shadow-xl cursor-pointer transition w-full";
+            nlCard.innerHTML = `
+                <div>
+                    <div class="text-sm font-black uppercase tracking-tight slightly-lighter-green">${nationsLeagueConfig.name}</div>
+                    <div class="text-xs text-white font-medium mt-0.5">${nlMatches.length} meccs elemzés</div>
+                </div>
+                <span class="bg-red-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow">${nlMatches.length}</span>
+            `;
+            nlCard.onclick = () => openLeagueModal(nationsLeagueConfig, nlMatches);
+            nationsContainer.appendChild(nlCard);
+
+            // 2. A többi nemzetközi kupa (3-as rácsban alatta)
             internationalConfig.forEach(cup => {
                 const cupMatches = matches.filter(m => matchBelongsToLeague(m.league_name, cup));
                 
@@ -462,6 +485,7 @@
                 intContainer.appendChild(card);
             });
 
+            // 3. Országok és ligák rácsa
             countriesConfig.forEach((item, index) => {
                 let countryTotalMatches = 0;
                 let leaguesHtml = '';
@@ -697,7 +721,7 @@
 
         async function handleForgotPassword(event) {
             event.preventDefault();
-            const email = document.getElementById('forgot-email'].value;
+            const email = document.getElementById('forgot-email').value;
             const msgEl = document.getElementById('login-message');
             msgEl.innerHTML = '<span class="text-gray-200">Email küldése folyamatban...</span>';
 
