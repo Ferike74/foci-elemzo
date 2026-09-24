@@ -41,8 +41,22 @@
             font-weight: 700;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
         }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Egyedi, jól látható görgetősáv a meccsek dobozához */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(56, 189, 248, 0.6);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(56, 189, 248, 0.9);
+        }
     </style>
 </head>
 <body class="min-h-screen text-white font-sans antialiased flex flex-col justify-between">
@@ -179,7 +193,8 @@
         <div class="glass-panel bg-slate-950/50 border border-white/20 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl backdrop-blur-md">
             <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-2xl font-bold">&times;</button>
             <h3 id="league-modal-title" class="text-lg font-black slightly-lighter-green mb-4 border-b border-green-500/30 pb-2">Válassz meccset</h3>
-            <div id="league-modal-list" class="space-y-2 max-h-64 overflow-y-auto no-scrollbar"></div>
+            <!-- Itt frissítve a max-h és a custom-scrollbar -->
+            <div id="league-modal-list" class="space-y-2 max-h-[360px] overflow-y-auto pr-1 custom-scrollbar"></div>
         </div>
     </div>
 
