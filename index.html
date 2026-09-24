@@ -193,7 +193,6 @@
         <div class="glass-panel bg-slate-950/50 border border-white/20 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl backdrop-blur-md">
             <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-2xl font-bold">&times;</button>
             <h3 id="league-modal-title" class="text-lg font-black slightly-lighter-green mb-4 border-b border-green-500/30 pb-2">Válassz meccset</h3>
-            <!-- Itt frissítve a max-h és a custom-scrollbar -->
             <div id="league-modal-list" class="space-y-2 max-h-[360px] overflow-y-auto pr-1 custom-scrollbar"></div>
         </div>
     </div>
@@ -205,7 +204,7 @@
             <div id="modal-html-container" class="mt-2"></div>
             <div class="mt-6 text-center border-t pt-4 bg-[#f0f2f5]">
                 <button onclick="closeFullAnalysisModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-lg transition text-xs uppercase tracking-wider">
-                    Bezárás
+                    Bezárás (Vissza a meccsekhez)
                 </button>
             </div>
         </div>
@@ -370,6 +369,8 @@
 
         let allMatches = [];
         let currentActiveMatch = null;
+        let currentActiveLeague = null;      // <--- ÚJ: Tárolja az aktuális ligát
+        let currentActiveLeagueMatches = []; // <--- ÚJ: Tárolja a liga meccseit
 
         const countriesConfig = [
             {
@@ -608,6 +609,8 @@
         }
 
         function openLeagueModal(league, leagueMatches) {
+            currentActiveLeague = league;             // <--- Mentés
+            currentActiveLeagueMatches = leagueMatches; // <--- Mentés
             document.body.style.overflow = 'hidden';
 
             document.getElementById('league-modal-title').innerText = `${league.name} - Elemzett Meccsek`;
@@ -686,8 +689,14 @@
             document.getElementById('full-analysis-modal').classList.remove('hidden');
         }
 
+        // <--- MÓDOSÍTVA: Bezáráskor visszatér a kisablakhoz, ha volt aktív liga
         function closeFullAnalysisModal() {
-            closeAllModalsAndAccordions();
+            document.getElementById('full-analysis-modal').classList.add('hidden');
+            if (currentActiveLeague) {
+                openLeagueModal(currentActiveLeague, currentActiveLeagueMatches);
+            } else {
+                closeAllModalsAndAccordions();
+            }
         }
 
         // Modal vezérlők
