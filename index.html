@@ -31,19 +31,19 @@
         }
 
         .league-card-custom {
-            background: rgba(2, 6, 23, 0.16);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            border: 1px solid rgba(6, 182, 212, 0.2);
+            background: rgba(2, 6, 23, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(6, 182, 212, 0.35);
             align-self: start;
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
 
         .league-card-custom:hover {
-            background: rgba(4, 12, 30, 0.3);
-            border-color: rgba(236, 72, 153, 0.5);
-            box-shadow: 0 0 20px rgba(236, 72, 153, 0.2);
+            background: rgba(4, 12, 30, 0.7);
+            border-color: rgba(236, 72, 153, 0.6);
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.25);
             transform: translateY(-2px);
         }
 
@@ -701,7 +701,7 @@
                             <span id="${iconId}" class="text-xs slightly-lighter-green transform transition-transform duration-200">▼</span>
                         </div>
                     </div>
-                    <div id="${contentId}" class="country-accordion-content hidden px-3 pb-3 pt-1 border-t border-cyan-500/20 bg-black/20 space-y-1 backdrop-blur-sm">
+                    <div id="${contentId}" class="country-accordion-content hidden px-3 pb-3 pt-1 border-t border-cyan-500/20 bg-black/30 space-y-1 backdrop-blur-sm">
                         ${leaguesHtml}
                     </div>
                 `;
@@ -741,7 +741,7 @@
             if (leagueMatches.length > 0) {
                 leagueMatches.forEach(m => {
                     const mBtn = document.createElement('button');
-                    mBtn.className = "w-full text-left px-4 py-3 text-sm text-white bg-black/30 hover:bg-pink-950/40 border border-cyan-500/30 rounded-xl transition flex items-center justify-between cursor-pointer shadow backdrop-blur-sm";
+                    mBtn.className = "w-full text-left px-4 py-3 text-sm text-white bg-black/40 hover:bg-pink-950/40 border border-cyan-500/30 rounded-xl transition flex items-center justify-between cursor-pointer shadow backdrop-blur-sm";
                     mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-xs text-pink-300 font-bold">Megnyitás &rarr;</span>`;
                     
                     mBtn.onclick = () => {
