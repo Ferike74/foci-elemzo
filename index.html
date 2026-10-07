@@ -14,13 +14,12 @@
         body {
             background-color: #030712;
             background-image: 
-                radial-gradient(circle at 50% 30%, rgba(236, 72, 153, 0.02) 0%, transparent 50%),
-                radial-gradient(circle at 10% 90%, rgba(6, 182, 212, 0.02) 0%, transparent 40%),
+                radial-gradient(circle at 50% 30%, rgba(236, 72, 153, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 10% 90%, rgba(6, 182, 212, 0.03) 0%, transparent 40%),
                 url('stadion.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            background-blend-mode: luminosity;
         }
 
         .glass-panel {
@@ -203,7 +202,7 @@
     </div>
 
     <!-- Teljes HTML Elemzés Modal -->
-    <div id="full-analysis-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-2 md:p-6">
+    <div id="full-analysis-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-2 md:p-6">
         <div class="bg-[#f0f2f5] text-[#1c1e21] w-full max-w-5xl max-h-[92vh] rounded-3xl p-4 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto font-sans border border-cyan-500">
             <button onclick="closeFullAnalysisModal()" class="absolute top-4 right-6 text-slate-700 hover:text-pink-600 text-4xl font-black z-50 bg-white/90 px-3 py-1 rounded-full shadow">&times;</button>
             <div id="modal-html-container" class="mt-2"></div>
@@ -216,7 +215,7 @@
     </div>
 
     <!-- Adatvédelmi Nyilatkozat Modal -->
-    <div id="privacy-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div id="privacy-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
             <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Adatvédelmi Nyilatkozat</h3>
@@ -232,7 +231,7 @@
     </div>
 
     <!-- Felhasználási Feltételek Modal -->
-    <div id="terms-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div id="terms-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
             <button onclick="closeTermsModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Felhasználási Feltételek és Jogi Nyilatkozat</h3>
