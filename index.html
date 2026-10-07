@@ -184,4 +184,54 @@
             <div class="bg-black/30 border border-emerald-500/40 rounded-2xl p-4 mb-6">
                 <a href="mailto:info@focielemzesek.com" class="text-emerald-400 font-black text-base md:text-lg tracking-wide hover:underline">info@focielemzesek.com</a>
             </div>
-            <button onclick="closeContactModal()" class="bg-slate-800 hover:bg-slate-700 text-white font
+            <button onclick="closeContactModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">Bezárás</button>
+        </div>
+    </div>
+
+    <!-- Liga Meccsei Modal -->
+    <div id="league-matches-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-slate-950/50 border border-white/20 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl backdrop-blur-md">
+            <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-2xl font-bold">&times;</button>
+            <h3 id="league-modal-title" class="text-lg font-black slightly-lighter-green mb-4 border-b border-green-500/30 pb-2">Válassz meccset</h3>
+            <div id="league-modal-list" class="space-y-2 max-h-[360px] overflow-y-auto pr-1 custom-scrollbar"></div>
+        </div>
+    </div>
+
+    <!-- Teljes HTML Elemzés Modal -->
+    <div id="full-analysis-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 md:p-6">
+        <div class="bg-[#f0f2f5] text-[#1c1e21] w-full max-w-5xl max-h-[92vh] rounded-3xl p-4 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto font-sans">
+            <button onclick="closeFullAnalysisModal()" class="absolute top-4 right-6 text-slate-700 hover:text-red-600 text-4xl font-black z-50 bg-white/90 px-3 py-1 rounded-full shadow">&times;</button>
+            <div id="modal-html-container" class="mt-2"></div>
+            <div class="mt-6 text-center border-t pt-4 bg-[#f0f2f5]">
+                <button onclick="closeFullAnalysisModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-lg transition text-xs uppercase tracking-wider">
+                    Bezárás (Vissza a meccsekhez)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Adatvédelmi Nyilatkozat Modal -->
+    <div id="privacy-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 text-gray-200 border border-white/20 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
+            <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-white hover:text-red-400 text-3xl font-bold">&times;</button>
+            <h3 class="text-xl font-black text-amber-400 mb-4 border-b border-white/10 pb-2">Adatvédelmi Nyilatkozat</h3>
+            <div class="space-y-4 text-xs leading-relaxed text-gray-300">
+                <p><strong>1. Adatkezelő adatai:</strong> A Focielemzések platform üzemeltetője elkötelezett a felhasználók személyes adatainak védelme mellett. Jelen adatvédelmi nyilatkozat rögzíti a szolgáltatás igénybevétele során gyűjtött adatok kezelésének elveit.</p>
+                <p><strong>2. Kezelt adatok köre:</strong> A regisztráció során kizárólag az Ön által megadott e-mail címet és a biztonságos hitelesítéshez szükséges titkosított jelszóadatokat tároljuk (Supabase rendszeren keresztül). A fizetési folyamatokat a Stripe biztonságos rendszere kezeli, bankkártyaadatokat a szervereink nem tárolnak.</p>
+                <p><strong>3. Az adatkezelés célja:</strong> A megadott e-mail címet kizárólag a fiók azonosítása, a belépés biztosítása, valamint a prémium előfizetés és a próbaidőszak kezelése céljából használjuk.</p>
+                <p><strong>4. Adatbiztonság:</strong> Minden adatátvitel titkosított csatornákon (HTTPS) történik, és a hozzáférést szigorú biztonsági protokollok védik.</p>
+            </div>
+            <div class="mt-6 text-center border-t border-white/10 pt-4">
+                <button onclick="closePrivacyModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider">Bezárás</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Felhasználási Feltételek Modal -->
+    <div id="terms-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 text-gray-200 border border-white/20 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
+            <button onclick="closeTermsModal()" class="absolute top-4 right-6 text-white hover:text-red-400 text-3xl font-bold">&times;</button>
+            <h3 class="text-xl font-black text-amber-400 mb-4 border-b border-white/10 pb-2">Felhasználási Feltételek és Jogi Nyilatkozat</h3>
+            <div class="space-y-4 text-xs leading-relaxed text-gray-300">
+                <p><strong>1. A szolgáltatás jellege:</strong> A Focielemzések egy mesterséges intelligencián és kvantitatív statisztikai szimulációkon alapuló sportfogadási elemző platform. Az oldalon megjelenő adatok, szimulációk és "fair odds" értékek kizárólag tájékoztató jellegűek.</p>
+                <p><strong>2. Felelősségvállalás korlátozása
