@@ -369,8 +369,8 @@
 
         let allMatches = [];
         let currentActiveMatch = null;
-        let currentActiveLeague = null;      // <--- ÚJ: Tárolja az aktuális ligát
-        let currentActiveLeagueMatches = []; // <--- ÚJ: Tárolja a liga meccseit
+        let currentActiveLeague = null;
+        let currentActiveLeagueMatches = [];
 
         const countriesConfig = [
             {
@@ -378,6 +378,8 @@
                 leagues: [
                     { key: "premier", name: "Premier League", synonyms: ["premier league", "anglia premier", "premier"] },
                     { key: "championship", name: "Championship", synonyms: ["championship"] },
+                    { key: "leagueone", name: "League One", synonyms: ["league one", "league 1"] },
+                    { key: "leaguetwo", name: "League Two", synonyms: ["league two", "league 2"] },
                     { key: "fakupa", name: "FA Kupa", synonyms: ["fa kupa", "fa cup"] },
                     { key: "eflkupa", name: "EFL Kupa", synonyms: ["efl kupa", "efl cup", "league cup"] }
                 ]
@@ -386,7 +388,9 @@
                 country: "Spanyolország",
                 leagues: [
                     { key: "laliga", name: "La Liga", synonyms: ["la liga", "spanyol", "laliga"] },
-                    { key: "spanyolkupa", name: "Spanyol Kupa", synonyms: ["spanyol kupa", "copa del rey"] }
+                    { key: "segundadivision", name: "Liga 2 (Segunda)", synonyms: ["segunda division", "liga 2", "spanyol 2"] },
+                    { key: "spanyolkupa", name: "Spanyol Kupa", synonyms: ["spanyol kupa", "copa del rey"] },
+                    { key: "spanyolszuperkupa", name: "Spanyol Szuperkupa", synonyms: ["spanyol szuperkupa", "supercopa de espana"] }
                 ]
             },
             {
@@ -609,8 +613,8 @@
         }
 
         function openLeagueModal(league, leagueMatches) {
-            currentActiveLeague = league;             // <--- Mentés
-            currentActiveLeagueMatches = leagueMatches; // <--- Mentés
+            currentActiveLeague = league;
+            currentActiveLeagueMatches = leagueMatches;
             document.body.style.overflow = 'hidden';
 
             document.getElementById('league-modal-title').innerText = `${league.name} - Elemzett Meccsek`;
@@ -689,7 +693,6 @@
             document.getElementById('full-analysis-modal').classList.remove('hidden');
         }
 
-        // <--- MÓDOSÍTVA: Bezáráskor visszatér a kisablakhoz, ha volt aktív liga
         function closeFullAnalysisModal() {
             document.getElementById('full-analysis-modal').classList.add('hidden');
             if (currentActiveLeague) {
@@ -699,7 +702,6 @@
             }
         }
 
-        // Modal vezérlők
         function openRegisterModal() { document.getElementById('register-modal').classList.remove('hidden'); }
         function closeRegisterModal() { document.getElementById('register-modal').classList.add('hidden'); }
 
@@ -758,7 +760,6 @@
             document.getElementById('login-message').innerHTML = '';
         }
 
-        // Jelszó láthatóság váltó függvény
         function togglePassword(fieldId, btnId) {
             const input = document.getElementById(fieldId);
             const btn = document.getElementById(btnId);
@@ -846,7 +847,6 @@
             }
         }
 
-        // Fiók és előfizetés törlése (Supabase Edge Function hívás)
         async function handleDeleteAccount() {
             if (confirm("Biztosan végleg törölni szeretnéd a fiókodat és lemondani az előfizetésed? Ezt a műveletet nem lehet visszacsinálni!")) {
                 const msgEl = document.getElementById('login-message');
