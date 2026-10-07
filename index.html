@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sportfogadás Elemző Agent | Prémium Platform</title>
+    <title>Sportfogadás Elemző Agent | Neural Pitch Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
@@ -12,93 +12,146 @@
 
     <style>
         body {
-            background-image: url('stadion.jpg');
+            background-color: #020617;
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(52, 211, 153, 0.1) 0%, transparent 40%),
+                url('stadion.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            background-blend-mode: overlay;
         }
+
+        /* Holografikus scannelő rácsháló overlay */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 1;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
         .glass-panel {
-            background: rgba(5, 10, 20, 0.02);
-            backdrop-filter: blur(3px);
-            -webkit-backdrop-filter: blur(3px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(3, 7, 18, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            box-shadow: 0 0 30px rgba(14, 165, 233, 0.15), inset 0 0 15px rgba(52, 211, 153, 0.05);
         }
+
         .league-card-custom {
-            background: rgba(3, 10, 20, 0.75);
+            background: rgba(3, 10, 20, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(52, 211, 153, 0.4);
             align-self: start;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
+
+        /* Neon energia csík a kártyák szélén */
+        .league-card-custom::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 2px; height: 100%;
+            background: linear-gradient(to bottom, #38bdf8, #34d399);
+            opacity: 0.7;
+        }
+
         .league-card-custom:hover {
-            background: rgba(5, 18, 35, 0.85);
-            border-color: rgba(56, 189, 248, 0.8);
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
+            background: rgba(5, 18, 35, 0.95);
+            border-color: rgba(56, 189, 248, 0.9);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.4), inset 0 0 10px rgba(56, 189, 248, 0.2);
+            transform: translateY(-2px);
         }
+
         .slightly-lighter-green {
             color: #34d399;
             font-weight: 700;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 0 10px rgba(52, 211, 153, 0.6);
         }
         
-        /* Egyedi, jól látható görgetősáv a meccsek dobozához */
+        /* Futurisztikus futó szöveg (Ticker) sáv */
+        .quantum-ticker {
+            background: rgba(2, 6, 23, 0.9);
+            border-top: 1px solid rgba(56, 189, 248, 0.3);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .ticker-content {
+            display: inline-block;
+            animation: ticker 35s linear infinite;
+        }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Egyedi neon görgetősáv */
         .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(2, 6, 23, 0.5);
             border-radius: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background: rgba(56, 189, 248, 0.6);
             border-radius: 4px;
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(56, 189, 248, 0.9);
+            background: rgba(52, 211, 153, 0.9);
         }
     </style>
 </head>
-<body class="min-h-screen text-white font-sans antialiased flex flex-col justify-between">
+<body class="min-h-screen text-white font-sans antialiased flex flex-col justify-between relative z-10">
 
     <div class="relative z-10 flex flex-col min-h-screen p-4 md:p-6 max-w-7xl mx-auto w-full space-y-6">
         
         <!-- 1. FEJLÉC -->
         <header class="glass-panel rounded-3xl px-6 py-14 md:py-20 flex flex-col items-center justify-center text-center shadow-2xl relative">
-            <!-- Bal felső sarok focilabda -->
-            <div class="absolute left-6 top-6 hidden md:flex items-center space-x-3 z-20">
-                <span class="text-3xl">⚽</span>
+            <!-- Bal felső sarok kvantum jelvény -->
+            <div class="absolute left-6 top-6 hidden md:flex items-center space-x-2 z-20 bg-sky-950/60 border border-sky-500/40 px-3 py-1 rounded-full">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span class="text-[10px] tracking-widest text-sky-300 uppercase font-bold">Neural Engine v4.2</span>
             </div>
 
             <!-- Bal oldali Kapcsolat gomb asztali nézetben -->
             <div class="absolute left-6 bottom-6 hidden md:flex items-center space-x-3 z-20">
-                <button onclick="openContactModal()" class="bg-black hover:bg-slate-900 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 transition transform hover:scale-105 uppercase text-xs tracking-wider">
+                <button onclick="openContactModal()" class="bg-black/80 hover:bg-slate-900 text-sky-400 font-bold px-4 py-2 rounded-xl shadow-[0_0_15px_rgba(56,189,248,0.2)] border border-sky-500/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
                     Kapcsolat
                 </button>
             </div>
             
             <div class="w-full px-2">
-                <h1 class="font-black tracking-wider text-xl sm:text-2xl md:text-3xl lg:text-4xl bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent drop-shadow-lg uppercase leading-tight">
+                <h1 class="font-black tracking-wider text-xl sm:text-2xl md:text-3xl lg:text-4xl bg-gradient-to-r from-red-500 via-amber-400 to-sky-400 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(239,68,68,0.4)] uppercase leading-tight">
                     Európai topp ligák és kupák
                 </h1>
-                <div class="font-black tracking-widest text-xl sm:text-2xl md:text-3xl lg:text-4xl bg-gradient-to-r from-amber-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg uppercase mt-2 leading-tight">
+                <div class="font-black tracking-widest text-xl sm:text-2xl md:text-3xl lg:text-4xl bg-gradient-to-r from-sky-400 via-emerald-400 to-amber-400 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(56,189,248,0.5)] uppercase mt-2 leading-tight">
                     professzionális elemzése
                 </div>
             </div>
 
-            <!-- Jobb felső sarok focilabda -->
+            <!-- Jobb felső sarok fénylő gömb -->
             <div class="absolute right-6 top-6 hidden md:flex items-center space-x-3 z-20">
-                <span class="text-3xl">⚽</span>
+                <span class="text-3xl filter drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]">⚽</span>
             </div>
 
             <!-- Jobb oldali gombok asztali nézetben -->
             <div class="absolute right-6 bottom-6 hidden md:flex flex-col items-end space-y-1 z-20">
-                <span id="user-status" class="text-xs text-gray-200 drop-shadow mb-1 cursor-pointer hover:underline" onclick="openLoginModal()" title="Kattints a fiók kezeléséhez"></span>
+                <span id="user-status" class="text-xs text-sky-300 drop-shadow mb-1 cursor-pointer hover:underline" onclick="openLoginModal()" title="Kattints a fiók kezeléséhez"></span>
                 <div class="flex items-center space-x-2">
-                    <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
+                    <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-[0_0_20px_rgba(220,38,38,0.5)] transition transform hover:scale-105 uppercase text-xs tracking-wider border border-red-400/50">
                         Regisztráció
                     </button>
-                    <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 transition transform hover:scale-105 uppercase text-xs tracking-wider">
+                    <button onclick="openLoginModal()" class="bg-slate-900/90 hover:bg-slate-800 text-sky-300 font-bold px-4 py-2 rounded-xl shadow-lg border border-sky-500/40 transition transform hover:scale-105 uppercase text-xs tracking-wider">
                         Belépés
                     </button>
                 </div>
@@ -107,36 +160,44 @@
             <!-- Mobil nézetű gombok -->
             <div class="mt-8 flex flex-col md:hidden items-center justify-center space-y-2 w-full">
                 <div class="flex items-center space-x-2">
-                    <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 uppercase text-xs tracking-wider">
+                    <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg shadow-red-600/40 uppercase text-xs tracking-wider border border-red-400/50">
                         Regisztráció
                     </button>
-                    <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 uppercase text-xs tracking-wider">
+                    <button onclick="openLoginModal()" class="bg-slate-900 hover:bg-slate-800 text-sky-300 font-bold px-4 py-2 rounded-xl shadow-lg border border-sky-500/40 uppercase text-xs tracking-wider">
                         Belépés
                     </button>
                 </div>
-                <button onclick="openContactModal()" class="bg-black hover:bg-slate-900 text-white font-bold px-4 py-2 rounded-xl shadow-lg border border-white/20 uppercase text-xs tracking-wider">
+                <button onclick="openContactModal()" class="bg-black hover:bg-slate-900 text-sky-400 font-bold px-4 py-2 rounded-xl shadow-lg border border-sky-500/40 uppercase text-xs tracking-wider">
                     Kapcsolat
                 </button>
             </div>
         </header>
 
+        <!-- FUTURISZTIKUS KVANTUM TICKER (Adatfolyam) -->
+        <div class="quantum-ticker py-2 px-4 rounded-xl shadow-[0_0_15px_rgba(56,189,248,0.15)]">
+            <div class="ticker-content text-xs font-mono tracking-wider text-sky-400">
+                <span class="text-emerald-400 font-bold">⚡ LIVE QUANTUM STREAM:</span> Monte Carlo Iterációk: 100,000/s &nbsp;&bull;&nbsp; Poisson eloszlás kalibrálva &nbsp;&bull;&nbsp; xG Mátrix aktív &nbsp;&bull;&nbsp; Fair Odds analízis folyamatban &nbsp;&bull;&nbsp; 
+                <span class="text-amber-400 font-bold">AI AGENT STATUS: OPTIMAL</span> &nbsp;&bull;&nbsp; Monte Carlo Iterációk: 100,000/s &nbsp;&bull;&nbsp; Poisson eloszlás kalibrálva &nbsp;&bull;&nbsp; xG Mátrix aktív
+            </div>
+        </div>
+
         <!-- 2. INFORMÁCIÓS PANEL -->
-        <section class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl space-y-4 text-center border border-white/20">
-            <div class="inline-block bg-red-600/30 backdrop-blur-md border border-red-400/50 px-5 py-2.5 rounded-2xl shadow-2xl">
+        <section class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl space-y-4 text-center border border-sky-500/30">
+            <div class="inline-block bg-red-600/20 backdrop-blur-md border border-red-500/60 px-5 py-2.5 rounded-2xl shadow-[0_0_20px_rgba(239,68,68,0.3)]">
                 <span class="text-xs md:text-sm font-black text-white uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                     🔥 Itt mi nem tippeket osztogatunk. Az adatok a mieink, a nyerő tipp viszont a tied!
                 </span>
             </div>
 
-            <p class="text-sm md:text-base text-white font-medium leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-3">
+            <p class="text-sm md:text-base text-gray-200 font-medium leading-relaxed drop-shadow max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-3">
                 Regisztráció után az első 
-                <span class="bg-emerald-500/30 border border-emerald-400/60 text-emerald-300 font-black text-sm md:text-base px-4 py-2 rounded-xl shadow uppercase text-center inline-block">3 nap ingyenes</span>, 
+                <span class="bg-emerald-500/20 border border-emerald-400/60 text-emerald-300 font-black text-sm md:text-base px-4 py-2 rounded-xl shadow-[0_0_15px_rgba(52,211,153,0.3)] uppercase text-center inline-block">3 nap ingyenes</span>, 
                 majd 
-                <span class="bg-emerald-500/30 border border-emerald-400/60 text-emerald-300 font-black text-lg md:text-xl px-4 py-2 rounded-xl shadow-2xl uppercase text-center inline-block">7999 FT/HÓ</span> 
+                <span class="bg-emerald-500/20 border border-emerald-400/60 text-emerald-300 font-black text-lg md:text-xl px-4 py-2 rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.4)] uppercase text-center inline-block">7999 FT/HÓ</span> 
                 Itt minden információt megtalálsz a tökéletes fogadás elkészítéséhez.
             </p>
             <div class="pt-2">
-                <button onclick="openRegisterModal()" class="bg-gradient-to-r from-red-600 hover:from-red-500 to-amber-500 hover:to-amber-400 text-white font-black px-8 py-3.5 rounded-2xl shadow-2xl shadow-red-600/60 transition transform hover:scale-105 uppercase text-xs md:text-sm tracking-widest border border-amber-400/60">
+                <button onclick="openRegisterModal()" class="bg-gradient-to-r from-red-600 hover:from-red-500 via-amber-500 to-sky-500 hover:to-sky-400 text-white font-black px-8 py-3.5 rounded-2xl shadow-[0_0_25px_rgba(56,189,248,0.5)] transition transform hover:scale-105 uppercase text-xs md:text-sm tracking-widest border border-sky-400/60">
                     Regisztrálj most! 🚀
                 </button>
             </div>
@@ -160,9 +221,9 @@
         </div>
 
         <!-- LÁBLÉC -->
-        <footer class="text-center text-xs text-gray-200 pb-2 drop-shadow space-y-2">
-            <div>&copy; 2026 Sportfogadás Elemző Agent. Minden jog fenntartva.</div>
-            <div class="flex justify-center space-x-4 text-gray-300">
+        <footer class="text-center text-xs text-sky-300/70 pb-2 drop-shadow space-y-2 border-t border-sky-500/20 pt-4">
+            <div>&copy; 2026 Sportfogadás Elemző Agent. Neural Systems & Quant Analytics. Minden jog fenntartva.</div>
+            <div class="flex justify-center space-x-4 text-sky-400">
                 <button onclick="openPrivacyModal()" class="hover:text-amber-400 underline transition">Adatvédelmi nyilatkozat</button>
                 <span>|</span>
                 <button onclick="openTermsModal()" class="hover:text-amber-400 underline transition">Felhasználási feltételek</button>
@@ -173,37 +234,37 @@
     </div>
 
     <!-- Kapcsolat Modal -->
-    <div id="contact-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 text-gray-200 border border-white/20 w-full max-w-md rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl text-center">
-            <button onclick="closeContactModal()" class="absolute top-4 right-6 text-white hover:text-red-400 text-3xl font-bold">&times;</button>
+    <div id="contact-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel text-gray-200 border border-sky-500/40 w-full max-w-md rounded-3xl p-6 md:p-8 relative flex flex-col shadow-[0_0_40px_rgba(56,189,248,0.2)] text-center">
+            <button onclick="closeContactModal()" class="absolute top-4 right-6 text-sky-400 hover:text-red-400 text-3xl font-bold">&times;</button>
             <div class="text-4xl mb-2">✉️</div>
             <h3 class="text-xl font-black text-amber-400 mb-4">Lépj velünk kapcsolatba</h3>
             <p class="text-xs text-gray-300 mb-6 leading-relaxed">
                 Kérdésed van a platformmal, az adatokkal vagy az előfizetéssel kapcsolatban? Írj nekünk bizalommal az alábbi e-mail címre:
             </p>
-            <div class="bg-black/30 border border-emerald-500/40 rounded-2xl p-4 mb-6">
+            <div class="bg-black/50 border border-emerald-500/40 rounded-2xl p-4 mb-6 shadow-[0_0_15px_rgba(52,211,153,0.15)]">
                 <a href="mailto:info@focielemzesek.com" class="text-emerald-400 font-black text-base md:text-lg tracking-wide hover:underline">info@focielemzesek.com</a>
             </div>
-            <button onclick="closeContactModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">Bezárás</button>
+            <button onclick="closeContactModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition border border-sky-500/30">Bezárás</button>
         </div>
     </div>
 
     <!-- Liga Meccsei Modal -->
-    <div id="league-matches-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel bg-slate-950/50 border border-white/20 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl backdrop-blur-md">
-            <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-2xl font-bold">&times;</button>
-            <h3 id="league-modal-title" class="text-lg font-black slightly-lighter-green mb-4 border-b border-green-500/30 pb-2">Válassz meccset</h3>
+    <div id="league-matches-modal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel border border-sky-500/40 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-[0_0_40px_rgba(56,189,248,0.2)]">
+            <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-sky-400 hover:text-red-400 text-2xl font-bold">&times;</button>
+            <h3 id="league-modal-title" class="text-lg font-black slightly-lighter-green mb-4 border-b border-sky-500/30 pb-2">Válassz meccset</h3>
             <div id="league-modal-list" class="space-y-2 max-h-[360px] overflow-y-auto pr-1 custom-scrollbar"></div>
         </div>
     </div>
 
     <!-- Teljes HTML Elemzés Modal -->
-    <div id="full-analysis-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 md:p-6">
-        <div class="bg-[#f0f2f5] text-[#1c1e21] w-full max-w-5xl max-h-[92vh] rounded-3xl p-4 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto font-sans">
+    <div id="full-analysis-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 hidden flex items-center justify-center p-2 md:p-6">
+        <div class="bg-[#f0f2f5] text-[#1c1e21] w-full max-w-5xl max-h-[92vh] rounded-3xl p-4 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto font-sans border border-sky-400">
             <button onclick="closeFullAnalysisModal()" class="absolute top-4 right-6 text-slate-700 hover:text-red-600 text-4xl font-black z-50 bg-white/90 px-3 py-1 rounded-full shadow">&times;</button>
             <div id="modal-html-container" class="mt-2"></div>
             <div class="mt-6 text-center border-t pt-4 bg-[#f0f2f5]">
-                <button onclick="closeFullAnalysisModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-lg transition text-xs uppercase tracking-wider">
+                <button onclick="closeFullAnalysisModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-xl shadow-lg transition text-xs uppercase tracking-wider">
                     Bezárás (Vissza a meccsekhez)
                 </button>
             </div>
@@ -211,81 +272,81 @@
     </div>
 
     <!-- Adatvédelmi Nyilatkozat Modal -->
-    <div id="privacy-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 text-gray-200 border border-white/20 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
-            <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-white hover:text-red-400 text-3xl font-bold">&times;</button>
-            <h3 class="text-xl font-black text-amber-400 mb-4 border-b border-white/10 pb-2">Adatvédelmi Nyilatkozat</h3>
+    <div id="privacy-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel text-gray-200 border border-sky-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
+            <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-sky-400 hover:text-red-400 text-3xl font-bold">&times;</button>
+            <h3 class="text-xl font-black text-amber-400 mb-4 border-b border-sky-500/20 pb-2">Adatvédelmi Nyilatkozat</h3>
             <div class="space-y-4 text-xs leading-relaxed text-gray-300">
                 <p><strong>1. Adatkezelő adatai:</strong> A Focielemzések platform üzemeltetője elkötelezett a felhasználók személyes adatainak védelme mellett. Jelen adatvédelmi nyilatkozat rögzíti a szolgáltatás igénybevétele során gyűjtött adatok kezelésének elveit.</p>
                 <p><strong>2. Kezelt adatok köre:</strong> A regisztráció során kizárólag az Ön által megadott e-mail címet és a biztonságos hitelesítéshez szükséges titkosított jelszóadatokat tároljuk (Supabase rendszeren keresztül). A fizetési folyamatokat a Stripe biztonságos rendszere kezeli, bankkártyaadatokat a szervereink nem tárolnak.</p>
                 <p><strong>3. Az adatkezelés célja:</strong> A megadott e-mail címet kizárólag a fiók azonosítása, a belépés biztosítása, valamint a prémium előfizetés és a próbaidőszak kezelése céljából használjuk.</p>
                 <p><strong>4. Adatbiztonság:</strong> Minden adatátvitel titkosított csatornákon (HTTPS) történik, és a hozzáférést szigorú biztonsági protokollok védik.</p>
             </div>
-            <div class="mt-6 text-center border-t border-white/10 pt-4">
-                <button onclick="closePrivacyModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider">Bezárás</button>
+            <div class="mt-6 text-center border-t border-sky-500/20 pt-4">
+                <button onclick="closePrivacyModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-sky-500/30">Bezárás</button>
             </div>
         </div>
     </div>
 
     <!-- Felhasználási Feltételek Modal -->
-    <div id="terms-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 text-gray-200 border border-white/20 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
-            <button onclick="closeTermsModal()" class="absolute top-4 right-6 text-white hover:text-red-400 text-3xl font-bold">&times;</button>
-            <h3 class="text-xl font-black text-amber-400 mb-4 border-b border-white/10 pb-2">Felhasználási Feltételek és Jogi Nyilatkozat</h3>
+    <div id="terms-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel text-gray-200 border border-sky-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
+            <button onclick="closeTermsModal()" class="absolute top-4 right-6 text-sky-400 hover:text-red-400 text-3xl font-bold">&times;</button>
+            <h3 class="text-xl font-black text-amber-400 mb-4 border-b border-sky-500/20 pb-2">Felhasználási Feltételek és Jogi Nyilatkozat</h3>
             <div class="space-y-4 text-xs leading-relaxed text-gray-300">
                 <p><strong>1. A szolgáltatás jellege:</strong> A Focielemzések egy mesterséges intelligencián és kvantitatív statisztikai szimulációkon alapuló sportfogadási elemző platform. Az oldalon megjelenő adatok, szimulációk és "fair odds" értékek kizárólag tájékoztató jellegűek.</p>
                 <p><strong>2. Felelősségvállalás korlátozása:</strong> A platformon található információk felhasználása a felhasználó saját felelősségére történik. Az üzemeltető semmilyen pénzügyi felelősséget nem vállal a sportfogadásokból eredő esetleges veszteségekért.</p>
                 <p><strong>3. Előfizetés és próbaidőszak:</strong> A regisztrációt követő 3 napos ingyenes próbaidőszak lejárta után a szolgáltatás fenntartásához az aktív előfizetés fenntartása szükséges. Az előfizetés bármikor lemondható.</p>
                 <p><strong>4. Szerzői jogok:</strong> A weboldalon található egyedi elemzések, elrendezések és szoftveres megoldások az üzemeltető szellemi tulajdonát képezik, azok illetéktelen másolása vagy terjesztése tilos.</p>
             </div>
-            <div class="mt-6 text-center border-t border-white/10 pt-4">
-                <button onclick="closeTermsModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider">Bezárás</button>
+            <div class="mt-6 text-center border-t border-sky-500/20 pt-4">
+                <button onclick="closeTermsModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-sky-500/30">Bezárás</button>
             </div>
         </div>
     </div>
 
     <!-- Regisztrációs Modal -->
-    <div id="register-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-white/20 shadow-2xl">
-            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-xl font-bold">&times;</button>
+    <div id="register-modal" class="fixed inset-0 bg-black/80 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-sky-500/40 shadow-[0_0_40px_rgba(56,189,248,0.2)]">
+            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-sky-400 hover:text-red-400 text-xl font-bold">&times;</button>
             <div class="text-center mb-6">
-                <span class="text-3xl">⚽</span>
-                <h3 class="text-xl font-extrabold mt-2 drop-shadow">Fiók létrehozása</h3>
+                <span class="text-3xl filter drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]">⚽</span>
+                <h3 class="text-xl font-extrabold mt-2 drop-shadow text-white">Fiók létrehozása</h3>
                 <p class="text-xs text-amber-300 mt-1">A regisztráció után átirányítunk a 3 napos ingyenes próba aktiválásához!</p>
             </div>
             <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Email cím</label>
-                    <input type="email" id="reg-email" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="pelda@email.hu">
+                    <label class="block text-xs uppercase font-bold text-sky-300 mb-1 drop-shadow">Email cím</label>
+                    <input type="email" id="reg-email" required class="w-full bg-black/50 border border-sky-500/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-400 text-white placeholder-gray-500 shadow-inner" placeholder="pelda@email.hu">
                 </div>
                 <div>
-                    <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Jelszó</label>
+                    <label class="block text-xs uppercase font-bold text-sky-300 mb-1 drop-shadow">Jelszó</label>
                     <div class="relative">
-                        <input type="password" id="reg-password" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="••••••••">
+                        <input type="password" id="reg-password" required class="w-full bg-black/50 border border-sky-500/40 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-emerald-400 text-white placeholder-gray-500 shadow-inner" placeholder="••••••••">
                         <button type="button" onclick="togglePassword('reg-password', 'eye-reg-1')" class="absolute right-3 top-2.5 text-gray-400 hover:text-white text-sm focus:outline-none" id="eye-reg-1">👁️</button>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Jelszó mégegyszer</label>
+                    <label class="block text-xs uppercase font-bold text-sky-300 mb-1 drop-shadow">Jelszó mégegyszer</label>
                     <div class="relative">
-                        <input type="password" id="reg-password-confirm" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="••••••••">
+                        <input type="password" id="reg-password-confirm" required class="w-full bg-black/50 border border-sky-500/40 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-emerald-400 text-white placeholder-gray-500 shadow-inner" placeholder="••••••••">
                         <button type="button" onclick="togglePassword('reg-password-confirm', 'eye-reg-2')" class="absolute right-3 top-2.5 text-gray-400 hover:text-white text-sm focus:outline-none" id="eye-reg-2">👁️</button>
                     </div>
                 </div>
                 
                 <!-- Elfogadó jelölőnégyzetek -->
-                <div class="space-y-2 pt-1 text-xs text-gray-200">
+                <div class="space-y-2 pt-1 text-xs text-gray-300">
                     <label class="flex items-start space-x-2 cursor-pointer">
-                        <input type="checkbox" id="reg-privacy-check" required class="mt-0.5 rounded border-white/20 bg-black/20 text-red-600 focus:ring-0">
+                        <input type="checkbox" id="reg-privacy-check" required class="mt-0.5 rounded border-sky-500/40 bg-black/50 text-emerald-500 focus:ring-0">
                         <span>Elfogadom az <button type="button" onclick="openPrivacyModal()" class="text-amber-300 underline hover:text-amber-200">Adatvédelmi nyilatkozatot</button>.</span>
                     </label>
                     <label class="flex items-start space-x-2 cursor-pointer">
-                        <input type="checkbox" id="reg-terms-check" required class="mt-0.5 rounded border-white/20 bg-black/20 text-red-600 focus:ring-0">
+                        <input type="checkbox" id="reg-terms-check" required class="mt-0.5 rounded border-sky-500/40 bg-black/50 text-emerald-500 focus:ring-0">
                         <span>Elfogadom a <button type="button" onclick="openTermsModal()" class="text-amber-300 underline hover:text-amber-200">Felhasználási feltételeket</button>.</span>
                     </label>
                 </div>
 
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-red-600/40 transition text-sm uppercase tracking-wider">
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl shadow-[0_0_20px_rgba(220,38,38,0.5)] transition text-sm uppercase tracking-wider border border-red-400/50">
                     Regisztráció és Tovább a Próbához
                 </button>
             </form>
@@ -294,30 +355,30 @@
     </div>
 
     <!-- Belépési / Fiókkezelési Modal -->
-    <div id="login-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-white/20 shadow-2xl">
-            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-white hover:text-red-400 text-xl font-bold">&times;</button>
+    <div id="login-modal" class="fixed inset-0 bg-black/80 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-sky-500/40 shadow-[0_0_40px_rgba(56,189,248,0.2)]">
+            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-sky-400 hover:text-red-400 text-xl font-bold">&times;</button>
             <div class="text-center mb-6">
-                <span class="text-3xl">⚽</span>
-                <h3 id="login-modal-title" class="text-xl font-extrabold mt-2 drop-shadow">Bejelentkezés a fiókodba</h3>
+                <span class="text-3xl filter drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]">⚽</span>
+                <h3 id="login-modal-title" class="text-xl font-extrabold mt-2 drop-shadow text-white">Bejelentkezés a fiókodba</h3>
             </div>
             
             <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Email cím</label>
-                    <input type="email" id="login-email" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="pelda@email.hu">
+                    <label class="block text-xs uppercase font-bold text-sky-300 mb-1 drop-shadow">Email cím</label>
+                    <input type="email" id="login-email" required class="w-full bg-black/50 border border-sky-500/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-400 text-white placeholder-gray-500 shadow-inner" placeholder="pelda@email.hu">
                 </div>
                 <div>
-                    <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Jelszó</label>
+                    <label class="block text-xs uppercase font-bold text-sky-300 mb-1 drop-shadow">Jelszó</label>
                     <div class="relative">
-                        <input type="password" id="login-password" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="••••••••">
+                        <input type="password" id="login-password" required class="w-full bg-black/50 border border-sky-500/40 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-emerald-400 text-white placeholder-gray-500 shadow-inner" placeholder="••••••••">
                         <button type="button" onclick="togglePassword('login-password', 'eye-login-1')" class="absolute right-3 top-2.5 text-gray-400 hover:text-white text-sm focus:outline-none" id="eye-login-1">👁️</button>
                     </div>
                 </div>
                 <div class="text-right">
                     <button type="button" onclick="showForgotPassword()" class="text-xs text-amber-300 underline">Elfelejtetted a jelszavad?</button>
                 </div>
-                <button type="submit" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl shadow-lg border border-white/20 transition text-sm uppercase tracking-wider">
+                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl shadow-lg border border-sky-500/40 transition text-sm uppercase tracking-wider">
                     Belépés
                 </button>
             </form>
@@ -325,8 +386,8 @@
             <form id="forgot-form" onsubmit="handleForgotPassword(event)" class="space-y-4 hidden">
                 <p class="text-xs text-gray-300 text-center mb-2">Add meg az email címed, és küldünk egy linket a jelszó visszaállításához.</p>
                 <div>
-                    <label class="block text-xs uppercase font-bold text-gray-200 mb-1 drop-shadow">Email cím</label>
-                    <input type="email" id="forgot-email" required class="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white placeholder-gray-300" placeholder="pelda@email.hu">
+                    <label class="block text-xs uppercase font-bold text-sky-300 mb-1 drop-shadow">Email cím</label>
+                    <input type="email" id="forgot-email" required class="w-full bg-black/50 border border-sky-500/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-400 text-white placeholder-gray-500 shadow-inner" placeholder="pelda@email.hu">
                 </div>
                 <div class="text-left">
                     <button type="button" onclick="showLoginForm()" class="text-xs text-amber-300 underline">&larr; Vissza a bejelentkezéshez</button>
@@ -338,15 +399,15 @@
 
             <!-- Fiók Törlés / Előfizetés lemondás szekció (Ha be van jelentkezve) -->
             <div id="account-management-section" class="hidden space-y-4 pt-2">
-                <div class="bg-black/30 border border-red-500/30 rounded-2xl p-4 text-center space-y-3">
+                <div class="bg-black/50 border border-red-500/40 rounded-2xl p-4 text-center space-y-3 shadow-inner">
                     <h4 class="text-xs font-bold text-red-400 uppercase tracking-wider">Előfizetés és Fiók Kezelése</h4>
                     <p class="text-xs text-gray-300 leading-relaxed">
                         Itt kezelheted az előfizetésedet vagy törölheted a fiókodat az összes rendszerünkből.
                     </p>
-                    <button onclick="handleDeleteAccount()" class="w-full bg-red-700/90 hover:bg-red-600 text-white font-bold py-2.5 rounded-xl text-xs uppercase transition shadow tracking-wider">
+                    <button onclick="handleDeleteAccount()" class="w-full bg-red-700/90 hover:bg-red-600 text-white font-bold py-2.5 rounded-xl text-xs uppercase transition shadow-[0_0_15px_rgba(220,38,38,0.4)] tracking-wider">
                         🗑️ Fiók és Előfizetés Végleges Törlése
                     </button>
-                    <button onclick="handleLogout()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 rounded-xl text-xs uppercase transition border border-white/10">
+                    <button onclick="handleLogout()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2 rounded-xl text-xs uppercase transition border border-sky-500/30">
                         Kijelentkezés
                     </button>
                 </div>
@@ -681,7 +742,7 @@
 
                     leaguesHtml += `
                         <div onclick="event.stopPropagation(); openLeagueModal(${JSON.stringify(league).replace(/"/g, '&quot;')}, ${JSON.stringify(leagueMatches).replace(/"/g, '&quot;')})" 
-                             class="flex justify-between items-center py-2 px-3 hover:bg-red-950/30 rounded-xl text-xs cursor-pointer transition border border-transparent hover:border-red-500/40">
+                             class="flex justify-between items-center py-2 px-3 hover:bg-sky-950/40 rounded-xl text-xs cursor-pointer transition border border-transparent hover:border-sky-500/40">
                             <span class="font-medium slightly-lighter-green">⚽ ${league.name}</span>
                             <span class="bg-red-600 text-white font-bold px-2 py-0.5 rounded-full shadow">${leagueMatches.length} meccs</span>
                         </div>
@@ -697,14 +758,14 @@
                     <div onclick="toggleCountryAccordion('${contentId}', '${iconId}')" class="p-4 flex justify-between items-center cursor-pointer select-none">
                         <div>
                             <h3 class="font-extrabold text-base slightly-lighter-green tracking-wide">${item.country}</h3>
-                            <p class="text-xs text-white mt-0.5">Összesen: <span class="text-white font-bold">${countryTotalMatches} meccs</span></p>
+                            <p class="text-xs text-gray-300 mt-0.5">Összesen: <span class="text-white font-bold">${countryTotalMatches} meccs</span></p>
                         </div>
                         <div class="flex items-center space-x-2">
                             <span class="bg-red-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow">${countryTotalMatches}</span>
                             <span id="${iconId}" class="text-xs slightly-lighter-green transform transition-transform duration-200">▼</span>
                         </div>
                     </div>
-                    <div id="${contentId}" class="country-accordion-content hidden px-3 pb-3 pt-1 border-t border-white/10 bg-black/30 space-y-1">
+                    <div id="${contentId}" class="country-accordion-content hidden px-3 pb-3 pt-1 border-t border-sky-500/20 bg-black/40 space-y-1">
                         ${leaguesHtml}
                     </div>
                 `;
@@ -744,7 +805,7 @@
             if (leagueMatches.length > 0) {
                 leagueMatches.forEach(m => {
                     const mBtn = document.createElement('button');
-                    mBtn.className = "w-full text-left px-4 py-3 text-sm text-white bg-black/40 hover:bg-red-950/50 border border-green-500/30 rounded-xl transition flex items-center justify-between cursor-pointer shadow";
+                    mBtn.className = "w-full text-left px-4 py-3 text-sm text-white bg-black/50 hover:bg-sky-950/60 border border-sky-500/30 rounded-xl transition flex items-center justify-between cursor-pointer shadow";
                     mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-xs text-red-400 font-bold">Megnyitás &rarr;</span>`;
                     
                     mBtn.onclick = () => {
@@ -756,7 +817,7 @@
                 });
             } else {
                 const emptyEl = document.createElement('div');
-                emptyEl.className = "px-4 py-4 text-xs text-gray-400 italic text-center bg-black/20 rounded-xl";
+                emptyEl.className = "px-4 py-4 text-xs text-gray-400 italic text-center bg-black/30 rounded-xl border border-sky-500/20";
                 emptyEl.innerText = "Ehhez a ligához nincsenek még feltöltött elemzések ma.";
                 listEl.appendChild(emptyEl);
             }
