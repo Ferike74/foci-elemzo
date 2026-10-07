@@ -165,4 +165,23 @@
             <div class="flex justify-center space-x-4 text-gray-300">
                 <button onclick="openPrivacyModal()" class="hover:text-amber-400 underline transition">Adatvédelmi nyilatkozat</button>
                 <span>|</span>
-                <button onclick="openTermsModal()" class="
+                <button onclick="openTermsModal()" class="hover:text-amber-400 underline transition">Felhasználási feltételek</button>
+                <span>|</span>
+                <button onclick="openContactModal()" class="hover:text-amber-400 underline transition">Kapcsolat</button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Kapcsolat Modal -->
+    <div id="contact-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 text-gray-200 border border-white/20 w-full max-w-md rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl text-center">
+            <button onclick="closeContactModal()" class="absolute top-4 right-6 text-white hover:text-red-400 text-3xl font-bold">&times;</button>
+            <div class="text-4xl mb-2">✉️</div>
+            <h3 class="text-xl font-black text-amber-400 mb-4">Lépj velünk kapcsolatba</h3>
+            <p class="text-xs text-gray-300 mb-6 leading-relaxed">
+                Kérdésed van a platformmal, az adatokkal vagy az előfizetéssel kapcsolatban? Írj nekünk bizalommal az alábbi e-mail címre:
+            </p>
+            <div class="bg-black/30 border border-emerald-500/40 rounded-2xl p-4 mb-6">
+                <a href="mailto:info@focielemzesek.com" class="text-emerald-400 font-black text-base md:text-lg tracking-wide hover:underline">info@focielemzesek.com</a>
+            </div>
+            <button onclick="closeContactModal()" class="bg-slate-800 hover:bg-slate-700 text-white font
