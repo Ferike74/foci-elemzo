@@ -388,7 +388,9 @@
                 country: "Spanyolország",
                 leagues: [
                     { key: "laliga", name: "La Liga", synonyms: ["la liga", "spanyol", "laliga"] },
-                    { key: "spanyolkupa", name: "Spanyol Kupa", synonyms: ["spanyol kupa", "copa del rey"] }
+                    { key: "segunda", name: "Liga 2", synonyms: ["segunda division", "liga 2", "spanyol 2", "segunda"] },
+                    { key: "spanyolkupa", name: "Spanyol Kupa", synonyms: ["spanyol kupa", "copa del rey"] },
+                    { key: "spanyolszuperkupa", name: "Spanyol Szuperkupa", synonyms: ["spanyol szuperkupa", "supercopa de espana", "supercopa"] }
                 ]
             },
             {
@@ -479,9 +481,7 @@
             { key: "konferencia", name: "UEFA Konferencia Liga", synonyms: ["konferencia liga", "conference league"] }
         ];
 
-        // BIZTONSÁGOS ÉS GARANTÁLT BETÖLTÉS: Azonnal kirajzolja a kártyákat, hiba esetén is!
         window.addEventListener('DOMContentLoaded', async () => {
-            // Először azonnal kirajzoljuk üresen/alaphelyzetben, hogy a kártyák látszódjanak!
             buildDashboard([]);
 
             try {
@@ -498,7 +498,7 @@
 
                     if (!error && analyses && analyses.length > 0) {
                         allMatches = analyses.filter(m => m.match_title && m.match_title.trim() !== "");
-                        buildDashboard(allMatches); // Újrarajzolás a valós adatokkal
+                        buildDashboard(allMatches);
                     }
                 }
             } catch (err) {
