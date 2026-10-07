@@ -14,8 +14,8 @@
         body {
             background-color: #030712;
             background-image: 
-                radial-gradient(circle at 50% 30%, rgba(236, 72, 153, 0.06) 0%, transparent 50%),
-                radial-gradient(circle at 10% 90%, rgba(6, 182, 212, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 50% 30%, rgba(236, 72, 153, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 10% 90%, rgba(6, 182, 212, 0.03) 0%, transparent 40%),
                 url('stadion.jpg');
             background-size: cover;
             background-position: center;
@@ -24,27 +24,27 @@
         }
 
         .glass-panel {
-            background: rgba(3, 7, 18, 0.55);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(236, 72, 153, 0.25);
-            box-shadow: 0 0 35px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(6, 182, 212, 0.03);
+            background: rgba(3, 7, 18, 0.28);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(236, 72, 153, 0.2);
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.3), inset 0 0 15px rgba(6, 182, 212, 0.02);
         }
 
         .league-card-custom {
-            background: rgba(2, 6, 23, 0.62);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(6, 182, 212, 0.35);
+            background: rgba(2, 6, 23, 0.35);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(6, 182, 212, 0.28);
             align-self: start;
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
 
         .league-card-custom:hover {
-            background: rgba(4, 12, 30, 0.78);
-            border-color: rgba(236, 72, 153, 0.75);
-            box-shadow: 0 0 30px rgba(236, 72, 153, 0.3);
+            background: rgba(4, 12, 30, 0.5);
+            border-color: rgba(236, 72, 153, 0.6);
+            box-shadow: 0 0 25px rgba(236, 72, 153, 0.25);
             transform: translateY(-2px);
         }
 
@@ -58,14 +58,14 @@
             width: 5px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(2, 4, 10, 0.3);
+            background: rgba(2, 4, 10, 0.2);
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(236, 72, 153, 0.5);
+            background: rgba(236, 72, 153, 0.4);
             border-radius: 3px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(236, 72, 153, 0.8);
+            background: rgba(236, 72, 153, 0.7);
         }
     </style>
 </head>
@@ -75,13 +75,9 @@
         
         <!-- 1. FEJLÉC -->
         <header class="glass-panel rounded-3xl px-6 py-14 md:py-20 flex flex-col items-center justify-center text-center shadow-2xl relative">
-            <div class="absolute left-6 top-6 hidden md:flex items-center space-x-2 z-20 bg-pink-950/50 border border-pink-500/40 px-3.5 py-1 rounded-full backdrop-blur-md">
-                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-                <span class="text-[10px] tracking-widest text-pink-200 uppercase font-bold">CYBERPUNK STADIUM VIBE</span>
-            </div>
-
+            <!-- Bal oldali Kapcsolat gomb asztali nézetben -->
             <div class="absolute left-6 bottom-6 hidden md:flex items-center space-x-3 z-20">
-                <button onclick="openContactModal()" class="bg-black/70 hover:bg-black text-cyan-300 font-bold px-4 py-2 rounded-xl shadow border border-cyan-500/30 backdrop-blur-md transition uppercase text-xs tracking-wider">
+                <button onclick="openContactModal()" class="bg-black/50 hover:bg-black/80 text-cyan-300 font-bold px-4 py-2 rounded-xl shadow border border-cyan-500/30 backdrop-blur-md transition uppercase text-xs tracking-wider">
                     Kapcsolat
                 </button>
             </div>
@@ -95,32 +91,35 @@
                 </div>
             </div>
 
+            <!-- Jobb felső sarok focilabda -->
             <div class="absolute right-6 top-6 hidden md:flex items-center space-x-3 z-20">
                 <span class="text-3xl filter drop-shadow-[0_0_12px_rgba(236,72,153,0.8)]">⚽</span>
             </div>
 
+            <!-- Jobb oldali gombok asztali nézetben -->
             <div class="absolute right-6 bottom-6 hidden md:flex flex-col items-end space-y-1 z-20">
                 <span id="user-status" class="text-xs text-cyan-200 mb-1 cursor-pointer hover:underline drop-shadow" onclick="openLoginModal()" title="Kattints a fiók kezeléséhez"></span>
                 <div class="flex items-center space-x-2">
-                    <button onclick="openRegisterModal()" class="bg-pink-600/90 hover:bg-pink-500 text-white font-bold px-4 py-2 rounded-xl shadow backdrop-blur-md transition uppercase text-xs tracking-wider border border-pink-400/50">
+                    <button onclick="openRegisterModal()" class="bg-pink-600/80 hover:bg-pink-500 text-white font-bold px-4 py-2 rounded-xl shadow backdrop-blur-md transition uppercase text-xs tracking-wider border border-pink-400/50">
                         Regisztráció
                     </button>
-                    <button onclick="openLoginModal()" class="bg-slate-900/80 hover:bg-slate-900 text-cyan-300 font-bold px-4 py-2 rounded-xl shadow border border-cyan-500/30 backdrop-blur-md uppercase text-xs tracking-wider">
+                    <button onclick="openLoginModal()" class="bg-slate-900/60 hover:bg-slate-900 text-cyan-300 font-bold px-4 py-2 rounded-xl shadow border border-cyan-500/30 backdrop-blur-md uppercase text-xs tracking-wider">
                         Belépés
                     </button>
                 </div>
             </div>
 
+            <!-- Mobil nézetű gombok -->
             <div class="mt-8 flex flex-col md:hidden items-center justify-center space-y-2 w-full">
                 <div class="flex items-center space-x-2">
-                    <button onclick="openRegisterModal()" class="bg-pink-600/90 hover:bg-pink-500 text-white font-bold px-4 py-2 rounded-xl uppercase text-xs tracking-wider border border-pink-400/50">
+                    <button onclick="openRegisterModal()" class="bg-pink-600/80 hover:bg-pink-500 text-white font-bold px-4 py-2 rounded-xl uppercase text-xs tracking-wider border border-pink-400/50">
                         Regisztráció
                     </button>
-                    <button onclick="openLoginModal()" class="bg-slate-900/80 hover:bg-slate-900 text-cyan-300 font-bold px-4 py-2 rounded-xl uppercase text-xs tracking-wider border border-cyan-500/30">
+                    <button onclick="openLoginModal()" class="bg-slate-900/60 hover:bg-slate-900 text-cyan-300 font-bold px-4 py-2 rounded-xl uppercase text-xs tracking-wider border border-cyan-500/30">
                         Belépés
                     </button>
                 </div>
-                <button onclick="openContactModal()" class="bg-black/70 hover:bg-black text-cyan-300 font-bold px-4 py-2 rounded-xl uppercase text-xs tracking-wider border border-cyan-500/30">
+                <button onclick="openContactModal()" class="bg-black/50 hover:bg-black/80 text-cyan-300 font-bold px-4 py-2 rounded-xl uppercase text-xs tracking-wider border border-cyan-500/30">
                     Kapcsolat
                 </button>
             </div>
@@ -128,7 +127,7 @@
 
         <!-- 2. INFORMÁCIÓS PANEL -->
         <section class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl space-y-4 text-center border border-cyan-500/30">
-            <div class="inline-block bg-pink-600/30 backdrop-blur-md border border-pink-500/60 px-5 py-2.5 rounded-2xl shadow-xl">
+            <div class="inline-block bg-pink-600/20 backdrop-blur-md border border-pink-500/40 px-5 py-2.5 rounded-2xl shadow-xl">
                 <span class="text-xs md:text-sm font-black text-white uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                     🔥 Itt mi nem tippeket osztogatunk. Az adatok a mieink, a nyerő tipp viszont a tied!
                 </span>
@@ -136,9 +135,9 @@
 
             <p class="text-sm md:text-base text-gray-100 font-medium leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-3">
                 Regisztráció után az első 
-                <span class="bg-cyan-500/30 border border-cyan-400/60 text-cyan-200 font-black text-sm md:text-base px-4 py-2 rounded-xl shadow uppercase text-center inline-block">3 nap ingyenes</span>, 
+                <span class="bg-cyan-500/20 border border-cyan-400/50 text-cyan-200 font-black text-sm md:text-base px-4 py-2 rounded-xl shadow uppercase text-center inline-block backdrop-blur-sm">3 nap ingyenes</span>, 
                 majd 
-                <span class="bg-cyan-500/30 border border-cyan-400/60 text-cyan-200 font-black text-lg md:text-xl px-4 py-2 rounded-xl shadow-2xl uppercase text-center inline-block">7999 FT/HÓ</span> 
+                <span class="bg-cyan-500/20 border border-cyan-400/50 text-cyan-200 font-black text-lg md:text-xl px-4 py-2 rounded-xl shadow-2xl uppercase text-center inline-block backdrop-blur-sm">7999 FT/HÓ</span> 
                 Itt minden információt megtalálsz a tökéletes fogadás elkészítéséhez.
             </p>
             <div class="pt-2">
@@ -179,7 +178,7 @@
     </div>
 
     <!-- Kapcsolat Modal -->
-    <div id="contact-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div id="contact-modal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-md rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl text-center">
             <button onclick="closeContactModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
             <div class="text-4xl mb-2">✉️</div>
@@ -187,15 +186,15 @@
             <p class="text-xs text-gray-200 mb-6 leading-relaxed">
                 Kérdésed van a platformmal, az adatokkal vagy az előfizetéssel kapcsolatban? Írj nekünk bizalommal az alábbi e-mail címre:
             </p>
-            <div class="bg-black/40 border border-cyan-500/40 rounded-2xl p-4 mb-6 backdrop-blur-sm">
+            <div class="bg-black/30 border border-cyan-500/40 rounded-2xl p-4 mb-6 backdrop-blur-sm">
                 <a href="mailto:info@focielemzesek.com" class="text-cyan-300 font-black text-base md:text-lg tracking-wide hover:underline">info@focielemzesek.com</a>
             </div>
-            <button onclick="closeContactModal()" class="bg-slate-900/80 hover:bg-slate-900 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition border border-cyan-500/30">Bezárás</button>
+            <button onclick="closeContactModal()" class="bg-slate-900/60 hover:bg-slate-900 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition border border-cyan-500/30">Bezárás</button>
         </div>
     </div>
 
     <!-- Liga Meccsei Modal -->
-    <div id="league-matches-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div id="league-matches-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel border border-cyan-500/40 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl">
             <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-cyan-300 hover:text-pink-400 text-2xl font-bold">&times;</button>
             <h3 id="league-modal-title" class="text-lg font-black slightly-lighter-green mb-4 border-b border-cyan-500/30 pb-2">Válassz meccset</h3>
@@ -204,7 +203,7 @@
     </div>
 
     <!-- Teljes HTML Elemzés Modal -->
-    <div id="full-analysis-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 md:p-6">
+    <div id="full-analysis-modal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 md:p-6">
         <div class="bg-[#f0f2f5] text-[#1c1e21] w-full max-w-5xl max-h-[92vh] rounded-3xl p-4 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto font-sans border border-cyan-500">
             <button onclick="closeFullAnalysisModal()" class="absolute top-4 right-6 text-slate-700 hover:text-pink-600 text-4xl font-black z-50 bg-white/90 px-3 py-1 rounded-full shadow">&times;</button>
             <div id="modal-html-container" class="mt-2"></div>
@@ -217,7 +216,7 @@
     </div>
 
     <!-- Adatvédelmi Nyilatkozat Modal -->
-    <div id="privacy-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div id="privacy-modal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
             <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Adatvédelmi Nyilatkozat</h3>
@@ -227,13 +226,13 @@
                 <p><strong>3. Az adatkezelés célja:</strong> A fiók azonosítása és a prémium előfizetés kezelése.</p>
             </div>
             <div class="mt-6 text-center border-t border-cyan-500/20 pt-4">
-                <button onclick="closePrivacyModal()" class="bg-slate-900/80 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
+                <button onclick="closePrivacyModal()" class="bg-slate-900/60 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
             </div>
         </div>
     </div>
 
     <!-- Felhasználási Feltételek Modal -->
-    <div id="terms-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div id="terms-modal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
             <button onclick="closeTermsModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Felhasználási Feltételek és Jogi Nyilatkozat</h3>
@@ -243,13 +242,13 @@
                 <p><strong>3. Előfizetés:</strong> A 3 napos próbaidőszak után előfizetés szükséges, ami bármikor lemondható.</p>
             </div>
             <div class="mt-6 text-center border-t border-cyan-500/20 pt-4">
-                <button onclick="closeTermsModal()" class="bg-slate-900/80 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
+                <button onclick="closeTermsModal()" class="bg-slate-900/60 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
             </div>
         </div>
     </div>
 
     <!-- Regisztrációs Modal -->
-    <div id="register-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div id="register-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-cyan-500/40 shadow-2xl">
             <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-cyan-300 hover:text-pink-400 text-xl font-bold">&times;</button>
             <div class="text-center mb-6">
@@ -260,30 +259,30 @@
             <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs uppercase font-bold text-cyan-200 mb-1">Email cím</label>
-                    <input type="email" id="reg-email" required class="w-full bg-black/40 border border-cyan-500/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="pelda@email.hu">
+                    <input type="email" id="reg-email" required class="w-full bg-black/30 border border-cyan-500/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="pelda@email.hu">
                 </div>
                 <div>
                     <label class="block text-xs uppercase font-bold text-cyan-200 mb-1">Jelszó</label>
                     <div class="relative">
-                        <input type="password" id="reg-password" required class="w-full bg-black/40 border border-cyan-500/40 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="••••••••">
+                        <input type="password" id="reg-password" required class="w-full bg-black/30 border border-cyan-500/40 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="••••••••">
                         <button type="button" onclick="togglePassword('reg-password', 'eye-reg-1')" class="absolute right-3 top-2.5 text-gray-300 hover:text-white text-sm focus:outline-none" id="eye-reg-1">👁️</button>
                     </div>
                 </div>
                 <div>
                     <label class="block text-xs uppercase font-bold text-cyan-200 mb-1">Jelszó mégegyszer</label>
                     <div class="relative">
-                        <input type="password" id="reg-password-confirm" required class="w-full bg-black/40 border border-cyan-500/40 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="••••••••">
+                        <input type="password" id="reg-password-confirm" required class="w-full bg-black/30 border border-cyan-500/40 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="••••••••">
                         <button type="button" onclick="togglePassword('reg-password-confirm', 'eye-reg-2')" class="absolute right-3 top-2.5 text-gray-300 hover:text-white text-sm focus:outline-none" id="eye-reg-2">👁️</button>
                     </div>
                 </div>
                 
                 <div class="space-y-2 pt-1 text-xs text-gray-200">
                     <label class="flex items-start space-x-2 cursor-pointer">
-                        <input type="checkbox" id="reg-privacy-check" required class="mt-0.5 rounded border-cyan-500 bg-black/60 text-pink-600">
+                        <input type="checkbox" id="reg-privacy-check" required class="mt-0.5 rounded border-cyan-500 bg-black/40 text-pink-600">
                         <span>Elfogadom az <button type="button" onclick="openPrivacyModal()" class="text-cyan-300 underline">Adatvédelmi nyilatkozatot</button>.</span>
                     </label>
                     <label class="flex items-start space-x-2 cursor-pointer">
-                        <input type="checkbox" id="reg-terms-check" required class="mt-0.5 rounded border-cyan-500 bg-black/60 text-pink-600">
+                        <input type="checkbox" id="reg-terms-check" required class="mt-0.5 rounded border-cyan-500 bg-black/40 text-pink-600">
                         <span>Elfogadom a <button type="button" onclick="openTermsModal()" class="text-cyan-300 underline">Felhasználási feltételeket</button>.</span>
                     </label>
                 </div>
@@ -297,7 +296,7 @@
     </div>
 
     <!-- Belépési / Fiókkezelési Modal -->
-    <div id="login-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div id="login-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-cyan-500/40 shadow-2xl">
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-cyan-300 hover:text-pink-400 text-xl font-bold">&times;</button>
             <div class="text-center mb-6">
@@ -308,19 +307,19 @@
             <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs uppercase font-bold text-cyan-200 mb-1">Email cím</label>
-                    <input type="email" id="login-email" required class="w-full bg-black/40 border border-cyan-500/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="pelda@email.hu">
+                    <input type="email" id="login-email" required class="w-full bg-black/30 border border-cyan-500/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="pelda@email.hu">
                 </div>
                 <div>
                     <label class="block text-xs uppercase font-bold text-cyan-200 mb-1">Jelszó</label>
                     <div class="relative">
-                        <input type="password" id="login-password" required class="w-full bg-black/40 border border-cyan-500/40 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="••••••••">
+                        <input type="password" id="login-password" required class="w-full bg-black/30 border border-cyan-500/40 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="••••••••">
                         <button type="button" onclick="togglePassword('login-password', 'eye-login-1')" class="absolute right-3 top-2.5 text-gray-300 hover:text-white text-sm focus:outline-none" id="eye-login-1">👁️</button>
                     </div>
                 </div>
                 <div class="text-right">
                     <button type="button" onclick="showForgotPassword()" class="text-xs text-cyan-300 underline">Elfelejtetted a jelszavad?</button>
                 </div>
-                <button type="submit" class="w-full bg-slate-900/80 hover:bg-slate-900 text-cyan-200 font-bold py-3 rounded-xl shadow border border-cyan-500/40 transition text-sm uppercase tracking-wider">
+                <button type="submit" class="w-full bg-slate-900/60 hover:bg-slate-900 text-cyan-200 font-bold py-3 rounded-xl shadow border border-cyan-500/40 transition text-sm uppercase tracking-wider">
                     Belépés
                 </button>
             </form>
@@ -329,7 +328,7 @@
                 <p class="text-xs text-gray-200 text-center mb-2">Add meg az email címed, és küldünk egy linket a jelszó visszaállításához.</p>
                 <div>
                     <label class="block text-xs uppercase font-bold text-cyan-200 mb-1">Email cím</label>
-                    <input type="email" id="forgot-email" required class="w-full bg-black/40 border border-cyan-500/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="pelda@email.hu">
+                    <input type="email" id="forgot-email" required class="w-full bg-black/30 border border-cyan-500/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="pelda@email.hu">
                 </div>
                 <div class="text-left">
                     <button type="button" onclick="showLoginForm()" class="text-xs text-cyan-300 underline">&larr; Vissza a bejelentkezéshez</button>
@@ -340,12 +339,12 @@
             </form>
 
             <div id="account-management-section" class="hidden space-y-4 pt-2">
-                <div class="bg-black/40 border border-pink-500/40 rounded-2xl p-4 text-center space-y-3 backdrop-blur-sm">
+                <div class="bg-black/30 border border-pink-500/40 rounded-2xl p-4 text-center space-y-3 backdrop-blur-sm">
                     <h4 class="text-xs font-bold text-pink-300 uppercase tracking-wider">Előfizetés és Fiók Kezelése</h4>
                     <button onclick="handleDeleteAccount()" class="w-full bg-pink-700 hover:bg-pink-600 text-white font-bold py-2.5 rounded-xl text-xs uppercase transition shadow tracking-wider">
                         🗑️ Fiók és Előfizetés Törlése
                     </button>
-                    <button onclick="handleLogout()" class="w-full bg-slate-900/80 hover:bg-slate-900 text-white font-bold py-2 rounded-xl text-xs uppercase transition border border-cyan-500/30">
+                    <button onclick="handleLogout()" class="w-full bg-slate-900/60 hover:bg-slate-900 text-white font-bold py-2 rounded-xl text-xs uppercase transition border border-cyan-500/30">
                         Kijelentkezés
                     </button>
                 </div>
@@ -703,7 +702,7 @@
                             <span id="${iconId}" class="text-xs slightly-lighter-green transform transition-transform duration-200">▼</span>
                         </div>
                     </div>
-                    <div id="${contentId}" class="country-accordion-content hidden px-3 pb-3 pt-1 border-t border-cyan-500/20 bg-black/50 space-y-1 backdrop-blur-md">
+                    <div id="${contentId}" class="country-accordion-content hidden px-3 pb-3 pt-1 border-t border-cyan-500/20 bg-black/30 space-y-1 backdrop-blur-md">
                         ${leaguesHtml}
                     </div>
                 `;
@@ -743,7 +742,7 @@
             if (leagueMatches.length > 0) {
                 leagueMatches.forEach(m => {
                     const mBtn = document.createElement('button');
-                    mBtn.className = "w-full text-left px-4 py-3 text-sm text-white bg-black/60 hover:bg-pink-950/60 border border-cyan-500/30 rounded-xl transition flex items-center justify-between cursor-pointer shadow backdrop-blur-sm";
+                    mBtn.className = "w-full text-left px-4 py-3 text-sm text-white bg-black/40 hover:bg-pink-950/60 border border-cyan-500/30 rounded-xl transition flex items-center justify-between cursor-pointer shadow backdrop-blur-sm";
                     mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-xs text-pink-300 font-bold">Megnyitás &rarr;</span>`;
                     
                     mBtn.onclick = () => {
@@ -755,7 +754,7 @@
                 });
             } else {
                 const emptyEl = document.createElement('div');
-                emptyEl.className = "px-4 py-4 text-xs text-gray-300 italic text-center bg-black/40 rounded-xl border border-cyan-500/20 backdrop-blur-sm";
+                emptyEl.className = "px-4 py-4 text-xs text-gray-300 italic text-center bg-black/30 rounded-xl border border-cyan-500/20 backdrop-blur-sm";
                 emptyEl.innerText = "Ehhez a ligához nincsenek még feltöltött elemzések ma.";
                 listEl.appendChild(emptyEl);
             }
