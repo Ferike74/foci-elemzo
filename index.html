@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sportfogadás Elemző Agent | Cyber-Terminal v4.0</title>
+    <title>Sportfogadás Elemző Agent | A.I. Genesis Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
@@ -12,11 +12,10 @@
 
     <style>
         body {
-            background-color: #050508;
+            background-color: #08090c;
             background-image: 
-                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%),
-                radial-gradient(circle at 10% 10%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 90%, rgba(245, 158, 11, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 50% 10%, rgba(220, 38, 38, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(245, 158, 11, 0.08) 0%, transparent 40%),
                 url('stadion.jpg');
             background-size: cover;
             background-position: center;
@@ -25,56 +24,54 @@
         }
 
         .glass-panel {
-            background: rgba(8, 12, 20, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            background: rgba(12, 14, 20, 0.88);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(245, 158, 11, 0.03);
         }
 
         .league-card-custom {
-            background: rgba(6, 10, 18, 0.92);
+            background: rgba(10, 12, 18, 0.9);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(16, 185, 129, 0.35);
+            border: 1px solid rgba(245, 158, 11, 0.3);
             align-self: start;
-            transition: all 0.25s ease;
+            transition: all 0.3s ease;
             position: relative;
         }
 
         .league-card-custom:hover {
-            background: rgba(10, 16, 28, 0.98);
-            border-color: rgba(245, 158, 11, 0.7);
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
-            transform: translateY(-1px);
+            background: rgba(16, 18, 28, 0.96);
+            border-color: rgba(239, 68, 68, 0.8);
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.25);
+            transform: translateY(-2px);
         }
 
         .slightly-lighter-green {
-            color: #10b981;
+            color: #f59e0b;
             font-weight: 700;
-            font-family: monospace;
-            letter-spacing: -0.5px;
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
         }
         
-        .terminal-ticker {
-            background: rgba(3, 6, 12, 0.95);
-            border-top: 1px solid rgba(16, 185, 129, 0.3);
-            border-bottom: 1px solid rgba(16, 185, 129, 0.3);
-            font-family: monospace;
+        .genesis-ticker {
+            background: rgba(6, 7, 10, 0.95);
+            border-top: 1px solid rgba(239, 68, 68, 0.3);
+            border-bottom: 1px solid rgba(239, 68, 68, 0.3);
         }
 
         .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
+            width: 5px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(5, 5, 8, 0.5);
+            background: rgba(8, 9, 12, 0.5);
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(16, 185, 129, 0.5);
-            border-radius: 2px;
+            background: rgba(239, 68, 68, 0.5);
+            border-radius: 3px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(16, 185, 129, 0.8);
+            background: rgba(239, 68, 68, 0.8);
         }
     </style>
 </head>
@@ -83,37 +80,38 @@
     <div class="relative z-10 flex flex-col min-h-screen p-4 md:p-6 max-w-7xl mx-auto w-full space-y-6">
         
         <!-- 1. FEJLÉC -->
-        <header class="glass-panel rounded-2xl px-6 py-12 md:py-16 flex flex-col items-center justify-center text-center shadow-2xl relative">
-            <div class="absolute left-6 top-6 hidden md:flex items-center space-x-2 z-20 font-mono bg-emerald-950/40 border border-emerald-500/30 px-3 py-1 rounded text-xs text-emerald-400">
-                <span>TERMINAL v4.0 // CONNECTED</span>
+        <header class="glass-panel rounded-3xl px-6 py-14 md:py-20 flex flex-col items-center justify-center text-center shadow-2xl relative">
+            <div class="absolute left-6 top-6 hidden md:flex items-center space-x-2 z-20 bg-red-950/50 border border-red-500/40 px-3.5 py-1 rounded-full">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                <span class="text-[10px] tracking-widest text-amber-300 uppercase font-bold">A.I. GENESIS CORE</span>
             </div>
 
             <div class="absolute left-6 bottom-6 hidden md:flex items-center space-x-3 z-20">
-                <button onclick="openContactModal()" class="bg-black hover:bg-slate-900 text-emerald-400 font-mono font-bold px-4 py-2 rounded-xl shadow border border-emerald-500/30 transition uppercase text-xs tracking-wider">
-                    [ Kapcsolat ]
+                <button onclick="openContactModal()" class="bg-black hover:bg-slate-900 text-amber-400 font-bold px-4 py-2 rounded-xl shadow border border-amber-500/30 transition uppercase text-xs tracking-wider">
+                    Kapcsolat
                 </button>
             </div>
             
             <div class="w-full px-2">
-                <h1 class="font-black tracking-widest text-xl sm:text-2xl md:text-3xl lg:text-4xl bg-gradient-to-r from-red-500 via-amber-400 to-emerald-400 bg-clip-text text-transparent uppercase leading-tight font-mono">
-                    EURÓPAI TOP LIGÁK ÉS KUPÁK
+                <h1 class="font-black tracking-wider text-xl sm:text-2xl md:text-3xl lg:text-4xl bg-gradient-to-r from-red-500 via-amber-400 to-amber-200 bg-clip-text text-transparent uppercase leading-tight drop-shadow-[0_0_25px_rgba(239,68,68,0.4)]">
+                    Európai topp ligák és kupák
                 </h1>
-                <div class="font-bold tracking-widest text-lg sm:text-xl md:text-2xl text-emerald-400 uppercase mt-2 font-mono">
-                    // PROFESSZIONÁLIS KVANTITATÍV ELEMZÉS
+                <div class="font-black tracking-widest text-xl sm:text-2xl md:text-3xl lg:text-4xl bg-gradient-to-r from-amber-400 to-red-600 bg-clip-text text-transparent uppercase mt-2 leading-tight">
+                    professzionális elemzése
                 </div>
             </div>
 
-            <div class="absolute right-6 top-6 hidden md:flex items-center space-x-3 z-20 font-mono text-xs text-amber-400">
-                <span>[ LIVE SYSTEM ]</span>
+            <div class="absolute right-6 top-6 hidden md:flex items-center space-x-3 z-20">
+                <span class="text-3xl filter drop-shadow-[0_0_10px_rgba(245,158,11,0.8)]">⚽</span>
             </div>
 
             <div class="absolute right-6 bottom-6 hidden md:flex flex-col items-end space-y-1 z-20">
-                <span id="user-status" class="text-xs text-emerald-300 font-mono mb-1 cursor-pointer hover:underline" onclick="openLoginModal()" title="Kattints a fiók kezeléséhez"></span>
+                <span id="user-status" class="text-xs text-amber-300 mb-1 cursor-pointer hover:underline" onclick="openLoginModal()" title="Kattints a fiók kezeléséhez"></span>
                 <div class="flex items-center space-x-2">
-                    <button onclick="openRegisterModal()" class="bg-emerald-600 hover:bg-emerald-500 text-black font-mono font-black px-4 py-2 rounded-xl shadow uppercase text-xs tracking-wider">
+                    <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl shadow-[0_0_20px_rgba(220,38,38,0.5)] transition uppercase text-xs tracking-wider border border-red-400/50">
                         Regisztráció
                     </button>
-                    <button onclick="openLoginModal()" class="bg-slate-900 hover:bg-slate-800 text-emerald-400 font-mono font-bold px-4 py-2 rounded-xl shadow border border-emerald-500/30 uppercase text-xs tracking-wider">
+                    <button onclick="openLoginModal()" class="bg-slate-900 hover:bg-slate-800 text-amber-300 font-bold px-4 py-2 rounded-xl shadow border border-amber-500/30 uppercase text-xs tracking-wider">
                         Belépés
                     </button>
                 </div>
@@ -121,43 +119,43 @@
 
             <div class="mt-8 flex flex-col md:hidden items-center justify-center space-y-2 w-full">
                 <div class="flex items-center space-x-2">
-                    <button onclick="openRegisterModal()" class="bg-emerald-600 hover:bg-emerald-500 text-black font-mono font-black px-4 py-2 rounded-xl uppercase text-xs tracking-wider">
+                    <button onclick="openRegisterModal()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl uppercase text-xs tracking-wider border border-red-400/50">
                         Regisztráció
                     </button>
-                    <button onclick="openLoginModal()" class="bg-slate-900 hover:bg-slate-800 text-emerald-400 font-mono font-bold px-4 py-2 rounded-xl uppercase text-xs tracking-wider border border-emerald-500/30">
+                    <button onclick="openLoginModal()" class="bg-slate-900 hover:bg-slate-800 text-amber-300 font-bold px-4 py-2 rounded-xl uppercase text-xs tracking-wider border border-amber-500/30">
                         Belépés
                     </button>
                 </div>
-                <button onclick="openContactModal()" class="bg-black hover:bg-slate-900 text-emerald-400 font-mono font-bold px-4 py-2 rounded-xl uppercase text-xs tracking-wider border border-emerald-500/30">
+                <button onclick="openContactModal()" class="bg-black hover:bg-slate-900 text-amber-400 font-bold px-4 py-2 rounded-xl uppercase text-xs tracking-wider border border-amber-500/30">
                     Kapcsolat
                 </button>
             </div>
         </header>
 
-        <!-- TERMINÁL TICKET SÁV -->
-        <div class="terminal-ticker py-2 px-4 rounded-xl text-xs text-emerald-400 font-mono flex items-center justify-between">
-            <span>&gt; SYSTEM: OK &nbsp;|&nbsp; MARKET: OPEN &nbsp;|&nbsp; ALGORITHM: POISSON_XG_ACTIVE &nbsp;|&nbsp; VALUE_BETS: SCANNING...</span>
-            <span class="text-amber-400 animate-pulse">● LIVE FEED</span>
+        <!-- GENESIS NEURÁLIS ADATSTREAM -->
+        <div class="genesis-ticker py-2 px-4 rounded-xl text-xs text-amber-300 font-mono flex items-center justify-between border border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.1)]">
+            <span class="text-red-400 font-bold">🧠 NEURAL ENGINE:</span> Aktív predikciós mátrix &bull; xG kalkuláció fut &bull; Monte Carlo szimulációk optimalizálva &bull; Fair Odds generálás folyamatban
+            <span class="text-emerald-400 animate-pulse">● ONLINE</span>
         </div>
 
         <!-- 2. INFORMÁCIÓS PANEL -->
-        <section class="glass-panel rounded-2xl p-6 md:p-8 shadow-2xl space-y-4 text-center border border-emerald-500/30">
-            <div class="inline-block bg-emerald-950/60 border border-emerald-500/50 px-5 py-2 rounded-xl">
-                <span class="text-xs md:text-sm font-mono font-black text-emerald-300 uppercase tracking-widest">
-                    &gt; ITT MI NEM TIPPEKET OSZTOGATUNK. AZ ADATOK A MIEINK, A NYERŐ TIPP VISZONT A TIED!
+        <section class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl space-y-4 text-center border border-amber-500/30">
+            <div class="inline-block bg-red-600/20 backdrop-blur-md border border-red-500/50 px-5 py-2.5 rounded-2xl shadow-[0_0_20px_rgba(239,68,68,0.3)]">
+                <span class="text-xs md:text-sm font-black text-white uppercase tracking-widest drop-shadow">
+                    🔥 Itt mi nem tippeket osztogatunk. Az adatok a mieink, a nyerő tipp viszont a tied!
                 </span>
             </div>
 
-            <p class="text-sm md:text-base text-gray-300 font-medium leading-relaxed max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-3 font-mono">
+            <p class="text-sm md:text-base text-gray-200 font-medium leading-relaxed max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-3">
                 Regisztráció után az első 
-                <span class="bg-emerald-950/80 border border-emerald-500 text-emerald-300 font-black text-sm md:text-base px-3 py-1.5 rounded uppercase">3 nap ingyenes</span>, 
+                <span class="bg-amber-500/20 border border-amber-400/60 text-amber-300 font-black text-sm md:text-base px-4 py-2 rounded-xl shadow uppercase text-center inline-block">3 nap ingyenes</span>, 
                 majd 
-                <span class="bg-emerald-950/80 border border-emerald-500 text-emerald-300 font-black text-base md:text-lg px-3 py-1.5 rounded uppercase">7999 FT/HÓ</span> 
-                Minden információ a tökéletes pozícióhoz.
+                <span class="bg-amber-500/20 border border-amber-400/60 text-amber-300 font-black text-lg md:text-xl px-4 py-2 rounded-xl shadow-2xl uppercase text-center inline-block">7999 FT/HÓ</span> 
+                Itt minden információt megtalálsz a tökéletes fogadás elkészítéséhez.
             </p>
             <div class="pt-2">
-                <button onclick="openRegisterModal()" class="bg-gradient-to-r from-emerald-600 hover:from-emerald-500 to-amber-500 hover:to-amber-400 text-black font-mono font-black px-8 py-3 rounded-xl shadow-lg transition uppercase text-xs md:text-sm tracking-widest border border-amber-400/50">
-                    [ ELŐFIZETÉS INDÍTÁSA ]
+                <button onclick="openRegisterModal()" class="bg-gradient-to-r from-red-600 hover:from-red-500 via-amber-500 to-amber-400 hover:to-amber-300 text-black font-black px-8 py-3.5 rounded-2xl shadow-[0_0_30px_rgba(245,158,11,0.4)] transition transform hover:scale-105 uppercase text-xs md:text-sm tracking-widest border border-amber-300/60">
+                    Regisztrálj most! 🚀
                 </button>
             </div>
         </section>
@@ -165,65 +163,65 @@
         <!-- 3. LIGAVÁLASZTÓ KÁRTYÁK -->
         <div class="space-y-6">
             <div>
-                <h2 class="text-sm font-mono font-bold text-amber-400 mb-3 flex items-center gap-2">
-                    <span>[+]</span> KIEMELT NEMZETKÖZI KUPÁK
+                <h2 class="text-lg font-bold text-amber-400 mb-3 drop-shadow flex items-center gap-2">
+                    <span>🏆</span> Kiemelt Nemzetközi Kupák
                 </h2>
                 <div id="international-cups-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start"></div>
             </div>
 
             <div>
-                <h2 class="text-sm font-mono font-bold text-emerald-400 mb-3 flex items-center gap-2">
-                    <span>[+]</span> ORSZÁGOK ÉS LIGÁK MÁTRIX
+                <h2 class="text-lg font-bold text-red-400 mb-3 drop-shadow flex items-center gap-2">
+                    <span>🌍</span> Országok és Ligák
                 </h2>
                 <div id="countries-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start"></div>
             </div>
         </div>
 
         <!-- LÁBLÉC -->
-        <footer class="text-center text-xs text-gray-400 pb-2 font-mono border-t border-emerald-500/20 pt-4">
-            <div>&copy; 2026 Sportfogadás Elemző Agent. All Rights Reserved.</div>
-            <div class="flex justify-center space-x-4 text-emerald-400 mt-1">
-                <button onclick="openPrivacyModal()" class="hover:underline">Adatvédelmi nyilatkozat</button>
+        <footer class="text-center text-xs text-gray-400 pb-2 drop-shadow space-y-2 border-t border-amber-500/20 pt-4">
+            <div>&copy; 2026 Sportfogadás Elemző Agent. A.I. Genesis Architecture. Minden jog fenntartva.</div>
+            <div class="flex justify-center space-x-4 text-amber-400">
+                <button onclick="openPrivacyModal()" class="hover:text-red-400 underline transition">Adatvédelmi nyilatkozat</button>
                 <span>|</span>
-                <button onclick="openTermsModal()" class="hover:underline">Felhasználási feltételek</button>
+                <button onclick="openTermsModal()" class="hover:text-red-400 underline transition">Felhasználási feltételek</button>
                 <span>|</span>
-                <button onclick="openContactModal()" class="hover:underline">Kapcsolat</button>
+                <button onclick="openContactModal()" class="hover:text-red-400 underline transition">Kapcsolat</button>
             </div>
         </footer>
     </div>
 
     <!-- Kapcsolat Modal -->
-    <div id="contact-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel text-gray-200 border border-emerald-500/40 w-full max-w-md rounded-2xl p-6 md:p-8 relative flex flex-col shadow-2xl text-center font-mono">
-            <button onclick="closeContactModal()" class="absolute top-4 right-6 text-emerald-400 hover:text-red-400 text-2xl font-bold">&times;</button>
-            <div class="text-3xl mb-2">✉️</div>
-            <h3 class="text-lg font-black text-amber-400 mb-4">&gt; KAPCSOLAT</h3>
+    <div id="contact-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel text-gray-200 border border-amber-500/40 w-full max-w-md rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl text-center">
+            <button onclick="closeContactModal()" class="absolute top-4 right-6 text-amber-400 hover:text-red-400 text-3xl font-bold">&times;</button>
+            <div class="text-4xl mb-2">✉️</div>
+            <h3 class="text-xl font-black text-amber-400 mb-4">Lépj velünk kapcsolatba</h3>
             <p class="text-xs text-gray-300 mb-6 leading-relaxed">
-                Kérdésed van a platformmal vagy a kvantitatív adatokkal kapcsolatban? Írj nekünk:
+                Kérdésed van a platformmal, az adatokkal vagy az előfizetéssel kapcsolatban? Írj nekünk bizalommal az alábbi e-mail címre:
             </p>
-            <div class="bg-black/60 border border-emerald-500/40 rounded-xl p-3 mb-6">
-                <a href="mailto:info@focielemzesek.com" class="text-emerald-400 font-bold text-sm tracking-wide hover:underline">info@focielemzesek.com</a>
+            <div class="bg-black/50 border border-amber-500/40 rounded-2xl p-4 mb-6 shadow-inner">
+                <a href="mailto:info@focielemzesek.com" class="text-amber-400 font-black text-base md:text-lg tracking-wide hover:underline">info@focielemzesek.com</a>
             </div>
-            <button onclick="closeContactModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold py-2 rounded-xl text-xs uppercase tracking-wider transition border border-emerald-500/30">Bezárás</button>
+            <button onclick="closeContactModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition border border-amber-500/30">Bezárás</button>
         </div>
     </div>
 
     <!-- Liga Meccsei Modal -->
-    <div id="league-matches-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel border border-emerald-500/40 w-full max-w-lg rounded-2xl p-6 relative flex flex-col shadow-2xl font-mono">
-            <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-emerald-400 hover:text-red-400 text-xl font-bold">&times;</button>
-            <h3 id="league-modal-title" class="text-sm font-black slightly-lighter-green mb-4 border-b border-emerald-500/30 pb-2">&gt; ELEMZETT MECCSEK</h3>
+    <div id="league-matches-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel border border-amber-500/40 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl">
+            <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-amber-400 hover:text-red-400 text-2xl font-bold">&times;</button>
+            <h3 id="league-modal-title" class="text-lg font-black slightly-lighter-green mb-4 border-b border-amber-500/30 pb-2">Válassz meccset</h3>
             <div id="league-modal-list" class="space-y-2 max-h-[360px] overflow-y-auto pr-1 custom-scrollbar"></div>
         </div>
     </div>
 
     <!-- Teljes HTML Elemzés Modal -->
-    <div id="full-analysis-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 md:p-6">
-        <div class="bg-[#f0f2f5] text-[#1c1e21] w-full max-w-5xl max-h-[92vh] rounded-2xl p-4 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto font-sans border border-emerald-500">
-            <button onclick="closeFullAnalysisModal()" class="absolute top-4 right-6 text-slate-700 hover:text-red-600 text-3xl font-black z-50 bg-white/90 px-3 py-1 rounded-full shadow">&times;</button>
+    <div id="full-analysis-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 hidden flex items-center justify-center p-2 md:p-6">
+        <div class="bg-[#f0f2f5] text-[#1c1e21] w-full max-w-5xl max-h-[92vh] rounded-3xl p-4 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto font-sans border border-amber-500">
+            <button onclick="closeFullAnalysisModal()" class="absolute top-4 right-6 text-slate-700 hover:text-red-600 text-4xl font-black z-50 bg-white/90 px-3 py-1 rounded-full shadow">&times;</button>
             <div id="modal-html-container" class="mt-2"></div>
             <div class="mt-6 text-center border-t pt-4 bg-[#f0f2f5]">
-                <button onclick="closeFullAnalysisModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-mono font-bold px-6 py-2 rounded-xl shadow transition text-xs uppercase tracking-wider">
+                <button onclick="closeFullAnalysisModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-xl shadow transition text-xs uppercase tracking-wider">
                     Bezárás (Vissza a meccsekhez)
                 </button>
             </div>
@@ -231,135 +229,135 @@
     </div>
 
     <!-- Adatvédelmi Nyilatkozat Modal -->
-    <div id="privacy-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel text-gray-200 border border-emerald-500/40 w-full max-w-2xl max-h-[85vh] rounded-2xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto font-mono text-xs">
-            <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-emerald-400 hover:text-red-400 text-2xl font-bold">&times;</button>
-            <h3 class="text-base font-black text-amber-400 mb-4 border-b border-emerald-500/20 pb-2">&gt; ADATVÉDELMI NYILATKOZAT</h3>
-            <div class="space-y-3 leading-relaxed text-gray-300">
+    <div id="privacy-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel text-gray-200 border border-amber-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
+            <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-amber-400 hover:text-red-400 text-3xl font-bold">&times;</button>
+            <h3 class="text-xl font-black text-amber-400 mb-4 border-b border-amber-500/20 pb-2">Adatvédelmi Nyilatkozat</h3>
+            <div class="space-y-4 text-xs leading-relaxed text-gray-300">
                 <p><strong>1. Adatkezelő adatai:</strong> A Focielemzések platform üzemeltetője elkötelezett a felhasználók személyes adatainak védelme mellett.</p>
-                <p><strong>2. Kezelt adatok köre:</strong> A regisztráció során kizárólag az Ön által megadott e-mail címet és titkosított hitelesítési adatokat tároljuk a Supabase rendszerén keresztül.</p>
+                <p><strong>2. Kezelt adatok köre:</strong> A regisztráció során kizárólag az Ön által megadott e-mail címet és hitelesítési adatokat tároljuk (Supabase rendszeren keresztül).</p>
                 <p><strong>3. Az adatkezelés célja:</strong> A fiók azonosítása és a prémium előfizetés kezelése.</p>
             </div>
-            <div class="mt-6 text-center border-t border-emerald-500/20 pt-4">
-                <button onclick="closePrivacyModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2 rounded-xl uppercase tracking-wider border border-emerald-500/30">Bezárás</button>
+            <div class="mt-6 text-center border-t border-amber-500/20 pt-4">
+                <button onclick="closePrivacyModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-amber-500/30">Bezárás</button>
             </div>
         </div>
     </div>
 
     <!-- Felhasználási Feltételek Modal -->
-    <div id="terms-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel text-gray-200 border border-emerald-500/40 w-full max-w-2xl max-h-[85vh] rounded-2xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto font-mono text-xs">
-            <button onclick="closeTermsModal()" class="absolute top-4 right-6 text-emerald-400 hover:text-red-400 text-2xl font-bold">&times;</button>
-            <h3 class="text-base font-black text-amber-400 mb-4 border-b border-emerald-500/20 pb-2">&gt; FELHASZNÁLÁSI FELTÉTELEK</h3>
-            <div class="space-y-3 leading-relaxed text-gray-300">
+    <div id="terms-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel text-gray-200 border border-amber-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
+            <button onclick="closeTermsModal()" class="absolute top-4 right-6 text-amber-400 hover:text-red-400 text-3xl font-bold">&times;</button>
+            <h3 class="text-xl font-black text-amber-400 mb-4 border-b border-amber-500/20 pb-2">Felhasználási Feltételek és Jogi Nyilatkozat</h3>
+            <div class="space-y-4 text-xs leading-relaxed text-gray-300">
                 <p><strong>1. A szolgáltatás jellege:</strong> Mesterséges intelligencián és statisztikai szimulációkon alapuló elemző platform.</p>
                 <p><strong>2. Felelősségvállalás:</strong> Az információk felhasználása saját felelősségre történik.</p>
                 <p><strong>3. Előfizetés:</strong> A 3 napos próbaidőszak után előfizetés szükséges, ami bármikor lemondható.</p>
             </div>
-            <div class="mt-6 text-center border-t border-emerald-500/20 pt-4">
-                <button onclick="closeTermsModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2 rounded-xl uppercase tracking-wider border border-emerald-500/30">Bezárás</button>
+            <div class="mt-6 text-center border-t border-amber-500/20 pt-4">
+                <button onclick="closeTermsModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-amber-500/30">Bezárás</button>
             </div>
         </div>
     </div>
 
     <!-- Regisztrációs Modal -->
-    <div id="register-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md rounded-2xl p-6 md:p-8 relative border border-emerald-500/40 shadow-2xl font-mono">
-            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-emerald-400 hover:text-red-400 text-xl font-bold">&times;</button>
+    <div id="register-modal" class="fixed inset-0 bg-black/80 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-amber-500/40 shadow-2xl">
+            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-amber-400 hover:text-red-400 text-xl font-bold">&times;</button>
             <div class="text-center mb-6">
                 <span class="text-3xl">⚽</span>
-                <h3 class="text-lg font-extrabold mt-2 text-white">&gt; FIÓK LÉTREHOZÁSA</h3>
-                <p class="text-xs text-amber-300 mt-1">3 nap ingyenes próbaidőszak aktiválása!</p>
+                <h3 class="text-xl font-extrabold mt-2 text-white">Fiók létrehozása</h3>
+                <p class="text-xs text-amber-300 mt-1">A regisztráció után átirányítunk a 3 napos ingyenes próbához!</p>
             </div>
-            <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4 text-xs">
+            <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4">
                 <div>
-                    <label class="block uppercase font-bold text-emerald-400 mb-1">Email cím</label>
-                    <input type="email" id="reg-email" required class="w-full bg-black/60 border border-emerald-500/40 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-emerald-400 text-white placeholder-gray-600" placeholder="pelda@email.hu">
+                    <label class="block text-xs uppercase font-bold text-amber-300 mb-1">Email cím</label>
+                    <input type="email" id="reg-email" required class="w-full bg-black/50 border border-amber-500/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-400 text-white placeholder-gray-500" placeholder="pelda@email.hu">
                 </div>
                 <div>
-                    <label class="block uppercase font-bold text-emerald-400 mb-1">Jelszó</label>
+                    <label class="block text-xs uppercase font-bold text-amber-300 mb-1">Jelszó</label>
                     <div class="relative">
-                        <input type="password" id="reg-password" required class="w-full bg-black/60 border border-emerald-500/40 rounded-xl px-4 py-2 pr-10 text-sm focus:outline-none focus:border-emerald-400 text-white placeholder-gray-600" placeholder="••••••••">
-                        <button type="button" onclick="togglePassword('reg-password', 'eye-reg-1')" class="absolute right-3 top-2 text-gray-400 hover:text-white text-sm focus:outline-none" id="eye-reg-1">👁️</button>
+                        <input type="password" id="reg-password" required class="w-full bg-black/50 border border-amber-500/40 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-amber-400 text-white placeholder-gray-500" placeholder="••••••••">
+                        <button type="button" onclick="togglePassword('reg-password', 'eye-reg-1')" class="absolute right-3 top-2.5 text-gray-400 hover:text-white text-sm focus:outline-none" id="eye-reg-1">👁️</button>
                     </div>
                 </div>
                 <div>
-                    <label class="block uppercase font-bold text-emerald-400 mb-1">Jelszó mégegyszer</label>
+                    <label class="block text-xs uppercase font-bold text-amber-300 mb-1">Jelszó mégegyszer</label>
                     <div class="relative">
-                        <input type="password" id="reg-password-confirm" required class="w-full bg-black/60 border border-emerald-500/40 rounded-xl px-4 py-2 pr-10 text-sm focus:outline-none focus:border-emerald-400 text-white placeholder-gray-600" placeholder="••••••••">
-                        <button type="button" onclick="togglePassword('reg-password-confirm', 'eye-reg-2')" class="absolute right-3 top-2 text-gray-400 hover:text-white text-sm focus:outline-none" id="eye-reg-2">👁️</button>
+                        <input type="password" id="reg-password-confirm" required class="w-full bg-black/50 border border-amber-500/40 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-amber-400 text-white placeholder-gray-500" placeholder="••••••••">
+                        <button type="button" onclick="togglePassword('reg-password-confirm', 'eye-reg-2')" class="absolute right-3 top-2.5 text-gray-400 hover:text-white text-sm focus:outline-none" id="eye-reg-2">👁️</button>
                     </div>
                 </div>
                 
-                <div class="space-y-2 pt-1 text-[11px] text-gray-300">
+                <div class="space-y-2 pt-1 text-xs text-gray-300">
                     <label class="flex items-start space-x-2 cursor-pointer">
-                        <input type="checkbox" id="reg-privacy-check" required class="mt-0.5 rounded border-emerald-500 bg-black text-emerald-600">
+                        <input type="checkbox" id="reg-privacy-check" required class="mt-0.5 rounded border-amber-500 bg-black text-red-600">
                         <span>Elfogadom az <button type="button" onclick="openPrivacyModal()" class="text-amber-300 underline">Adatvédelmi nyilatkozatot</button>.</span>
                     </label>
                     <label class="flex items-start space-x-2 cursor-pointer">
-                        <input type="checkbox" id="reg-terms-check" required class="mt-0.5 rounded border-emerald-500 bg-black text-emerald-600">
+                        <input type="checkbox" id="reg-terms-check" required class="mt-0.5 rounded border-amber-500 bg-black text-red-600">
                         <span>Elfogadom a <button type="button" onclick="openTermsModal()" class="text-amber-300 underline">Felhasználási feltételeket</button>.</span>
                     </label>
                 </div>
 
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-black font-black py-3 rounded-xl shadow transition text-xs uppercase tracking-wider">
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl shadow transition text-sm uppercase tracking-wider border border-red-400/50">
                     Regisztráció és Tovább
                 </button>
             </form>
-            <div id="register-message" class="text-center text-xs mt-4 font-mono"></div>
+            <div id="register-message" class="text-center text-xs mt-4"></div>
         </div>
     </div>
 
     <!-- Belépési / Fiókkezelési Modal -->
-    <div id="login-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md rounded-2xl p-6 md:p-8 relative border border-emerald-500/40 shadow-2xl font-mono">
-            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-emerald-400 hover:text-red-400 text-xl font-bold">&times;</button>
+    <div id="login-modal" class="fixed inset-0 bg-black/80 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-amber-500/40 shadow-2xl">
+            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-amber-400 hover:text-red-400 text-xl font-bold">&times;</button>
             <div class="text-center mb-6">
                 <span class="text-3xl">⚽</span>
-                <h3 id="login-modal-title" class="text-lg font-extrabold mt-2 text-white">&gt; BEJELENTKEZÉS</h3>
+                <h3 id="login-modal-title" class="text-xl font-extrabold mt-2 text-white">Bejelentkezés a fiókodba</h3>
             </div>
             
-            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4 text-xs">
+            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block uppercase font-bold text-emerald-400 mb-1">Email cím</label>
-                    <input type="email" id="login-email" required class="w-full bg-black/60 border border-emerald-500/40 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-emerald-400 text-white placeholder-gray-600" placeholder="pelda@email.hu">
+                    <label class="block text-xs uppercase font-bold text-amber-300 mb-1">Email cím</label>
+                    <input type="email" id="login-email" required class="w-full bg-black/50 border border-amber-500/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-400 text-white placeholder-gray-500" placeholder="pelda@email.hu">
                 </div>
                 <div>
-                    <label class="block uppercase font-bold text-emerald-400 mb-1">Jelszó</label>
+                    <label class="block text-xs uppercase font-bold text-amber-300 mb-1">Jelszó</label>
                     <div class="relative">
-                        <input type="password" id="login-password" required class="w-full bg-black/60 border border-emerald-500/40 rounded-xl px-4 py-2 pr-10 text-sm focus:outline-none focus:border-emerald-400 text-white placeholder-gray-600" placeholder="••••••••">
-                        <button type="button" onclick="togglePassword('login-password', 'eye-login-1')" class="absolute right-3 top-2 text-gray-400 hover:text-white text-sm focus:outline-none" id="eye-login-1">👁️</button>
+                        <input type="password" id="login-password" required class="w-full bg-black/50 border border-amber-500/40 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-amber-400 text-white placeholder-gray-500" placeholder="••••••••">
+                        <button type="button" onclick="togglePassword('login-password', 'eye-login-1')" class="absolute right-3 top-2.5 text-gray-400 hover:text-white text-sm focus:outline-none" id="eye-login-1">👁️</button>
                     </div>
                 </div>
                 <div class="text-right">
                     <button type="button" onclick="showForgotPassword()" class="text-xs text-amber-300 underline">Elfelejtetted a jelszavad?</button>
                 </div>
-                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-emerald-400 font-bold py-3 rounded-xl shadow border border-emerald-500/40 transition text-xs uppercase tracking-wider">
+                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-amber-300 font-bold py-3 rounded-xl shadow border border-amber-500/40 transition text-sm uppercase tracking-wider">
                     Belépés
                 </button>
             </form>
 
-            <form id="forgot-form" onsubmit="handleForgotPassword(event)" class="space-y-4 hidden text-xs">
-                <p class="text-gray-300 text-center mb-2">Add meg az email címed, és küldünk egy linket a jelszó visszaállításához.</p>
+            <form id="forgot-form" onsubmit="handleForgotPassword(event)" class="space-y-4 hidden">
+                <p class="text-xs text-gray-300 text-center mb-2">Add meg az email címed, és küldünk egy linket a jelszó visszaállításához.</p>
                 <div>
-                    <label class="block uppercase font-bold text-emerald-400 mb-1">Email cím</label>
-                    <input type="email" id="forgot-email" required class="w-full bg-black/60 border border-emerald-500/40 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-emerald-400 text-white placeholder-gray-600" placeholder="pelda@email.hu">
+                    <label class="block text-xs uppercase font-bold text-amber-300 mb-1">Email cím</label>
+                    <input type="email" id="forgot-email" required class="w-full bg-black/50 border border-amber-500/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-400 text-white placeholder-gray-500" placeholder="pelda@email.hu">
                 </div>
                 <div class="text-left">
-                    <button type="button" onclick="showLoginForm()" class="text-xs text-amber-300 underline">&larr; Vissza</button>
+                    <button type="button" onclick="showLoginForm()" class="text-xs text-amber-300 underline">&larr; Vissza a bejelentkezéshez</button>
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-black font-bold py-3 rounded-xl shadow transition text-xs uppercase tracking-wider">
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl shadow transition text-sm uppercase tracking-wider">
                     Új jelszó küldése
                 </button>
             </form>
 
-            <div id="account-management-section" class="hidden space-y-4 pt-2 text-xs">
-                <div class="bg-black/60 border border-red-500/40 rounded-xl p-4 text-center space-y-3">
-                    <h4 class="font-bold text-red-400 uppercase tracking-wider">Előfizetés és Fiók Kezelése</h4>
+            <div id="account-management-section" class="hidden space-y-4 pt-2">
+                <div class="bg-black/50 border border-red-500/40 rounded-2xl p-4 text-center space-y-3">
+                    <h4 class="text-xs font-bold text-red-400 uppercase tracking-wider">Előfizetés és Fiók Kezelése</h4>
                     <button onclick="handleDeleteAccount()" class="w-full bg-red-700 hover:bg-red-600 text-white font-bold py-2.5 rounded-xl text-xs uppercase transition shadow tracking-wider">
                         🗑️ Fiók és Előfizetés Törlése
                     </button>
-                    <button onclick="handleLogout()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2 rounded-xl text-xs uppercase transition border border-emerald-500/30">
+                    <button onclick="handleLogout()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2 rounded-xl text-xs uppercase transition border border-amber-500/30">
                         Kijelentkezés
                     </button>
                 </div>
@@ -672,13 +670,13 @@
                 const cupMatches = matches.filter(m => matchBelongsToLeague(m.league_name, cup));
                 
                 const card = document.createElement('div');
-                card.className = "league-card-custom rounded-xl p-4 flex justify-between items-center shadow-xl cursor-pointer transition";
+                card.className = "league-card-custom rounded-2xl p-4 flex justify-between items-center shadow-xl cursor-pointer transition";
                 card.innerHTML = `
                     <div>
                         <div class="text-sm font-black uppercase tracking-tight slightly-lighter-green">${cup.name}</div>
-                        <div class="text-xs text-gray-300 font-mono mt-0.5">${cupMatches.length} meccs elemzés</div>
+                        <div class="text-xs text-gray-300 font-medium mt-0.5">${cupMatches.length} meccs elemzés</div>
                     </div>
-                    <span class="bg-emerald-600 text-black text-xs font-mono font-bold w-6 h-6 rounded-full flex items-center justify-center shadow">${cupMatches.length}</span>
+                    <span class="bg-amber-500 text-black text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow">${cupMatches.length}</span>
                 `;
                 card.onclick = () => openLeagueModal(cup, cupMatches);
                 intContainer.appendChild(card);
@@ -694,9 +692,9 @@
 
                     leaguesHtml += `
                         <div onclick="event.stopPropagation(); openLeagueModal(${JSON.stringify(league).replace(/"/g, '&quot;')}, ${JSON.stringify(leagueMatches).replace(/"/g, '&quot;')})" 
-                             class="flex justify-between items-center py-2 px-3 hover:bg-emerald-950/40 rounded-xl text-xs cursor-pointer transition border border-transparent hover:border-emerald-500/40 font-mono">
+                             class="flex justify-between items-center py-2 px-3 hover:bg-red-950/40 rounded-xl text-xs cursor-pointer transition border border-transparent hover:border-red-500/40">
                             <span class="font-medium slightly-lighter-green">⚽ ${league.name}</span>
-                            <span class="bg-emerald-600 text-black font-mono font-bold px-2 py-0.5 rounded shadow">${leagueMatches.length} meccs</span>
+                            <span class="bg-amber-500 text-black font-bold px-2 py-0.5 rounded shadow">${leagueMatches.length} meccs</span>
                         </div>
                     `;
                 });
@@ -705,19 +703,19 @@
                 const iconId = `country-icon-${index}`;
 
                 const countryCard = document.createElement('div');
-                countryCard.className = "league-card-custom rounded-xl shadow-xl overflow-hidden transition";
+                countryCard.className = "league-card-custom rounded-2xl shadow-xl overflow-hidden transition";
                 countryCard.innerHTML = `
                     <div onclick="toggleCountryAccordion('${contentId}', '${iconId}')" class="p-4 flex justify-between items-center cursor-pointer select-none">
                         <div>
                             <h3 class="font-extrabold text-base slightly-lighter-green tracking-wide">${item.country}</h3>
-                            <p class="text-xs text-gray-400 font-mono mt-0.5">Összesen: <span class="text-white font-bold">${countryTotalMatches} meccs</span></p>
+                            <p class="text-xs text-gray-300 mt-0.5">Összesen: <span class="text-white font-bold">${countryTotalMatches} meccs</span></p>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <span class="bg-emerald-600 text-black text-xs font-mono font-bold w-6 h-6 rounded-full flex items-center justify-center shadow">${countryTotalMatches}</span>
+                            <span class="bg-amber-500 text-black text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow">${countryTotalMatches}</span>
                             <span id="${iconId}" class="text-xs slightly-lighter-green transform transition-transform duration-200">▼</span>
                         </div>
                     </div>
-                    <div id="${contentId}" class="country-accordion-content hidden px-3 pb-3 pt-1 border-t border-emerald-500/20 bg-black/50 space-y-1">
+                    <div id="${contentId}" class="country-accordion-content hidden px-3 pb-3 pt-1 border-t border-amber-500/20 bg-black/40 space-y-1">
                         ${leaguesHtml}
                     </div>
                 `;
@@ -750,15 +748,15 @@
             currentActiveLeagueMatches = leagueMatches; 
             document.body.style.overflow = 'hidden';
 
-            document.getElementById('league-modal-title').innerText = `> ${league.name} - MECCSEK`;
+            document.getElementById('league-modal-title').innerText = `${league.name} - Elemzett Meccsek`;
             const listEl = document.getElementById('league-modal-list');
             listEl.innerHTML = '';
 
             if (leagueMatches.length > 0) {
                 leagueMatches.forEach(m => {
                     const mBtn = document.createElement('button');
-                    mBtn.className = "w-full text-left px-4 py-3 text-sm text-white bg-black/60 hover:bg-emerald-950/50 border border-emerald-500/30 rounded-xl transition flex items-center justify-between cursor-pointer shadow font-mono";
-                    mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-xs text-emerald-400 font-bold">MEGNYITÁS &rarr;</span>`;
+                    mBtn.className = "w-full text-left px-4 py-3 text-sm text-white bg-black/50 hover:bg-red-950/60 border border-amber-500/30 rounded-xl transition flex items-center justify-between cursor-pointer shadow";
+                    mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-xs text-amber-400 font-bold">Megnyitás &rarr;</span>`;
                     
                     mBtn.onclick = () => {
                         currentActiveMatch = m;
@@ -769,8 +767,8 @@
                 });
             } else {
                 const emptyEl = document.createElement('div');
-                emptyEl.className = "px-4 py-4 text-xs text-gray-400 italic text-center bg-black/40 rounded-xl border border-emerald-500/20 font-mono";
-                emptyEl.innerText = "Nincsenek még feltöltött elemzések ehhez a ligához.";
+                emptyEl.className = "px-4 py-4 text-xs text-gray-400 italic text-center bg-black/30 rounded-xl border border-amber-500/20";
+                emptyEl.innerText = "Ehhez a ligához nincsenek még feltöltött elemzések ma.";
                 listEl.appendChild(emptyEl);
             }
 
@@ -846,7 +844,7 @@
                     document.getElementById('login-form').classList.add('hidden');
                     document.getElementById('forgot-form').classList.add('hidden');
                     document.getElementById('account-management-section').classList.remove('hidden');
-                    document.getElementById('login-modal-title').innerText = `> FIÓK KEZELÉSE (${session.user.email})`;
+                    document.getElementById('login-modal-title').innerText = `Fiók kezelése (${session.user.email})`;
                 } else {
                     document.getElementById('account-management-section').classList.add('hidden');
                 }
@@ -882,14 +880,14 @@
         function showForgotPassword() {
             document.getElementById('login-form').classList.add('hidden');
             document.getElementById('forgot-form').classList.remove('hidden');
-            document.getElementById('login-modal-title').innerText = '> JELSZÓ VISSZAÁLLÍTÁSA';
+            document.getElementById('login-modal-title').innerText = 'Jelszó visszaállítása';
             document.getElementById('login-message').innerHTML = '';
         }
 
         function showLoginForm() {
             document.getElementById('forgot-form').classList.add('hidden');
             document.getElementById('login-form').classList.remove('hidden');
-            document.getElementById('login-modal-title').innerText = '> BEJELENTKEZÉS';
+            document.getElementById('login-modal-title').innerText = 'Bejelentkezés a fiókodba';
             document.getElementById('login-message').innerHTML = '';
         }
 
@@ -931,7 +929,7 @@
             if (error) {
                 msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${error.message}</span>`;
             } else {
-                msgEl.innerHTML = '<span class="text-emerald-400 font-bold">Sikeres regisztráció! Átirányítás...</span>';
+                msgEl.innerHTML = '<span class="text-amber-400 font-bold">Sikeres regisztráció! Átirányítás a fizetésre...</span>';
                 setTimeout(() => {
                     const stripeUrl = `https://buy.stripe.com/test_6oUcN5cy23eg7EG4Y8ejK04?prefilled_email=${encodeURIComponent(email)}`;
                     window.location.href = stripeUrl;
@@ -951,7 +949,7 @@
             if (error) {
                 msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${error.message}</span>`;
             } else {
-                msgEl.innerHTML = '<span class="text-emerald-400 font-bold">Sikeres bejelentkezés!</span>';
+                msgEl.innerHTML = '<span class="text-amber-400 font-bold">Sikeres bejelentkezés!</span>';
                 setTimeout(() => { closeLoginModal(); location.reload(); }, 1200);
             }
         }
@@ -976,7 +974,7 @@
             if (error) {
                 msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${error.message}</span>`;
             } else {
-                msgEl.innerHTML = '<span class="text-emerald-400 font-bold">Jelszó-visszaállító email elküldve!</span>';
+                msgEl.innerHTML = '<span class="text-amber-400 font-bold">A jelszó-visszaállító emailt elküldtük!</span>';
             }
         }
 
@@ -1003,7 +1001,7 @@
                         throw new Error(result.error || "Hiba történt a törlés során.");
                     }
 
-                    msgEl.innerHTML = '<span class="text-emerald-400 font-bold">A fiók sikeresen törölve lett.</span>';
+                    msgEl.innerHTML = '<span class="text-amber-400 font-bold">A fiók sikeresen törölve lett.</span>';
                     setTimeout(() => {
                         closeLoginModal();
                         location.reload();
