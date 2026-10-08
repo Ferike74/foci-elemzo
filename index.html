@@ -55,6 +55,18 @@
             text-shadow: 0 0 10px rgba(34, 211, 238, 0.8), 0 2px 4px rgba(0, 0, 0, 0.9);
         }
 
+        /* Smaragdzöld csillogó felirat */
+        .emerald-glitter-title {
+            color: #10b981;
+            font-weight: 900;
+            text-shadow: 
+                0 0 5px rgba(16, 185, 129, 0.8), 
+                0 0 10px rgba(16, 185, 129, 0.6), 
+                0 0 15px rgba(34, 211, 238, 0.4), 
+                0 2px 4px rgba(0, 0, 0, 0.9);
+            letter-spacing: 0.5px;
+        }
+
         .custom-scrollbar::-webkit-scrollbar {
             width: 5px;
         }
@@ -76,7 +88,6 @@
         
         <!-- 1. FEJLÉC -->
         <header class="glass-panel rounded-3xl px-6 py-14 md:py-20 flex flex-col items-center justify-center text-center shadow-2xl relative">
-            <!-- Bal oldali Kapcsolat gomb asztali nézetben -->
             <div class="absolute left-6 bottom-6 hidden md:flex items-center space-x-3 z-20">
                 <button onclick="openContactModal()" class="bg-black/30 hover:bg-black/60 text-cyan-300 font-bold px-4 py-2 rounded-xl shadow border border-cyan-500/30 backdrop-blur-sm transition uppercase text-xs tracking-wider">
                     Kapcsolat
@@ -89,12 +100,10 @@
                 </h1>
             </div>
 
-            <!-- Jobb felső sarok focilabda -->
             <div class="absolute right-6 top-6 hidden md:flex items-center space-x-3 z-20">
                 <span class="text-3xl filter drop-shadow-[0_0_12px_rgba(236,72,153,0.8)]">⚽</span>
             </div>
 
-            <!-- Jobb oldali gombok asztali nézetben -->
             <div class="absolute right-6 bottom-6 hidden md:flex flex-col items-end space-y-1 z-20">
                 <span id="user-status" class="text-xs text-cyan-200 mb-1 cursor-pointer hover:underline drop-shadow" onclick="openLoginModal()" title="Kattints a fiók kezeléséhez"></span>
                 <div class="flex items-center space-x-2">
@@ -107,7 +116,6 @@
                 </div>
             </div>
 
-            <!-- Mobil nézetű gombok -->
             <div class="mt-8 flex flex-col md:hidden items-center justify-center space-y-2 w-full">
                 <div class="flex items-center space-x-2">
                     <button onclick="openRegisterModal()" class="bg-pink-600/60 hover:bg-pink-500 text-white font-bold px-4 py-2 rounded-xl uppercase text-xs tracking-wider border border-pink-400/40">
@@ -155,7 +163,7 @@
             </div>
 
             <div>
-                <h2 class="text-lg font-bold text-cyan-300 mb-3 drop-shadow flex items-center gap-2">
+                <h2 class="text-lg font-bold mb-3 drop-shadow flex items-center gap-2 emerald-glitter-title">
                     <span>🌍</span> Országok és Ligák
                 </h2>
                 <div id="countries-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start"></div>
@@ -710,7 +718,6 @@
         }
 
         function toggleCountryAccordion(contentId, iconId) {
-            // Minden más kártya bezárása, hogy egyszerre csak egy legyen nyitva
             document.querySelectorAll('.country-accordion-content').forEach(el => {
                 if (el.id !== contentId) {
                     el.classList.add('hidden');
@@ -722,7 +729,6 @@
                 }
             });
 
-            // Aktuális kártya nyitása vagy zárása
             const content = document.getElementById(contentId);
             const icon = document.getElementById(iconId);
             content.classList.toggle('hidden');
