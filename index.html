@@ -710,6 +710,19 @@
         }
 
         function toggleCountryAccordion(contentId, iconId) {
+            // Minden más kártya bezárása, hogy egyszerre csak egy legyen nyitva
+            document.querySelectorAll('.country-accordion-content').forEach(el => {
+                if (el.id !== contentId) {
+                    el.classList.add('hidden');
+                }
+            });
+            document.querySelectorAll('[id^="country-icon-"]').forEach(el => {
+                if (el.id !== iconId) {
+                    el.classList.remove('rotate-180');
+                }
+            });
+
+            // Aktuális kártya nyitása vagy zárása
             const content = document.getElementById(contentId);
             const icon = document.getElementById(iconId);
             content.classList.toggle('hidden');
