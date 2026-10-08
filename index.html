@@ -12,25 +12,32 @@
     <style>
         body {
             background-color: #030712;
-            background-image: 
-                radial-gradient(circle at 50% 30%, rgba(236, 72, 153, 0.04) 0%, transparent 50%),
-                radial-gradient(circle at 10% 90%, rgba(6, 182, 212, 0.03) 0%, transparent 40%),
-                url('stadion.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Élő, interaktív animált focipálya háttér */
+        #stadium-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
         }
 
         .glass-panel {
-            background: rgba(15, 23, 42, 0.45);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(236, 72, 153, 0.35);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.25), inset 0 0 15px rgba(6, 182, 212, 0.08);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(6, 182, 212, 0.08);
         }
 
         .league-card-custom {
-            background: rgba(15, 23, 42, 0.55);
+            background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(6, 182, 212, 0.45);
@@ -40,7 +47,7 @@
         }
 
         .league-card-custom:hover {
-            background: rgba(30, 41, 59, 0.75);
+            background: rgba(30, 41, 59, 0.85);
             border-color: rgba(236, 72, 153, 0.7);
             box-shadow: 0 0 25px rgba(236, 72, 153, 0.35);
             transform: translateY(-2px);
@@ -68,6 +75,8 @@
     </style>
 </head>
 <body class="min-h-screen text-white font-sans antialiased flex flex-col justify-between">
+
+    <canvas id="stadium-canvas"></canvas>
 
     <div class="relative z-10 flex flex-col min-h-screen p-4 md:p-6 max-w-7xl mx-auto w-full space-y-6">
         
@@ -333,6 +342,118 @@
             <div id="login-message" class="text-center text-xs mt-4"></div>
         </div>
     </div>
+
+    <script>
+        const canvas = document.getElementById('stadium-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Játékosok és labda inicializálása
+        const ball = { x: canvas.width / 2, y: canvas.height / 2, vx: 3, vy: 2, radius: 6 };
+        
+        const teamA = []; // Kék csapat
+        const teamB = []; // Piros csapat
+
+        for (let i = 0; i < 5; i++) {
+            teamA.push({
+                x: canvas.width * 0.3 + Math.random() * 200,
+                y: canvas.height * 0.2 + Math.random() * (canvas.height * 0.6),
+                vx: (Math.random() - 0.5) * 1.5,
+                vy: (Math.random() - 0.5) * 1.5,
+                radius: 8,
+                targetX: 0,
+                targetY: 0
+            });
+            teamB.push({
+                x: canvas.width * 0.7 - Math.random() * 200,
+                y: canvas.height * 0.2 + Math.random() * (canvas.height * 0.6),
+                vx: (Math.random() - 0.5) * 1.5,
+                vy: (Math.random() - 0.5) * 1.5,
+                radius: 8,
+                targetX: 0,
+                targetY: 0
+            });
+        }
+
+        function animateStadium() {
+            // Sötét zöld stadion fű háttér
+            ctx.fillStyle = '#061a10';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Pálya vonalak rajzolása
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.lineWidth = 2;
+
+            // Középkör
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height / 2, 90, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Középvonal
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2, 0);
+            ctx.lineTo(canvas.width / 2, canvas.height);
+            ctx.stroke();
+
+            // Kapuk
+            ctx.strokeRect(0, canvas.height / 2 - 80, 50, 160);
+            ctx.strokeRect(canvas.width - 50, canvas.height / 2 - 80, 50, 160);
+
+            // Labda mozgása és passzolgatása
+            ball.x += ball.vx;
+            ball.y += ball.vy;
+
+            if (ball.x < 50 || ball.x > canvas.width - 50) ball.vx *= -1;
+            if (ball.y < 20 || ball.y > canvas.height - 20) ball.vy *= -1;
+
+            // Labda rajzolása
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.shadowBlur = 12;
+            ctx.shadowColor = '#ffffff';
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Team A (Kék játékosok) mozgása a labda felé
+            teamA.forEach(p => {
+                p.x += (ball.x - p.x) * 0.01 + p.vx;
+                p.y += (ball.y - p.y) * 0.01 + p.vy;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#06b6d4'; // Cyan kék
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#06b6d4';
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+
+            // Team B (Piros játékosok) mozgása
+            teamB.forEach(p => {
+                p.x += (ball.x - p.x) * 0.008 + p.vx;
+                p.y += (ball.y - p.y) * 0.008 + p.vy;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#ec4899'; // Neon rózsaszín
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#ec4899';
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+
+            requestAnimationFrame(animateStadium);
+        }
+
+        animateStadium();
+    </script>
 
     <script>
         const SUPABASE_URL = 'https://gyozibfurwsbdutwmgrl.supabase.co';
