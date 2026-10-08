@@ -17,7 +17,7 @@
             overflow-x: hidden;
         }
 
-        /* Élő, interaktív animált focipálya háttér */
+        /* Valósághű, animált stadion háttér */
         #stadium-canvas {
             position: fixed;
             top: 0;
@@ -29,17 +29,17 @@
         }
 
         .glass-panel {
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(236, 72, 153, 0.35);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(6, 182, 212, 0.08);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(6, 182, 212, 0.1);
         }
 
         .league-card-custom {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(6, 182, 212, 0.45);
             align-self: start;
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -47,7 +47,7 @@
         }
 
         .league-card-custom:hover {
-            background: rgba(30, 41, 59, 0.85);
+            background: rgba(30, 41, 59, 0.95);
             border-color: rgba(236, 72, 153, 0.7);
             box-shadow: 0 0 25px rgba(236, 72, 153, 0.35);
             transform: translateY(-2px);
@@ -354,45 +354,104 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Játékosok és labda inicializálása
-        const ball = { x: canvas.width / 2, y: canvas.height / 2, vx: 3, vy: 2, radius: 6 };
-        
-        const teamA = []; // Kék csapat
-        const teamB = []; // Piros csapat
+        // Labda objektum
+        const ball = { x: canvas.width / 2, y: canvas.height / 2, vx: 2.5, ry: 1.8, radius: 7 };
 
-        for (let i = 0; i < 5; i++) {
-            teamA.push({
-                x: canvas.width * 0.3 + Math.random() * 200,
-                y: canvas.height * 0.2 + Math.random() * (canvas.height * 0.6),
-                vx: (Math.random() - 0.5) * 1.5,
-                vy: (Math.random() - 0.5) * 1.5,
-                radius: 8,
-                targetX: 0,
-                targetY: 0
-            });
-            teamB.push({
-                x: canvas.width * 0.7 - Math.random() * 200,
-                y: canvas.height * 0.2 + Math.random() * (canvas.height * 0.6),
-                vx: (Math.random() - 0.5) * 1.5,
-                vy: (Math.random() - 0.5) * 1.5,
-                radius: 8,
-                targetX: 0,
-                targetY: 0
+        // Valódi emberi sziluettel és mozgással rendelkező játékosok generálása
+        const players = [];
+        
+        // 1. csapat (Kék mezben)
+        for (let i = 0; i < 6; i++) {
+            players.push({
+                x: canvas.width * 0.25 + Math.random() * 300,
+                y: canvas.height * 0.3 + Math.random() * (canvas.height * 0.4),
+                vx: (Math.random() - 0.5) * 1.2,
+                vy: (Math.random() - 0.5) * 1.2,
+                team: 'blue',
+                legAngle: 0,
+                speed: Math.random() * 0.05
             });
         }
 
+        // 2. csapat (Piros mezben)
+        for (let i = 0; i < 6; i++) {
+            players.push({
+                x: canvas.width * 0.55 + Math.random() * 300,
+                y: canvas.height * 0.3 + Math.random() * (canvas.height * 0.4),
+                vx: (Math.random() - 0.5) * 1.2,
+                vy: (Math.random() - 0.5) * 1.2,
+                team: 'red',
+                legAngle: 0,
+                speed: Math.random() * 0.05
+            });
+        }
+
+        function drawHumanPlayer(p) {
+            ctx.save();
+            ctx.translate(p.x, p.y);
+
+            const kitColor = p.team === 'blue' ? '#0284c7' : '#e11d48';
+            const shortsColor = '#0f172a';
+
+            // Árnyék a fűvön
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+            ctx.beginPath();
+            ctx.ellipse(0, 15, 8, 4, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Lábak (futás animáció szögfüggvénnyel)
+            p.legAngle += p.speed;
+            const legOffset = Math.sin(p.legAngle) * 6;
+
+            ctx.strokeStyle = '#fbcfe8';
+            ctx.lineWidth = 3;
+            // Bal láb
+            ctx.beginPath();
+            ctx.moveTo(-3, 8);
+            ctx.lineTo(-3 + legOffset, 16);
+            ctx.stroke();
+            // Jobb láb
+            ctx.beginPath();
+            ctx.moveTo(3, 8);
+            ctx.lineTo(3 - legOffset, 16);
+            ctx.stroke();
+
+            // Törzs (Mez)
+            ctx.fillStyle = kitColor;
+            ctx.fillRect(-5, -2, 10, 11);
+
+            // Nadrág
+            ctx.fillStyle = shortsColor;
+            ctx.fillRect(-4, 8, 8, 4);
+
+            // Fej
+            ctx.fillStyle = '#fde68a';
+            ctx.beginPath();
+            ctx.arc(0, -7, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
         function animateStadium() {
-            // Sötét zöld stadion fű háttér
-            ctx.fillStyle = '#061a10';
+            // Stadion gyep háttér sötét tónusú zöld mezsgyén
+            ctx.fillStyle = '#051b0f';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Pálya vonalak rajzolása
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-            ctx.lineWidth = 2;
+            // Fűcsíkok (Stadion mintázat)
+            ctx.fillStyle = 'rgba(10, 45, 25, 0.25);';
+            const stripWidth = 60;
+            for (let i = 0; i < canvas.width; i += stripWidth * 2) {
+                ctx.fillRect(i, 0, stripWidth, canvas.height);
+            }
 
-            // Középkör
+            // Pálya vonalak
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+            ctx.lineWidth = 3;
+
+            // Félpálya kör
             ctx.beginPath();
-            ctx.arc(canvas.width / 2, canvas.height / 2, 90, 0, Math.PI * 2);
+            ctx.arc(canvas.width / 2, canvas.height / 2, 110, 0, Math.PI * 2);
             ctx.stroke();
 
             // Középvonal
@@ -401,52 +460,37 @@
             ctx.lineTo(canvas.width / 2, canvas.height);
             ctx.stroke();
 
-            // Kapuk
-            ctx.strokeRect(0, canvas.height / 2 - 80, 50, 160);
-            ctx.strokeRect(canvas.width - 50, canvas.height / 2 - 80, 50, 160);
+            // Kapuk a széleken
+            ctx.strokeRect(0, canvas.height / 2 - 90, 60, 180);
+            ctx.strokeRect(canvas.width - 60, canvas.height / 2 - 90, 60, 180);
 
-            // Labda mozgása és passzolgatása
+            // Labda mozgása
             ball.x += ball.vx;
             ball.y += ball.vy;
 
-            if (ball.x < 50 || ball.x > canvas.width - 50) ball.vx *= -1;
-            if (ball.y < 20 || ball.y > canvas.height - 20) ball.vy *= -1;
+            if (ball.x < 70 || ball.x > canvas.width - 70) ball.vx *= -1;
+            if (ball.y < 30 || ball.y > canvas.height - 30) ball.vy *= -1;
 
-            // Labda rajzolása
+            // Labda rajzolása fényeffekttel
             ctx.beginPath();
             ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
             ctx.fillStyle = '#ffffff';
-            ctx.shadowBlur = 12;
+            ctx.shadowBlur = 15;
             ctx.shadowColor = '#ffffff';
             ctx.fill();
             ctx.shadowBlur = 0;
 
-            // Team A (Kék játékosok) mozgása a labda felé
-            teamA.forEach(p => {
-                p.x += (ball.x - p.x) * 0.01 + p.vx;
-                p.y += (ball.y - p.y) * 0.01 + p.vy;
-
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fillStyle = '#06b6d4'; // Cyan kék
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = '#06b6d4';
-                ctx.fill();
-                ctx.shadowBlur = 0;
-            });
-
-            // Team B (Piros játékosok) mozgása
-            teamB.forEach(p => {
+            // Játékosok mozgásának frissítése és rajzolása
+            players.forEach(p => {
+                // Enyhén a labda felé vonulnak
                 p.x += (ball.x - p.x) * 0.008 + p.vx;
                 p.y += (ball.y - p.y) * 0.008 + p.vy;
 
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fillStyle = '#ec4899'; // Neon rózsaszín
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = '#ec4899';
-                ctx.fill();
-                ctx.shadowBlur = 0;
+                // Pálya határain belül tartás
+                if (p.x < 50 || p.x > canvas.width - 50) p.vx *= -1;
+                if (p.y < 50 || p.y > canvas.height - 50) p.vy *= -1;
+
+                drawHumanPlayer(p);
             });
 
             requestAnimationFrame(animateStadium);
