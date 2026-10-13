@@ -635,9 +635,15 @@
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
             
-            // Szigorú Bajnokok Ligája (UCL) szűrés, hogy soha ne keverje össze a Championship-pel
+            // Ha a meccs Bajnokok Ligája, de a vizsgálott kártya NEM az UCL, akkor azonnal kizárjuk!
+            const isChampionsLeague = lowerDb.includes("champions") || lowerDb.includes("bajnokok") || lowerDb.includes("ucl") || lowerDb.includes("bl");
+            if (isChampionsLeague && leagueConfig.key !== "ucl") {
+                return false;
+            }
+
+            // Szigorú Bajnokok Ligája (UCL) szűrés
             if (leagueConfig.key === "ucl") {
-                return lowerDb.includes("champions") || lowerDb.includes("bajnokok") || lowerDb.includes("ucl") || lowerDb.includes("bl");
+                return isChampionsLeague;
             }
             
             if (leagueConfig.name === "Német Bundesliga") {
@@ -758,7 +764,7 @@
         }
 
         function openLeagueModal(league, leagueMatches) {
-            currentActiveLeague = league;             
+            currentActiveLeague = league;              
             currentActiveLeagueMatches = leagueMatches; 
             document.body.style.overflow = 'hidden';
 
