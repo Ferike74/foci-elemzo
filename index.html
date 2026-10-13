@@ -635,6 +635,11 @@
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
             
+            // Szigorú Bajnokok Ligája (UCL) szűrés, hogy soha ne keverje össze a Championship-pel
+            if (leagueConfig.key === "ucl") {
+                return lowerDb.includes("champions") || lowerDb.includes("bajnokok") || lowerDb.includes("ucl") || lowerDb.includes("bl");
+            }
+            
             if (leagueConfig.name === "Német Bundesliga") {
                 if (lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria")) return false;
             }
