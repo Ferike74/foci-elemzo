@@ -635,8 +635,13 @@
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
             
+            // Ha a liganév Championship, de a kártya NEM a Championship, akkor kizárjuk
+            if (lowerDb.includes("championship") && leagueConfig.key !== "championship") {
+                return false;
+            }
+
             // Ha a meccs Bajnokok Ligája, de a vizsgálott kártya NEM az UCL, akkor azonnal kizárjuk!
-            const isChampionsLeague = lowerDb.includes("champions") || lowerDb.includes("bajnokok") || lowerDb.includes("ucl") || lowerDb.includes("bl");
+            const isChampionsLeague = (lowerDb.includes("champions") || lowerDb.includes("bajnokok") || lowerDb.includes("ucl") || lowerDb.includes("bl")) && !lowerDb.includes("championship");
             if (isChampionsLeague && leagueConfig.key !== "ucl") {
                 return false;
             }
