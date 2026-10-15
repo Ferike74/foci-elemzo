@@ -228,27 +228,32 @@
 
     <!-- Adatvédelmi Nyilatkozat Modal -->
     <div id="privacy-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
+        <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto custom-scrollbar">
             <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Adatvédelmi Nyilatkozat és Adatkezelési Tájékoztató</h3>
-            <div class="space-y-4 text-xs leading-relaxed text-gray-200">
-                <p><strong>1. Adatkezelő adatai:</strong><br>
-                Név: Sütő Ferenc e.v.<br>
-                Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B<br>
-                Adószám: 92466175-1-28<br>
-                Nyilvántartási szám: 62943248<br>
-                E-mail: info@focielemzesek.com</p>
+            <div class="space-y-3 text-xs leading-relaxed text-gray-200 text-justify">
+                <p><strong>1. AZ ADATKEZELŐ ADATAI</strong><br>
+                A weboldal üzemeltetője és az adatkezelő:<br>
+                - Név: Sütő Ferenc egyéni vállalkozó<br>
+                - Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B<br>
+                - Nyilvántartási szám: 62943248<br>
+                - Adószám: 92466175-1-28<br>
+                - E-mail elérhetőség: info@focielemzesek.com</p>
 
-                <p><strong>2. Kezelt adatok köre:</strong> A regisztráció és a Weboldal használata során a következő adatokat kezeljük: e-mail cím, jelszó (titkosított formában), valamint a fizetési tranzakciós adatok.</p>
+                <p><strong>2. A KEZELT SZEMÉLYES ADATOK KÖRE</strong><br>
+                A regisztráció és a szolgáltatás igénybevétele során az alábbi adatokat kezeljük: a Felhasználó által megadott e-mail cím, titkosított jelszó, valamint a fizetési tranzakciókhoz kapcsolódó technikai adatok. A bankkártyaadatait a Szolgáltató nem tárolja, azokat közvetlenül a biztonságos fizetési partnerünk (Stripe Inc.) kezeli a nemzetközi bankbiztonsági előírásoknak (PCI-DSS) megfelelően.</p>
 
-                <p><strong>3. Az adatkezelés célja és jogalapja:</strong> A felhasználói fiók azonosítása, a prémium előfizetések kezelése, számlázás és a szolgáltatás nyújtása.</p>
+                <p><strong>3. AZ ADATKEZELÉS CÉLJA ÉS JOGALAPJA</strong><br>
+                Az adatkezelés célja a Felhasználó azonosítása, a regisztrációs fiók biztosítása, a prémium előfizetések kezelése, számlázás, valamint a szerződéses kötelezettségek teljesítése. Az adatkezelés jogalapja a Felhasználó önkéntes hozzájárulása, valamint a megkötött előfizetői szerződés teljesítése.</p>
 
-                <p><strong>4. Adatfeldolgozók:</strong><br>
-                - Supabase Inc. (Adatbázis-kezelés és hitelesítés)<br>
-                - Vercel Inc. (Tárhelyszolgáltatás)<br>
-                - Stripe Inc. (Online bankkártyás fizetés feldolgozása)</p>
+                <p><strong>4. ADATFELDOLGOZÓK ÉS ADATTOVÁBBÍTÁS</strong><br>
+                A szolgáltatás technikai fenntartása érdekében harmadik fél adatfeldolgozókat veszünk igénybe:<br>
+                - Tárhelyszolgáltatás: Vercel Inc. (440 N Barranca Ave #4133 Covina, CA 91723, USA)<br>
+                - Adatbázis és hitelesítés: Supabase Inc.<br>
+                - Fizetési tranzakciók: Stripe Inc.</p>
 
-                <p><strong>5. Felhasználói jogok:</strong> A Felhasználó bármikor kérhet tájékoztatást adatai kezeléséről, kérheti azok helyesbítését, illetve fiókja törlését a profiljában vagy az info@focielemzesek.com e-mail címen.</p>
+                <p><strong>5. A FELHASZNÁLÓI JOGOK ÉS JOGORVOSLAT</strong><br>
+                A Felhasználó bármikor jogosult tájékoztatást kérni a kezelés alatt álló személyes adatairól, kérheti azok helyesbítését, módosítását, illetve fiókjának és adatainak végleges törlését a weboldalon található fióktörlési funkcióval vagy az info@focielemzesek.com e-mail címre küldött nyilatkozattal.</p>
             </div>
             <div class="mt-6 text-center border-t border-cyan-500/20 pt-4">
                 <button onclick="closePrivacyModal()" class="bg-slate-900/50 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
@@ -258,27 +263,27 @@
 
     <!-- Felhasználási Feltételek Modal -->
     <div id="terms-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
+        <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto custom-scrollbar">
             <button onclick="closeTermsModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Általános Szerződési Feltételek (ÁSZF)</h3>
-            <div class="space-y-4 text-xs leading-relaxed text-gray-200">
-                <p><strong>1. Szolgáltató adatai:</strong><br>
-                Név: Sütő Ferenc egyéni vállalkozó<br>
-                Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B<br>
-                Adószám: 92466175-1-28<br>
-                Nyilvántartási szám: 62943248<br>
-                E-mail: info@focielemzesek.com</p>
+            <div class="space-y-3 text-xs leading-relaxed text-gray-200 text-justify">
+                <p><strong>1. SZOLGÁLTATÓI ADATOK</strong><br>
+                A weboldalon elérhető szolgáltatás nyújtója Sütő Ferenc egyéni vállalkozó (Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B; Nyilvántartási szám: 62943248; Adószám: 92466175-1-28; E-mail: info@focielemzesek.com).</p>
 
-                <p><strong>2. A szolgáltatás jellege és felelősségkizárás:</strong> A Weboldal mesterséges intelligencián és statisztikai szimulációkon alapuló labdarúgó-mérkőzés elemzéseket nyújt. Az adatok kizárólag tájékoztató jellegűek. A Szolgáltató nem vállal felelősséget a sportfogadásokból eredő pénzügyi veszteségekért; minden felhasználó a saját felelősségére fogad.</p>
+                <p><strong>2. A SZOLGÁLTATÁS TÁRGYA ÉS FELELŐSSÉGKIZÁRÁS (DISCLAIMER)</strong><br>
+                A weboldal mesterséges intelligencián és statisztikai adatsorokon alapuló labdarúgó-mérkőzés elemzéseket, szimulációkat és előrejelzéseket tesz közzé. Az oldalon található összes információ kizárólag információs és statisztikai jellegű. A Szolgáltató semmilyen garanciát nem vállal az elemzések pontosságáért, és kifejezetten kizárja a felelősségét a sportfogadásokból, tippekből eredő bármilyen közvetlen vagy közvetett pénzügyi veszteségért. A sportfogadás kockázatos; a Felhasználó kizárólag a saját saját felelősségére hoz döntést. A Szolgáltató nem szerencsejáték-szervező.</p>
 
-                <p><strong>3. Előfizetés és fizetési feltételek:</strong><br>
-                - Próbaidőszak: A regisztráció után 3 napos ingyenes próbaidőszak jár.<br>
-                - Előfizetési díj: 7 999 Ft / hónap (alanyi adómentes).<br>
-                - Automatikus megújulás: Amennyiben a felhasználó a 3 napon belül nem mondja le az előfizetést, a rendszer automatikusan levonja a havi díjat minden hónapban a lemondásig.</p>
+                <p><strong>3. ELŐFIZETÉSI FELTÉTELEK ÉS AUTOMATIKUS MEGÚJULÁS</strong><br>
+                - Regisztrációt követően a Felhasználó <strong>3 napos ingyenes próbaidőszakban</strong> részesül.<br>
+                - Amennyiben a Felhasználó a 3 napos próbaidőszak letelte előtt nem mondja le az előfizetését, a rendszer automatikusan terheli a megadott bankkártyát a havi előfizetési díjjal.<br>
+                - Az előfizetés díja: <strong>7 999 Ft / hónap</strong> (Alanyi adómentes szolgáltatás).<br>
+                - Az előfizetés minden hónapban automatikusan megújul, és a rendszer addig vonja havonta az összeget, amíg a Felhasználó azt aktívan le nem mondja.</p>
 
-                <p><strong>4. Lemondás és fióktörlés:</strong> Az előfizetés bármikor lemondható. A lemondás a következő ciklustól lép életbe. A felhasználó bármikor törölheti a fiókját is.</p>
+                <p><strong>4. LEMONDÁS ÉS FIÓKTÖRLÉS</strong><br>
+                A Felhasználó az előfizetését bármikor indoklás nélkül lemondhatja a fiókkezelő felületen keresztül vagy az ügyfélszolgálati e-mail címen. A lemondás a következő számlázási ciklusra vonatkozik; a már kifizetett időszakra a szolgáltatás teljes körűen elérhető marad. A Felhasználó bármikor jogosult a fiókját véglegesen törölni.</p>
 
-                <p><strong>5. Elállási jog:</strong> A digitális tartalom azonnali biztosítása miatt a felhasználó tudomásul veszi, hogy a teljesítés megkezdésével elveszíti a 14 napos elállási jogát.</p>
+                <p><strong>5. ELÁLLÁSI JOG KIZÁRÁSA</strong><br>
+                Mivel a weboldal digitális, azonnal elérhető online adattartalmat és elemzéseket biztosít, a Felhasználó a regisztrációval és a fizetés megkezdésével kifejezetten kéri a szolgáltatás azonnali teljesítését, és tudomásul veszi, hogy a teljesítés megkezdését követően elveszíti a 14 napos elállási jogát.</p>
             </div>
             <div class="mt-6 text-center border-t border-cyan-500/20 pt-4">
                 <button onclick="closeTermsModal()" class="bg-slate-900/50 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
