@@ -178,7 +178,9 @@
         <!-- LÁBLÉC -->
         <footer class="text-center text-xs text-gray-300 pb-2 drop-shadow space-y-2 border-t border-cyan-500/20 pt-4">
             <div>&copy; 2026 Sportfogadás Elemző Agent. Cyberpunk Stadium Grid. Minden jog fenntartva.</div>
-            <div class="flex justify-center space-x-4 text-cyan-300">
+            <div class="flex justify-center flex-wrap gap-x-4 gap-y-1 text-cyan-300">
+                <button onclick="openImpressumModal()" class="hover:text-pink-300 underline transition">Impresszum</button>
+                <span>|</span>
                 <button onclick="openPrivacyModal()" class="hover:text-pink-300 underline transition">Adatvédelmi nyilatkozat</button>
                 <span>|</span>
                 <button onclick="openTermsModal()" class="hover:text-pink-300 underline transition">Felhasználási feltételek</button>
@@ -201,6 +203,34 @@
                 <a href="mailto:info@focielemzesek.com" class="text-cyan-300 font-black text-base md:text-lg tracking-wide hover:underline">info@focielemzesek.com</a>
             </div>
             <button onclick="closeContactModal()" class="bg-slate-900/50 hover:bg-slate-900 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition border border-cyan-500/30">Bezárás</button>
+        </div>
+    </div>
+
+    <!-- Impresszum Modal -->
+    <div id="impressum-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto custom-scrollbar">
+            <button onclick="closeImpressumModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
+            <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Impresszum</h3>
+            <div class="space-y-3 text-xs leading-relaxed text-gray-200 text-justify">
+                <p><strong>SZOLGÁLTATÓ ADATAI:</strong><br>
+                - Név: Sütő Ferenc egyéni vállalkozó[cite: 7]<br>
+                - Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7]<br>
+                - Nyilvántartási szám: 62943248[cite: 7]<br>
+                - Adószám: 92466175-1-28[cite: 7]<br>
+                - Statisztikai számjel: 92466175-6039-231-08[cite: 7]<br>
+                - Főtevékenység: 603901 – Egyéb tartalomterjesztési tevékenység[cite: 7]<br>
+                - E-mail: info@focielemzesek.com</p>
+
+                <p><strong>TÁRHELYSZOLGÁLTATÓ ADATAI:</strong><br>
+                - Név: Vercel Inc.<br>
+                - Székhely: 440 N Barranca Ave #4133 Covina, CA 91723, USA</p>
+
+                <p><strong>JOGI NYILATKOZAT:</strong><br>
+                A weboldalon található minden tartalom, statisztikai elemzés és szimuláció szerzői jogi védelem alatt áll. Az adatok felhasználása kizárólag saját felelősségre történhet.</p>
+            </div>
+            <div class="mt-6 text-center border-t border-cyan-500/20 pt-4">
+                <button onclick="closeImpressumModal()" class="bg-slate-900/50 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
+            </div>
         </div>
     </div>
 
@@ -234,10 +264,10 @@
             <div class="space-y-3 text-xs leading-relaxed text-gray-200 text-justify">
                 <p><strong>1. AZ ADATKEZELŐ ADATAI</strong><br>
                 A weboldal üzemeltetője és az adatkezelő:<br>
-                - Név: Sütő Ferenc egyéni vállalkozó<br>
-                - Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B<br>
-                - Nyilvántartási szám: 62943248<br>
-                - Adószám: 92466175-1-28<br>
+                - Név: Sütő Ferenc egyéni vállalkozó[cite: 7]<br>
+                - Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7]<br>
+                - Nyilvántartási szám: 62943248[cite: 7]<br>
+                - Adószám: 92466175-1-28[cite: 7]<br>
                 - E-mail elérhetőség: info@focielemzesek.com</p>
 
                 <p><strong>2. A KEZELT SZEMÉLYES ADATOK KÖRE</strong><br>
@@ -247,7 +277,7 @@
                 Az adatkezelés célja a Felhasználó azonosítása, a regisztrációs fiók biztosítása, a prémium előfizetések kezelése, számlázás, valamint a szerződéses kötelezettségek teljesítése. Az adatkezelés jogalapja a Felhasználó önkéntes hozzájárulása, valamint a megkötött előfizetői szerződés teljesítése.</p>
 
                 <p><strong>4. ADATFELDOLGOZÓK ÉS ADATTOVÁBBÍTÁS</strong><br>
-                A szolgáltatás technikai fenntartása érdekében harmadik fél adatfeldolgozókat veszünk igénybe:<br>
+                A szolgáltatás technikai fenntartása érdekében harmadik fél feldolgozókat veszünk igénybe:<br>
                 - Tárhelyszolgáltatás: Vercel Inc. (440 N Barranca Ave #4133 Covina, CA 91723, USA)<br>
                 - Adatbázis és hitelesítés: Supabase Inc.<br>
                 - Fizetési tranzakciók: Stripe Inc.</p>
@@ -268,15 +298,15 @@
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Általános Szerződési Feltételek (ÁSZF)</h3>
             <div class="space-y-3 text-xs leading-relaxed text-gray-200 text-justify">
                 <p><strong>1. SZOLGÁLTATÓI ADATOK</strong><br>
-                A weboldalon elérhető szolgáltatás nyújtója Sütő Ferenc egyéni vállalkozó (Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B; Nyilvántartási szám: 62943248; Adószám: 92466175-1-28; E-mail: info@focielemzesek.com).</p>
+                A weboldalon elérhető szolgáltatás nyújtója Sütő Ferenc egyéni vállalkozó (Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7]; Nyilvántartási szám: 62943248[cite: 7]; Adószám: 92466175-1-28[cite: 7]; E-mail: info@focielemzesek.com).</p>
 
                 <p><strong>2. A SZOLGÁLTATÁS TÁRGYA ÉS FELELŐSSÉGKIZÁRÁS (DISCLAIMER)</strong><br>
-                A weboldal mesterséges intelligencián és statisztikai adatsorokon alapuló labdarúgó-mérkőzés elemzéseket, szimulációkat és előrejelzéseket tesz közzé. Az oldalon található összes információ kizárólag információs és statisztikai jellegű. A Szolgáltató semmilyen garanciát nem vállal az elemzések pontosságáért, és kifejezetten kizárja a felelősségét a sportfogadásokból, tippekből eredő bármilyen közvetlen vagy közvetett pénzügyi veszteségért. A sportfogadás kockázatos; a Felhasználó kizárólag a saját saját felelősségére hoz döntést. A Szolgáltató nem szerencsejáték-szervező.</p>
+                A weboldal mesterséges intelligencián és statisztikai adatsorokon alapuló labdarúgó-mérkőzés elemzéseket, szimulációkat és előrejelzéseket tesz közzé. Az oldalon található összes információ kizárólag információs és statisztikai jellegű. A Szolgáltató semmilyen garanciát nem vállal az elemzések pontosságáért, és kifejezetten kizárja a felelősségét a sportfogadásokból, tippekből eredő bármilyen közvetlen vagy közvetett pénzügyi veszteségért. A sportfogadás kockázatos; a Felhasználó kizárólag a saját felelősségére hoz döntést. A Szolgáltató nem szerencsejáték-szervező.</p>
 
                 <p><strong>3. ELŐFIZETÉSI FELTÉTELEK ÉS AUTOMATIKUS MEGÚJULÁS</strong><br>
                 - Regisztrációt követően a Felhasználó <strong>3 napos ingyenes próbaidőszakban</strong> részesül.<br>
                 - Amennyiben a Felhasználó a 3 napos próbaidőszak letelte előtt nem mondja le az előfizetését, a rendszer automatikusan terheli a megadott bankkártyát a havi előfizetési díjjal.<br>
-                - Az előfizetés díja: <strong>7 999 Ft / hónap</strong> (Alanyi adómentes szolgáltatás).<br>
+                - Az előfizetés díja: <strong>7 999 Ft / hónap</strong> (Alanyi adómentes szolgáltatás)[cite: 7].<br>
                 - Az előfizetés minden hónapban automatikusan megújul, és a rendszer addig vonja havonta az összeget, amíg a Felhasználó azt aktívan le nem mondja.</p>
 
                 <p><strong>4. LEMONDÁS ÉS FIÓKTÖRLÉS</strong><br>
@@ -791,6 +821,7 @@
         function closeAllModalsAndAccordions() {
             document.getElementById('league-matches-modal').classList.add('hidden');
             document.getElementById('full-analysis-modal').classList.add('hidden');
+            document.getElementById('impressum-modal').classList.add('hidden');
             document.getElementById('privacy-modal').classList.add('hidden');
             document.getElementById('terms-modal').classList.add('hidden');
             document.getElementById('contact-modal').classList.add('hidden');
@@ -910,6 +941,14 @@
             document.getElementById('login-modal').classList.remove('hidden'); 
         }
         function closeLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }
+
+        function openImpressumModal() {
+            document.body.style.overflow = 'hidden';
+            document.getElementById('impressum-modal').classList.remove('hidden');
+        }
+        function closeImpressumModal() {
+            closeAllModalsAndAccordions();
+        }
 
         function openPrivacyModal() {
             document.body.style.overflow = 'hidden';
