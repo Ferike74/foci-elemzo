@@ -230,11 +230,25 @@
     <div id="privacy-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
             <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
-            <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Adatvédelmi Nyilatkozat</h3>
+            <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Adatvédelmi Nyilatkozat és Adatkezelési Tájékoztató</h3>
             <div class="space-y-4 text-xs leading-relaxed text-gray-200">
-                <p><strong>1. Adatkezelő adatai:</strong> A Focielemzések platform üzemeltetője elkötelezett a felhasználók személyes adatainak védelme mellett.</p>
-                <p><strong>2. Kezelt adatok köre:</strong> A regisztráció során kizárólag az Ön által megadott e-mail címet és hitelesítési adatokat tároljuk (Supabase rendszeren keresztül).</p>
-                <p><strong>3. Az adatkezelés célja:</strong> A fiók azonosítása és a prémium előfizetés kezelése.</p>
+                <p><strong>1. Adatkezelő adatai:</strong><br>
+                Név: Sütő Ferenc e.v.<br>
+                Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B<br>
+                Adószám: 92466175-1-28<br>
+                Nyilvántartási szám: 62943248<br>
+                E-mail: info@focielemzesek.com</p>
+
+                <p><strong>2. Kezelt adatok köre:</strong> A regisztráció és a Weboldal használata során a következő adatokat kezeljük: e-mail cím, jelszó (titkosított formában), valamint a fizetési tranzakciós adatok.</p>
+
+                <p><strong>3. Az adatkezelés célja és jogalapja:</strong> A felhasználói fiók azonosítása, a prémium előfizetések kezelése, számlázás és a szolgáltatás nyújtása.</p>
+
+                <p><strong>4. Adatfeldolgozók:</strong><br>
+                - Supabase Inc. (Adatbázis-kezelés és hitelesítés)<br>
+                - Vercel Inc. (Tárhelyszolgáltatás)<br>
+                - Stripe Inc. (Online bankkártyás fizetés feldolgozása)</p>
+
+                <p><strong>5. Felhasználói jogok:</strong> A Felhasználó bármikor kérhet tájékoztatást adatai kezeléséről, kérheti azok helyesbítését, illetve fiókja törlését a profiljában vagy az info@focielemzesek.com e-mail címen.</p>
             </div>
             <div class="mt-6 text-center border-t border-cyan-500/20 pt-4">
                 <button onclick="closePrivacyModal()" class="bg-slate-900/50 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
@@ -246,11 +260,25 @@
     <div id="terms-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto">
             <button onclick="closeTermsModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
-            <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Felhasználási Feltételek és Jogi Nyilatkozat</h3>
+            <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Általános Szerződési Feltételek (ÁSZF)</h3>
             <div class="space-y-4 text-xs leading-relaxed text-gray-200">
-                <p><strong>1. A szolgáltatás jellege:</strong> Mesterséges intelligencián és statisztikai szimulációkon alapuló elemző platform.</p>
-                <p><strong>2. Felelősségvállalás:</strong> Az információk felhasználása saját felelősségre történik.</p>
-                <p><strong>3. Előfizetés:</strong> A 3 napos próbaidőszak után előfizetés szükséges, ami bármikor lemondható.</p>
+                <p><strong>1. Szolgáltató adatai:</strong><br>
+                Név: Sütő Ferenc egyéni vállalkozó<br>
+                Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B<br>
+                Adószám: 92466175-1-28<br>
+                Nyilvántartási szám: 62943248<br>
+                E-mail: info@focielemzesek.com</p>
+
+                <p><strong>2. A szolgáltatás jellege és felelősségkizárás:</strong> A Weboldal mesterséges intelligencián és statisztikai szimulációkon alapuló labdarúgó-mérkőzés elemzéseket nyújt. Az adatok kizárólag tájékoztató jellegűek. A Szolgáltató nem vállal felelősséget a sportfogadásokból eredő pénzügyi veszteségekért; minden felhasználó a saját felelősségére fogad.</p>
+
+                <p><strong>3. Előfizetés és fizetési feltételek:</strong><br>
+                - Próbaidőszak: A regisztráció után 3 napos ingyenes próbaidőszak jár.<br>
+                - Előfizetési díj: 7 999 Ft / hónap (alanyi adómentes).<br>
+                - Automatikus megújulás: Amennyiben a felhasználó a 3 napon belül nem mondja le az előfizetést, a rendszer automatikusan levonja a havi díjat minden hónapban a lemondásig.</p>
+
+                <p><strong>4. Lemondás és fióktörlés:</strong> Az előfizetés bármikor lemondható. A lemondás a következő ciklustól lép életbe. A felhasználó bármikor törölheti a fiókját is.</p>
+
+                <p><strong>5. Elállási jog:</strong> A digitális tartalom azonnali biztosítása miatt a felhasználó tudomásul veszi, hogy a teljesítés megkezdésével elveszíti a 14 napos elállási jogát.</p>
             </div>
             <div class="mt-6 text-center border-t border-cyan-500/20 pt-4">
                 <button onclick="closeTermsModal()" class="bg-slate-900/50 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
