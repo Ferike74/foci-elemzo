@@ -291,29 +291,38 @@
         </div>
     </div>
 
-    <!-- Felhasználási Feltételek Modal -->
+    <!-- Felhasználási Feltételek Modal (Vaskosan Védő, Teljeskörű ÁSZF) -->
     <div id="terms-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto custom-scrollbar">
             <button onclick="closeTermsModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Általános Szerződési Feltételek (ÁSZF)</h3>
             <div class="space-y-3 text-xs leading-relaxed text-gray-200 text-justify">
-                <p><strong>1. SZOLGÁLTATÓI ADATOK</strong><br>
-                A weboldalon elérhető szolgáltatás nyújtója Sütő Ferenc egyéni vállalkozó (Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7]; Nyilvántartási szám: 62943248[cite: 7]; Adószám: 92466175-1-28[cite: 7]; E-mail: info@focielemzesek.com).</p>
+                <p><strong>1. SZOLGÁLTATÓI ADATOK ÉS A HATÁLY</strong><br>
+                A weboldalon elérhető szolgáltatás nyújtója és üzemeltetője Sütő Ferenc egyéni vállalkozó (Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7]; Nyilvántartási szám: 62943248[cite: 7]; Adószám: 92466175-1-28[cite: 7]; E-mail: info@focielemzesek.com). Jelen ÁSZF hatálya kiterjed minden olyan kereskedelmi és információs szolgáltatásra, amelyet a weboldalon keresztül nyújtanak.</p>
 
-                <p><strong>2. A SZOLGÁLTATÁS TÁRGYA ÉS FELELŐSSÉGKIZÁRÁS (DISCLAIMER)</strong><br>
-                A weboldal mesterséges intelligencián és statisztikai adatsorokon alapuló labdarúgó-mérkőzés elemzéseket, szimulációkat és előrejelzéseket tesz közzé. Az oldalon található összes információ kizárólag információs és statisztikai jellegű. A Szolgáltató semmilyen garanciát nem vállal az elemzések pontosságáért, és kifejezetten kizárja a felelősségét a sportfogadásokból, tippekből eredő bármilyen közvetlen vagy közvetett pénzügyi veszteségért. A sportfogadás kockázatos; a Felhasználó kizárólag a saját felelősségére hoz döntést. A Szolgáltató nem szerencsejáték-szervező.</p>
+                <p><strong>2. FELELŐSSÉGKIZÁRÁS ÉS TELJES KÖRŰ JOGI NYILATKOZAT (DISCLAIMER)</strong><br>
+                A weboldal mesterséges intelligencián, statisztikai modelleken és matematikai szimulációkon alapuló labdarúgó-mérkőzés elemzéseket tesz közzé. Az oldalon található összes adat, becslés, statisztika és szimuláció kizárólag információs, statisztikai és szórakoztató jellegű. A Szolgáltató semmilyen garanciát vagy szavatosságot nem vállal az adatok pontosságáért, helyességéért vagy a sportesemények kimeneteléért. A Szolgáltató <strong>kifejezetten és teljes körűen kizárja a felelősségét</strong> a sportfogadásokból, tippekből, vagy a statisztikák félreértelmezéséből eredő bármilyen közvetlen vagy közvetett anyagi és nem vagyoni kárért, profitveszteségért vagy tőkevesztésért. A sportfogadás magas kockázatú tevékenység; a Felhasználó kizárólag a saját felelősségére, saját elhatározásából és saját tőkéjéből hoz döntést a fogadásokról. A Szolgáltató nem minősül szerencsejáték-szervezőnek, nem végez engedélyköteles fogadásszervezést, és nem pénzügyi vagy befektetési tanácsadó.</p>
 
-                <p><strong>3. ELŐFIZETÉSI FELTÉTELEK ÉS AUTOMATIKUS MEGÚJULÁS</strong><br>
-                - Regisztrációt követően a Felhasználó <strong>3 napos ingyenes próbaidőszakban</strong> részesül.<br>
-                - Amennyiben a Felhasználó a 3 napos próbaidőszak letelte előtt nem mondja le az előfizetését, a rendszer automatikusan terheli a megadott bankkártyát a havi előfizetési díjjal.<br>
-                - Az előfizetés díja: <strong>7 999 Ft / hónap</strong> (Alanyi adómentes szolgáltatás)[cite: 7].<br>
-                - Az előfizetés minden hónapban automatikusan megújul, és a rendszer addig vonja havonta az összeget, amíg a Felhasználó azt aktívan le nem mondja.</p>
+                <p><strong>3. ELŐFIZETÉSI DÍJAK ÉS AUTOMATIKUS MEGÚJULÁS</strong><br>
+                - A regisztrációt követően a Felhasználó <strong>3 napos ingyenes próbaidőszakban</strong> részesül a rendszer tesztelésére.<br>
+                - Amennyiben a Felhasználó a 3 napos próbaidőszak lejárta előtt nem mondja le a regisztrációját vagy előfizetését, a rendszer automatikusan terheli a megadott bankkártyáját a havi előfizetési díjjal.<br>
+                - Az előfizetés havi díja: <strong>7 999 Ft / hónap</strong> (amely összeg az alanyi adómentesség miatt áfát nem tartalmaz[cite: 7]).<br>
+                - <strong>Ismétlődő bankkártyás terhelés (Recurring Billing):</strong> Az előfizetés minden hónapban automatikusan megújul. A fizetési szolgáltató (Stripe Inc.) a havi díjat minden számlázási ciklus végén automatikusan levonja mindaddig, amíg a Felhasználó az előfizetését aktívan le nem mondja. A Felhasználó a regisztrációval kifejezetten felhatalmazást ad és hozzájárul az ismétlődő bankkártyás terhelések végrehajtásához.</p>
 
-                <p><strong>4. LEMONDÁS ÉS FIÓKTÖRLÉS</strong><br>
-                A Felhasználó az előfizetését bármikor indoklás nélkül lemondhatja a fiókkezelő felületen keresztül vagy az ügyfélszolgálati e-mail címen. A lemondás a következő számlázási ciklusra vonatkozik; a már kifizetett időszakra a szolgáltatás teljes körűen elérhető marad. A Felhasználó bármikor jogosult a fiókját véglegesen törölni.</p>
+                <p><strong>4. LEMONDÁS, FELMONDÁS ÉS FIÓKTÖRLÉS</strong><br>
+                A Felhasználó az előfizetését bármikor indoklás nélkül lemondhatja a fiókkezelő felületen keresztül vagy az ügyfélszolgálati e-mail címen. A lemondás a következő számlázási ciklusra vonatkozik; a már kifizetett időszakra a szolgáltatás teljes körűen elérhető marad, időarányos vagy teljes visszatérítést a Szolgáltató nem köteles biztosítani. A Felhasználó bármikor jogosult a fiókját és adatait véglegesen törölni a rendszerből.</p>
 
-                <p><strong>5. ELÁLLÁSI JOG KIZÁRÁSA</strong><br>
-                Mivel a weboldal digitális, azonnal elérhető online adattartalmat és elemzéseket biztosít, a Felhasználó a regisztrációval és a fizetés megkezdésével kifejezetten kéri a szolgáltatás azonnali teljesítését, és tudomásul veszi, hogy a teljesítés megkezdését követően elveszíti a 14 napos elállási jogát.</p>
+                <p><strong>5. ELÁLLÁSI JOG KIZÁRÁSA (DIGITÁLIS TARTALOM)</strong><br>
+                Mivel a weboldal digitális, nem kézzelfogható online adattartalmat és azonnal elérhető elemzéseket biztosít, a Felhasználó a regisztrációval és a fizetés megkezdésével kifejezetten kéri a szolgáltatás azonnali teljesítésének megkezdését, és tudomásul veszi, hogy a teljesítés megkezdését követően <strong>elveszíti a 14 napos elállási jogát</strong>.</p>
+
+                <p><strong>6. VISSZATERHELÉSEK (CHARGEBACK) ÉS JOGVITÁK KEZELÉSE</strong><br>
+                Amennyiben a Felhasználó alaptalanul kezdeményez banki visszaterhelést (chargeback) a Stripe-on vagy a bankján keresztül anélkül, hogy a Szolgáltatóval a problémát előzetesen írásban jelezte volna vagy az előfizetését szabályszerűen lemondta volna, a Szolgáltató fenntartja a jogot a Felhasználói fiók azonnali felfüggesztésére vagy törlésére, a szolgáltatásból való kitiltásra, valamint a jogi úton történő igényérvényesítésre a felmerült költségek, tranzakciós díjak és elmaradott összegek behajtása érdekében.</p>
+
+                <p><strong>7. JOGOSULATLAN FIÓKMEGOSZTÁS ÉS VISSZAÉLÉSEK TILTÁSA</strong><br>
+                A felhasználói fiók kizárólag az előfizető személyes használatára szolgál. Szigorúan tilos a belépési adatok (e-mail, jelszó) megosztása harmadik felekkel, vagy több személy általi egyidejű használata (fiókmegosztás). Olyan gyanús, automatizált lekérdezések vagy többszörös belépések esetén, amelyek visszaélésre utalnak, a Szolgáltató jogosult a fiókot azonnal, kártérítési kötelezettség nélkül törölni.</p>
+
+                <p><strong>8. FELELŐSSÉGKORLÁTOZÁS ÉS VIS MAIOR</strong><br>
+                A Szolgáltató nem vállal felelősséget a harmadik féltől származó rendszerek (pl. Vercel tárhely, Supabase adatbázis, Stripe fizetési kapu, vagy külső sport adatszolgáltató API-k) esetleges leállásából, technikai hibáiból vagy karbantartásából eredő károkért. Vis maior helyzetekben (elemi csapás, áramszünet, globális internetes hálózati zavar, kibertámadás) a Szolgáltató teljes mértékben mentesül a szerződéses kötelezettségeinek teljesítése alól.</p>
             </div>
             <div class="mt-6 text-center border-t border-cyan-500/20 pt-4">
                 <button onclick="closeTermsModal()" class="bg-slate-900/50 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
