@@ -270,7 +270,7 @@
                 - Adószám: 92466175-1-28[cite: 7]<br>
                 - E-mail elérhetőség: info@focielemzesek.com</p>
 
-                <p><strong>2. A KEZELT SZEMÉLYES ADATok KÖRE</strong><br>
+                <p><strong>2. A KEZELT SZEMÉLYES ADATOK KÖRE</strong><br>
                 A regisztráció és a szolgáltatás igénybevétele során az alábbi adatokat kezeljük: a Felhasználó által megadott e-mail cím, titkosított jelszó, valamint a fizetési tranzakciókhoz kapcsolódó technikai adatok. A bankkártyaadatait a Szolgáltató nem tárolja, azokat közvetlenül a biztonságos fizetési partnerünk (Stripe Inc.) kezeli a nemzetközi bankbiztonsági előírásoknak (PCI-DSS) megfelelően.</p>
 
                 <p><strong>3. AZ ADATKEZELÉS CÉLJA ÉS JOGALAPJA</strong><br>
@@ -725,7 +725,6 @@
             
             // Szigorú szétválasztás a Bundesliga és a 2. Bundesliga között
             const isSecondBundesliga = lowerDb.includes("2. bundesliga") || lowerDb.includes("bundesliga 2") || lowerDb.includes("2bundesliga");
-            
             if (leagueConfig.key === "bundesliga2") {
                 return isSecondBundesliga;
             }
@@ -733,9 +732,10 @@
                 if (isSecondBundesliga) return false;
             }
 
-            // Szigorú szétválasztás a Svájci Kupa, Svájci Szuperliga és Olasz Kupa között
+            // Szigorú szétválasztás a Svájci Kupa, Svájci Szuperliga és a Szerb Szuperliga között
             const isSwissCup = lowerDb.includes("svájci kupa") || lowerDb.includes("swiss cup");
-            const isSwissLeague = (lowerDb.includes("svájci") || lowerDb.includes("super league") || lowerDb.includes("szuperliga")) && !isSwissCup && !lowerDb.includes("görög") && !lowerDb.includes("szerb");
+            const isSerbian = lowerDb.includes("szerb") || lowerDb.includes("serbia");
+            const isSwissLeague = (lowerDb.includes("svájci") || lowerDb.includes("super league") || (lowerDb.includes("szuperliga") && !isSerbian)) && !isSwissCup;
             const isItalianCup = lowerDb.includes("olasz kupa") || lowerDb.includes("coppa italia");
 
             if (leagueConfig.key === "svajckupa") {
