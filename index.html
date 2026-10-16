@@ -717,6 +717,11 @@
             if (countryName === "Szerbia" && isSlovenianMatch) return false;
             if (countryName === "Szlovénia" && isSerbianMatch) return false;
 
+            // Ha az ország konkrétan Szerbia, de a liga neve "prva liga" és a meccs szlovén, tiltsuk
+            if (countryName === "Szerbia" && leagueConfig.name === "Prva Liga" && isSlovenianMatch) return false;
+            // Ha az ország konkrétan Szlovénia, de a liga neve "Prva Liga" és a meccs szerb, tiltsuk
+            if (countryName === "Szlovénia" && leagueConfig.name === "Prva Liga" && isSerbianMatch) return false;
+
             if (lowerDb.includes("championship") && leagueConfig.key !== "championship") {
                 return false;
             }
