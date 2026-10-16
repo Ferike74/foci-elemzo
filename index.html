@@ -723,6 +723,16 @@
                 return isChampionsLeague;
             }
             
+            // Szigorú szétválasztás a Bundesliga és a 2. Bundesliga között
+            const isSecondBundesliga = lowerDb.includes("2. bundesliga") || lowerDb.includes("bundesliga 2") || lowerDb.includes("2bundesliga");
+            
+            if (leagueConfig.key === "bundesliga2") {
+                return isSecondBundesliga;
+            }
+            if (leagueConfig.key === "bundesliga") {
+                if (isSecondBundesliga) return false;
+            }
+
             if (leagueConfig.name === "Német Bundesliga") {
                 if (lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria")) return false;
             }
