@@ -710,15 +710,12 @@
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
             
-            // Biztonsági blokkolás: Szerb meccs ne kerülhessen Svájcba, és fordítva
-            const isSerbian = lowerDb.includes("szerb") || lowerDb.includes("serbia") || lowerDb.includes("super liga srbije");
-            if (leagueConfig.key === "svajc" && isSerbian) {
-                return false;
-            }
-            const isSwiss = lowerDb.includes("svájci") || lowerDb.includes("swiss") || lowerDb.includes("challenge league");
-            if (countryName === "Szerbia" && isSwiss) {
-                return false;
-            }
+            // Ország szerinti szigorú blokkolás (Szerbia vs Szlovénia Prva Liga keveredés ellen)
+            const isSlovenian = lowerDb.includes("szlovén") || lowerDb.includes("slovenia") || lowerDb.includes("1. snl") || lowerDb.includes("aluminij") || lowerDb.includes("olimpija");
+            const isSerbian = lowerDb.includes("szerb") || lowerDb.includes("serbia") || lowerDb.includes("super liga srbije") || lowerDb.includes("prva liga srbije");
+
+            if (countryName === "Szerbia" && isSlovenian) return false;
+            if (countryName === "Szlovénia" && isSerbian) return false;
 
             if (lowerDb.includes("championship") && leagueConfig.key !== "championship") {
                 return false;
