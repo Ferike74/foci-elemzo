@@ -710,6 +710,16 @@
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
             
+            // Biztonsági blokkolás: Szerb meccs ne kerülhessen Svájcba, és fordítva
+            const isSerbian = lowerDb.includes("szerb") || lowerDb.includes("serbia") || lowerDb.includes("super liga srbije");
+            if (leagueConfig.key === "svajc" && isSerbian) {
+                return false;
+            }
+            const isSwiss = lowerDb.includes("svájci") || lowerDb.includes("swiss") || lowerDb.includes("challenge league");
+            if (countryName === "Szerbia" && isSwiss) {
+                return false;
+            }
+
             if (lowerDb.includes("championship") && leagueConfig.key !== "championship") {
                 return false;
             }
@@ -732,17 +742,12 @@
                 if (isSecondBundesliga) return false;
             }
 
-            // Szigorú szétválasztás a Svájci Kupa, Svájci Szuperliga és a Szerb Szuperliga között
+            // Svájci Kupa és Olasz Kupa szűrések
             const isSwissCup = lowerDb.includes("svájci kupa") || lowerDb.includes("swiss cup");
-            const isSerbian = lowerDb.includes("szerb") || lowerDb.includes("serbia");
-            const isSwissLeague = (lowerDb.includes("svájci") || lowerDb.includes("super league") || (lowerDb.includes("szuperliga") && !isSerbian)) && !isSwissCup;
             const isItalianCup = lowerDb.includes("olasz kupa") || lowerDb.includes("coppa italia");
 
             if (leagueConfig.key === "svajckupa") {
                 return isSwissCup;
-            }
-            if (leagueConfig.key === "svajc") {
-                return isSwissLeague && !isSwissCup;
             }
             if (leagueConfig.key === "olaszkupa") {
                 return isItalianCup;
