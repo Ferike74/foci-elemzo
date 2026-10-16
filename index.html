@@ -710,17 +710,17 @@
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
             
-            // Szigorú ország- és csapatnév alapú tiltás a Szerbia vs Szlovénia Prva Liga keveredés ellen
+            // Szigorú országon alapuló kizárás Prva Liga (Szlovénia vs Szerbia) ellen
             const isSlovenianMatch = lowerDb.includes("szlovén") || lowerDb.includes("slovenia") || lowerDb.includes("1. snl") || lowerDb.includes("aluminij") || lowerDb.includes("olimpija");
             const isSerbianMatch = lowerDb.includes("szerb") || lowerDb.includes("serbia") || lowerDb.includes("super liga srbije") || lowerDb.includes("prva liga srbije") || lowerDb.includes("radnik") || lowerDb.includes("radnicki");
 
             if (countryName === "Szerbia" && isSlovenianMatch) return false;
             if (countryName === "Szlovénia" && isSerbianMatch) return false;
 
-            // Ha az ország konkrétan Szerbia, de a liga neve "prva liga" és a meccs szlovén, tiltsuk
-            if (countryName === "Szerbia" && leagueConfig.name === "Prva Liga" && isSlovenianMatch) return false;
-            // Ha az ország konkrétan Szlovénia, de a liga neve "Prva Liga" és a meccs szerb, tiltsuk
-            if (countryName === "Szlovénia" && leagueConfig.name === "Prva Liga" && isSerbianMatch) return false;
+            // Ha a kártya a Szerb Prva Liga, de a meccs szlovén
+            if (countryName === "Szerbia" && leagueConfig.key === "szerbia2" && !isSerbianMatch) return false;
+            // Ha a kártya a Szlovén Prva Liga, de a meccs szerb
+            if (countryName === "Szlovénia" && leagueConfig.key === "szloven2" && !isSlovenianMatch) return false;
 
             if (lowerDb.includes("championship") && leagueConfig.key !== "championship") {
                 return false;
