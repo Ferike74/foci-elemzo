@@ -710,12 +710,12 @@
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
             
-            // Ország szerinti szigorú blokkolás (Szerbia vs Szlovénia Prva Liga keveredés ellen)
-            const isSlovenian = lowerDb.includes("szlovén") || lowerDb.includes("slovenia") || lowerDb.includes("1. snl") || lowerDb.includes("aluminij") || lowerDb.includes("olimpija");
-            const isSerbian = lowerDb.includes("szerb") || lowerDb.includes("serbia") || lowerDb.includes("super liga srbije") || lowerDb.includes("prva liga srbije");
+            // Szigorú ország- és csapatnév alapú tiltás a Szerbia vs Szlovénia Prva Liga keveredés ellen
+            const isSlovenianMatch = lowerDb.includes("szlovén") || lowerDb.includes("slovenia") || lowerDb.includes("1. snl") || lowerDb.includes("aluminij") || lowerDb.includes("olimpija");
+            const isSerbianMatch = lowerDb.includes("szerb") || lowerDb.includes("serbia") || lowerDb.includes("super liga srbije") || lowerDb.includes("prva liga srbije") || lowerDb.includes("radnik") || lowerDb.includes("radnicki");
 
-            if (countryName === "Szerbia" && isSlovenian) return false;
-            if (countryName === "Szlovénia" && isSerbian) return false;
+            if (countryName === "Szerbia" && isSlovenianMatch) return false;
+            if (countryName === "Szlovénia" && isSerbianMatch) return false;
 
             if (lowerDb.includes("championship") && leagueConfig.key !== "championship") {
                 return false;
