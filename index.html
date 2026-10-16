@@ -270,7 +270,7 @@
                 - Adószám: 92466175-1-28[cite: 7]<br>
                 - E-mail elérhetőség: info@focielemzesek.com</p>
 
-                <p><strong>2. A KEZELT SZEMÉLYES ADATOK KÖRE</strong><br>
+                <p><strong>2. A KEZELT SZEMÉLYES ADATok KÖRE</strong><br>
                 A regisztráció és a szolgáltatás igénybevétele során az alábbi adatokat kezeljük: a Felhasználó által megadott e-mail cím, titkosított jelszó, valamint a fizetési tranzakciókhoz kapcsolódó technikai adatok. A bankkártyaadatait a Szolgáltató nem tárolja, azokat közvetlenül a biztonságos fizetési partnerünk (Stripe Inc.) kezeli a nemzetközi bankbiztonsági előírásoknak (PCI-DSS) megfelelően.</p>
 
                 <p><strong>3. AZ ADATKEZELÉS CÉLJA ÉS JOGALAPJA</strong><br>
@@ -731,6 +731,27 @@
             }
             if (leagueConfig.key === "bundesliga") {
                 if (isSecondBundesliga) return false;
+            }
+
+            // Szigorú szétválasztás a Svájci Kupa, Svájci Szuperliga és Olasz Kupa között
+            const isSwissCup = lowerDb.includes("svájci kupa") || lowerDb.includes("swiss cup");
+            const isSwissLeague = (lowerDb.includes("svájci") || lowerDb.includes("super league") || lowerDb.includes("szuperliga")) && !isSwissCup && !lowerDb.includes("görög") && !lowerDb.includes("szerb");
+            const isItalianCup = lowerDb.includes("olasz kupa") || lowerDb.includes("coppa italia");
+
+            if (leagueConfig.key === "svajckupa") {
+                return isSwissCup;
+            }
+            if (leagueConfig.key === "svajc") {
+                return isSwissLeague && !isSwissCup;
+            }
+            if (leagueConfig.key === "olaszkupa") {
+                return isItalianCup;
+            }
+            if (isSwissCup && leagueConfig.key !== "svajckupa") {
+                return false;
+            }
+            if (isItalianCup && leagueConfig.key !== "olaszkupa") {
+                return false;
             }
 
             if (leagueConfig.name === "Német Bundesliga") {
