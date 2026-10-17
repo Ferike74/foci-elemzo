@@ -6,6 +6,8 @@
     <title>Sportfogadás Elemző Agent | Cyberpunk Stadium Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- HTML-to-PDF Generáló Könyvtár a direkt letöltéshez -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <!-- Vercel Web Analytics Szkript -->
     <script defer src="/_vercel/insights/script.js"></script>
@@ -244,13 +246,13 @@
         </div>
     </div>
 
-    <!-- ADATVÉDELMI NYILATKOZAT MODAL (Működő JavaScript letöltés gombbal és teljes tartalommal) -->
+    <!-- ADATVÉDELMI NYILATKOZAT MODAL (Automatikus PDF generálással és letöltéssel) -->
     <div id="privacy-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-4xl h-[90vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-hidden">
             <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold z-20 bg-black/40 px-2.5 py-0.5 rounded-full">&times;</button>
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2 flex-shrink-0">Adatvédelmi Nyilatkozat és Adatkezelési Tájékoztató</h3>
             
-            <div id="privacy-text-content" class="space-y-4 text-xs leading-relaxed text-gray-200 text-justify overflow-y-auto custom-scrollbar flex-grow pr-3">
+            <div id="privacy-pdf-container" class="space-y-4 text-xs leading-relaxed text-gray-200 text-justify overflow-y-auto custom-scrollbar flex-grow pr-3">
                 <p><strong>1. AZ ADATKEZELÉSI TÁJÉKOZTATÓ CÉLJA</strong><br>
                 Sütő Ferenc egyéni vállalkozó (székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7], a továbbiakban: szolgáltató, adatkezelő) mint adatkezelő, magára nézve kötelezőnek ismeri el jelen jogi közlemény tartalmát[cite: 8]. Kötelezettséget vállal arra, hogy tevékenységével kapcsolatos minden adatkezelés megfelel a jelen szabályzatban és a hatályos nemzeti jogszabályokban, valamint az Európai Unió jogi aktusaiban meghatározott elvárásoknak[cite: 8]. Jelen adatkezelési tájékoztató az alábbi domainre és azok aldomainjeire terjed ki: <strong>focielemzesek.com</strong>[cite: 8]. Adatkezelő adatkezeléseivel kapcsolatosan felmerülő adatvédelmi irányelvek folyamatosan elérhetők a focielemzesek.com oldalon[cite: 8]. Adatkezelő fenntartja magának a jogot jelen tájékoztató bármikori módosítására[cite: 8]. A változásokról az érintettek kellő időben tájékoztatásra kerülnek[cite: 8]. Amennyiben kérdése lenne jelen közleményhez kapcsolódóan, kérjük, írja meg és megválaszoljuk kérdését[cite: 8]. Adatkezelő elkötelezett ügyfelei és partnerei személyes adatainak védelmében, kiemelten fontosnak tartja ügyfelei információs önrendelkezési jogának tiszteletben tartását[cite: 8]. Adatkezelő a személyes adatokat bizalmasan kezeli, és megtesz minden olyan biztonsági, technikai és szervezési intézkedést, mely az adatok biztonságát garantálja[cite: 8]. Adatkezelő az alábbiakban ismerteti adatkezelési gyakorlatát[cite: 8].</p>
 
@@ -319,8 +321,8 @@
             </div>
 
             <div class="mt-4 pt-3 border-t border-cyan-500/20 flex flex-wrap justify-between items-center gap-3 flex-shrink-0">
-                <button onclick="downloadPrivacyText()" class="bg-cyan-600/80 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider transition inline-flex items-center gap-2 border border-cyan-400/50 shadow cursor-pointer">
-                    📥 Adatvédelmi Tájékoztató Letöltése (.txt)
+                <button onclick="downloadPrivacyPDF()" class="bg-cyan-600/80 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider transition inline-flex items-center gap-2 border border-cyan-400/50 shadow cursor-pointer">
+                    📥 Hivatalos PDF Dokumentum Letöltése
                 </button>
                 <button onclick="closePrivacyModal()" class="bg-slate-900/90 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
             </div>
@@ -1164,18 +1166,17 @@
             }
         }
 
-        // Működő letöltés funkció JavaScript-tel
-        function downloadPrivacyText() {
-            const content = document.getElementById('privacy-text-content').innerText;
-            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Adatvedelmi_Tajekoztato_Suto_Ferenc_EV.txt';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+        // Tökéletesen működő kliens oldali PDF generáló és letöltő függvény
+        function downloadPrivacyPDF() {
+            const element = document.getElementById('privacy-pdf-container');
+            const opt = {
+                margin:       10,
+                filename:     'adatkezelesi_tajekoztato_suto_ferenc.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save();
         }
     </script>
 </body>
