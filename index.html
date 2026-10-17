@@ -253,13 +253,14 @@
         </div>
     </div>
 
-    <!-- Adatvédelmi Nyilatkozat Modal (Teljes, Részletes 16 oldalas szöveges verzió görgetősávval + Letöltési lehetőséggel) -->
-    <div id="privacy-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <!-- Adatvédelmi Nyilatkozat Modal (Teljesen görgethető 16 oldalas szöveges verzió + PDF letöltéssel) -->
+    <div id="privacy-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-4xl h-[90vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-hidden">
-            <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold z-10">&times;</button>
-            <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Adatvédelmi Nyilatkozat és Adatkezelési Tájékoztató</h3>
+            <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold z-20 bg-black/40 px-2.5 py-0.5 rounded-full">&times;</button>
+            <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2 flex-shrink-0">Adatvédelmi Nyilatkozat és Adatkezelési Tájékoztató</h3>
             
-            <div class="space-y-4 text-xs leading-relaxed text-gray-200 text-justify overflow-y-auto custom-scrollbar flex-grow pr-3 pb-6">
+            <!-- Görgethető tartalom -->
+            <div class="space-y-4 text-xs leading-relaxed text-gray-200 text-justify overflow-y-auto custom-scrollbar flex-grow pr-3">
                 <p><strong>1. AZ ADATKEZELÉSI TÁJÉKOZTATÓ CÉLJA</strong><br>
                 Sütő Ferenc egyéni vállalkozó (székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7], nyilvántartási szám: 62943248[cite: 7], adószám: 92466175-1-28[cite: 7], e-mail: info@focielemzesek.com[cite: 7]), mint adatkezelő (a továbbiakban: Szolgáltató vagy Adatkezelő), magára nézve kötelezőnek ismeri el jelen jogi közlemény tartalmát[cite: 21]. Kötelezettséget vállal arra, hogy tevékenységével kapcsolatos minden adatkezelés megfelel a jelen szabályzatban és a hatályos nemzeti jogszabályokban, valamint az Európai Unió jogi aktusaiban meghatározott elvárásoknak[cite: 21].<br>
                 Jelen adatkezelési tájékoztató az alábbi domainre és annak aldomainjeire terjed ki: <strong>focielemzesek.com</strong>[cite: 21].</p>
@@ -304,17 +305,14 @@
 
                 <p><strong>7. EGYÉB RENDELKEZÉSEK</strong><br>
                 E tájékoztatóban fel nem sorolt adatkezelésekről az adat felvételekor adunk tájékoztatást. Az adatkezelő a hatóságok részére személyes adatot csak a megkeresés céljának megvalósításához elengedhetetlenül szükséges mértékben ad ki.</p>
-
-                <!-- PDF letöltő gomb a szöveg alján -->
-                <div class="mt-6 text-center pt-2">
-                    <a href="/adatkezelesi_tajekoztato_suto_ferenc.pdf" download class="bg-cyan-600/80 hover:bg-cyan-500 text-white font-bold px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider transition inline-flex items-center gap-2 border border-cyan-400/50 shadow">
-                        📥 Hivatalos PDF Dokumentum Letöltése
-                    </a>
-                </div>
             </div>
 
-            <div class="mt-4 text-center border-t border-cyan-500/20 pt-3 flex-shrink-0">
-                <button onclick="closePrivacyModal()" class="bg-slate-900/80 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
+            <!-- Fix alsó gombsor -->
+            <div class="mt-4 pt-3 border-t border-cyan-500/20 flex flex-wrap justify-between items-center gap-3 flex-shrink-0">
+                <a href="/adatkezelesi_tajekoztato_suto_ferenc.pdf" download class="bg-cyan-600/80 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider transition inline-flex items-center gap-2 border border-cyan-400/50 shadow">
+                    📥 Hivatalos PDF Dokumentum Letöltése
+                </a>
+                <button onclick="closePrivacyModal()" class="bg-slate-900/90 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
             </div>
         </div>
     </div>
