@@ -22,7 +22,6 @@
             background-attachment: fixed;
         }
 
-        /* Sokkal áttetszőbb üvegpanelek és információs panelek */
         .glass-panel {
             background: rgba(15, 23, 42, 0.25);
             backdrop-filter: blur(12px);
@@ -31,7 +30,6 @@
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.2), inset 0 0 15px rgba(6, 182, 212, 0.05);
         }
 
-        /* Sokkal áttetszőbb ligakártyák */
         .league-card-custom {
             background: rgba(15, 23, 42, 0.30);
             backdrop-filter: blur(10px);
@@ -55,7 +53,6 @@
             text-shadow: 0 0 10px rgba(34, 211, 238, 0.8), 0 2px 4px rgba(0, 0, 0, 0.9);
         }
 
-        /* VAKÍTÓAN RAGYOGÓ, CSILLAG MÓDÚ SMARAGDZÖLD FELIRAT */
         .emerald-glitter-title {
             color: #ffffff;
             font-weight: 900;
@@ -256,22 +253,68 @@
         </div>
     </div>
 
-    <!-- Adatvédelmi Nyilatkozat Modal (Beágyazott PDF Nézegetővel és Letöltési Lehetőséggel) -->
-    <div id="privacy-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-5xl h-[92vh] rounded-3xl p-4 md:p-6 relative flex flex-col shadow-2xl overflow-hidden">
-            <button onclick="closePrivacyModal()" class="absolute top-3 right-5 text-cyan-300 hover:text-pink-400 text-3xl font-bold z-20 bg-black/40 px-3 py-0.5 rounded-full">&times;</button>
-            <h3 class="text-lg font-black text-cyan-300 mb-3 px-2">Adatvédelmi Nyilatkozat és Adatkezelési Tájékoztató (PDF Nézegető)</h3>
+    <!-- Adatvédelmi Nyilatkozat Modal (Teljes, Részletes 16 oldalas szöveges verzió görgetősávval + Letöltési lehetőséggel) -->
+    <div id="privacy-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-4xl h-[90vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-hidden">
+            <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold z-10">&times;</button>
+            <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Adatvédelmi Nyilatkozat és Adatkezelési Tájékoztató</h3>
             
-            <!-- Beágyazott PDF Olvasó (Oldalszámmal, Nagyítással, Görgetéssel) -->
-            <div class="flex-grow w-full h-full rounded-2xl overflow-hidden border border-cyan-500/30 bg-slate-950">
-                <embed src="/adatkezelesi_tajekoztato_suto_ferenc.pdf" type="application/pdf" width="100%" height="100%" />
+            <div class="space-y-4 text-xs leading-relaxed text-gray-200 text-justify overflow-y-auto custom-scrollbar flex-grow pr-3 pb-6">
+                <p><strong>1. AZ ADATKEZELÉSI TÁJÉKOZTATÓ CÉLJA</strong><br>
+                Sütő Ferenc egyéni vállalkozó (székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7], nyilvántartási szám: 62943248[cite: 7], adószám: 92466175-1-28[cite: 7], e-mail: info@focielemzesek.com[cite: 7]), mint adatkezelő (a továbbiakban: Szolgáltató vagy Adatkezelő), magára nézve kötelezőnek ismeri el jelen jogi közlemény tartalmát[cite: 21]. Kötelezettséget vállal arra, hogy tevékenységével kapcsolatos minden adatkezelés megfelel a jelen szabályzatban és a hatályos nemzeti jogszabályokban, valamint az Európai Unió jogi aktusaiban meghatározott elvárásoknak[cite: 21].<br>
+                Jelen adatkezelési tájékoztató az alábbi domainre és annak aldomainjeire terjed ki: <strong>focielemzesek.com</strong>[cite: 21].</p>
+
+                <p><strong>2. AZ ADATKEZELŐ ADATAI</strong><br>
+                - Név: Sütő Ferenc egyéni vállalkozó[cite: 7, 22]<br>
+                - Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7, 22]<br>
+                - Nyilvántartási szám: 62943248[cite: 7, 22]<br>
+                - Adószám: 92466175-1-28[cite: 7, 22]<br>
+                - E-mail: info@focielemzesek.com[cite: 7, 22]<br>
+                <strong>2.1 Adatvédelmi tisztviselő:</strong> Az adatkezelő nem végez olyan tevékenységet, mely indokolttá tenné adatvédelmi tisztviselő kijelölését[cite: 22].</p>
+
+                <p><strong>3. A KEZELT SZEMÉLYES ADATOK KÖRE ÉS BIZTONSÁGA</strong><br>
+                <strong>3.1 Technikai adatok:</strong> Az adatkezelő a személyes adatok kezeléséhez a szolgáltatás nyújtása során alkalmazott informatikai eszközöket úgy választja meg és üzemelteti, hogy a kezelt adat hozzáférhető (rendelkezésre állás), hitelesítése biztosított, változatlansága igazolható (adatintegritás) és a jogosulatlan hozzáférés ellen védett (adat bizalmassága) legyen[cite: 22].<br>
+                <strong>3.2 Cookie-k (Sütik):</strong> A sütik információkat gyűjtenek a látogatókról és eszközeikről; megjegyzik a látogatók egyéni beállításait, megkönnyítik a weboldal használatát, és statisztikai információkat gyűjtenek[cite: 22, 23]. A focielemzesek.com oldalon munkamenet (session) sütik, valamint analitikai sütik (pl. Google Analytics) kerülnek alkalmazásra a felhasználói élmény javítása érdekében[cite: 23, 24]. A cookie kezelés jogalapja a weboldal látogatójának önkéntes hozzájárulása (GDPR 6. cikk (1) bekezdés a) pont)[cite: 24].</p>
+
+                <p><strong>4. ÁLTALÁNOS ADATKEZELÉSI IRÁNYELVEK ÉS JOGALAPOK</strong><br>
+                Az adatkezelés önkéntes hozzájáruláson, illetve törvényi felhatalmazáson alapul (GDPR). Az érintettek hozzájárulásukat bármikor visszavonhatják.<br>
+                - <strong>Előfizetés és regisztráció:</strong> Kezelt adatok: név, e-mail cím, titkosított jelszó. Célja: fiók biztosítása, prémium előfizetések kezelése. Jogalapja: önkéntes hozzájárulás és szerződés teljesítése.<br>
+                - <strong>Kapcsolatfelvétel és ügyintézés:</strong> Kezelt adatok: név, e-mail cím, telefonszám (opcionális). Célja: kérdések megválaszolása, megrendelések kezelése. Jogalapja: önkéntes hozzájárulás.<br>
+                - <strong>Számlázás:</strong> Kezelt adatok: név, e-mail cím, számlázási cím. Célja: számviteli bizonylat kiállítása. Jogalapja: törvényi kötelezettség (tárgyév + 5 év megőrzési idő).</p>
+
+                <p><strong>5. AZ ADATOK FIZIKAI TÁROLÁSI HELYEI ÉS ADATFELDOLGOZÓK</strong><br>
+                A szolgáltatás technikai fenntartása és működtetése érdekében az alábbi harmadik fél feldolgozókat vesszük igénybe:<br>
+                - Tárhelyszolgáltatás: Vercel Inc. (440 N Barranca Ave #4133 Covina, CA 91723, USA)<br>
+                - Adatbázis és hitelesítés: Supabase Inc.<br>
+                - Fizetési tranzakciók: Stripe Inc. (A bankkártyaadatokat a Szolgáltató nem tárolja, azokat közvetlenül a Stripe kezeli a nemzetközi bankbiztonsági előírásoknak megfelelően).</p>
+
+                <p><strong>6. ÉRINTETT JOGAI ÉS JOGÉRVÉNYESÍTÉSI LEHETŐSÉGEI</strong><br>
+                Az érintett tájékoztatást kérhet személyes adatai kezeléséről, kérheti azok helyesbítését, módosítását, illetve törlését az info@focielemzesek.com e-mail címen[cite: 7].<br>
+                - <strong>Tájékoztatáshoz való jog:</strong> Az adatkezelő tömör, átlátható és érthető tájékoztatást nyújt.<br>
+                - <strong>Hozzáféréshez való jog:</strong> Az érintett visszajelzést kaphat adatai kezeléséről.<br>
+                - <strong>Helyesbítés joga:</strong> Pontatlan adatok javítása és hiányos adatok kiegészítése.<br>
+                - <strong>Törléshez való jog („elfeledtetéshez való jog”):</strong> Adatok indokolatlan késedelem nélküli törlése.<br>
+                - <strong>Adatkezelés korlátozásának joga:</strong> Adatok zárolása bizonyos feltételek esetén.<br>
+                - <strong>Adathordozhatóság joga:</strong> Adatok átadása géppel olvasható formátumban.<br>
+                - <strong>Tiltakozás joga:</strong> Tiltakozás jogos érdeken alapuló adatkezelés ellen.<br>
+                - <strong>Visszavonás joga:</strong> Hozzájárulás bármikori visszavonása.<br>
+                - <strong>Jogorvoslati lehetőség:</strong> Panasszal élhet a Nemzeti Adatvédelmi és Információszabadság Hatóságnál (NAIH):<br>
+                Cím: 1055 Budapest, Falk Miksa utca 9-11.<br>
+                E-mail: ugyfelszolgalat@naih.hu</p>
+
+                <p><strong>7. EGYÉB RENDELKEZÉSEK</strong><br>
+                E tájékoztatóban fel nem sorolt adatkezelésekről az adat felvételekor adunk tájékoztatást. Az adatkezelő a hatóságok részére személyes adatot csak a megkeresés céljának megvalósításához elengedhetetlenül szükséges mértékben ad ki.</p>
+
+                <!-- PDF letöltő gomb a szöveg alján -->
+                <div class="mt-6 text-center pt-2">
+                    <a href="/adatkezelesi_tajekoztato_suto_ferenc.pdf" download class="bg-cyan-600/80 hover:bg-cyan-500 text-white font-bold px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider transition inline-flex items-center gap-2 border border-cyan-400/50 shadow">
+                        📥 Hivatalos PDF Dokumentum Letöltése
+                    </a>
+                </div>
             </div>
 
-            <div class="mt-3 flex justify-between items-center px-2 flex-shrink-0">
-                <a href="/adatkezelesi_tajekoztato_suto_ferenc.pdf" download class="bg-cyan-600/80 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider transition inline-flex items-center gap-2 border border-cyan-400/50 shadow">
-                    📥 PDF Dokumentum Letöltése
-                </a>
-                <button onclick="closePrivacyModal()" class="bg-slate-900/90 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
+            <div class="mt-4 text-center border-t border-cyan-500/20 pt-3 flex-shrink-0">
+                <button onclick="closePrivacyModal()" class="bg-slate-900/80 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
             </div>
         </div>
     </div>
@@ -695,16 +738,13 @@
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
             
-            // Szigorú ország- és csapatnév alapú tiltás a Szerbia vs Szlovénia Prva Liga keveredés ellen
             const isSlovenianMatch = lowerDb.includes("szlovén") || lowerDb.includes("slovenia") || lowerDb.includes("1. snl") || lowerDb.includes("aluminij") || lowerDb.includes("olimpija");
             const isSerbianMatch = lowerDb.includes("szerb") || lowerDb.includes("serbia") || lowerDb.includes("super liga srbije") || lowerDb.includes("prva liga srbije") || lowerDb.includes("radnik") || lowerDb.includes("radnicki");
 
             if (countryName === "Szerbia" && isSlovenianMatch) return false;
             if (countryName === "Szlovénia" && isSerbianMatch) return false;
 
-            // Ha a kártya a Szerb Prva Liga, de a meccs szlovén
             if (countryName === "Szerbia" && leagueConfig.key === "szerbia2" && !isSerbianMatch) return false;
-            // Ha a kártya a Szlovén Prva Liga, de a meccs szerb
             if (countryName === "Szlovénia" && leagueConfig.key === "szloven2" && !isSlovenianMatch) return false;
 
             if (lowerDb.includes("championship") && leagueConfig.key !== "championship") {
@@ -720,7 +760,6 @@
                 return isChampionsLeague;
             }
             
-            // Szigorú szétválasztás a Bundesliga és a 2. Bundesliga között
             const isSecondBundesliga = lowerDb.includes("2. bundesliga") || lowerDb.includes("bundesliga 2") || lowerDb.includes("2bundesliga");
             if (leagueConfig.key === "bundesliga2") {
                 return isSecondBundesliga;
@@ -729,7 +768,6 @@
                 if (isSecondBundesliga) return false;
             }
 
-            // Svájci Kupa és Olasz Kupa szűrések
             const isSwissCup = lowerDb.includes("svájci kupa") || lowerDb.includes("swiss cup");
             const isItalianCup = lowerDb.includes("olasz kupa") || lowerDb.includes("coppa italia");
 
