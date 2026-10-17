@@ -6,7 +6,7 @@
     <title>Sportfogadás Elemző Agent | Cyberpunk Stadium Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- HTML-to-PDF Könyvtár -->
+    <!-- HTML-to-PDF Könyvtár a direkt letöltéshez -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <!-- Vercel Web Analytics Szkript -->
@@ -252,7 +252,7 @@
             <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold z-20 bg-black/40 px-2.5 py-0.5 rounded-full">&times;</button>
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2 flex-shrink-0">Adatvédelmi Nyilatkozat és Adatkezelési Tájékoztató</h3>
             
-            <div class="space-y-4 text-xs leading-relaxed text-gray-200 text-justify overflow-y-auto custom-scrollbar flex-grow pr-3">
+            <div id="privacy-pdf-content" class="space-y-4 text-xs leading-relaxed text-gray-200 text-justify overflow-y-auto custom-scrollbar flex-grow pr-3">
                 <p><strong>1. AZ ADATKEZELÉSI TÁJÉKOZTATÓ CÉLJA</strong><br>
                 Sütő Ferenc egyéni vállalkozó (székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7], a továbbiakban: szolgáltató, adatkezelő) mint adatkezelő, magára nézve kötelezőnek ismeri el jelen jogi közlemény tartalmát[cite: 8]. Kötelezettséget vállal arra, hogy tevékenységével kapcsolatos minden adatkezelés megfelel a jelen szabályzatban és a hatályos nemzeti jogszabályokban, valamint az Európai Unió jogi aktusaiban meghatározott elvárásoknak[cite: 8]. Jelen adatkezelési tájékoztató az alábbi domainre és azok aldomainjeire terjed ki: <strong>focielemzesek.com</strong>[cite: 8]. Adatkezelő adatkezeléseivel kapcsolatosan felmerülő adatvédelmi irányelvek folyamatosan elérhetők a focielemzesek.com oldalon[cite: 8]. Adatkezelő fenntartja magának a jogot jelen tájékoztató bármikori módosítására[cite: 8]. A változásokról az érintettek kellő időben tájékoztatásra kerülnek[cite: 8]. Amennyiben kérdése lenne jelen közleményhez kapcsolódóan, kérjük, írja meg és megválaszoljuk kérdését[cite: 8]. Adatkezelő elkötelezett ügyfelei és partnerei személyes adatainak védelmében, kiemelten fontosnak tartja ügyfelei információs önrendelkezési jogának tiszteletben tartását[cite: 8]. Adatkezelő a személyes adatokat bizalmasan kezeli, és megtesz minden olyan biztonsági, technikai és szervezési intézkedést, mely az adatok biztonságát garantálja[cite: 8]. Adatkezelő az alábbiakban ismerteti adatkezelési gyakorlatát[cite: 8].</p>
 
@@ -1168,21 +1168,19 @@
 
         // Tökéletesen működő, teljes tartalmú PDF letöltő függvény
         function downloadPrivacyPDF() {
+            const contentHTML = document.getElementById('privacy-pdf-content').innerHTML;
+            
             const wrapper = document.createElement('div');
             wrapper.style.background = '#ffffff';
             wrapper.style.color = '#000000';
-            wrapper.style.padding = '25px';
+            wrapper.style.padding = '20px';
             wrapper.style.fontFamily = 'Arial, sans-serif';
             wrapper.style.fontSize = '11px';
-            wrapper.style.lineHeight = '1.6';
-
-            // Kivesszük a modal belső szövegét és átadjuk a tiszta fehér exportálónak
-            const contentHTML = document.getElementById('privacy-pdf-content').innerHTML;
-            
+            wrapper.style.lineHeight = '1.5';
             wrapper.innerHTML = `
-                <div style="text-align: center; margin-bottom: 20px;">
+                <div style="text-align: center; margin-bottom: 25px; border-bottom: 2px solid #000; padding-bottom: 10px;">
                     <h1 style="font-size: 16px; font-weight: bold; margin: 0;">ADATKEZELÉSI TÁJÉKOZTATÓ</h1>
-                    <p style="font-size: 10px; color: #555; margin-top: 5px;">focielemzesek.com | Sütő Ferenc EV</p>
+                    <p style="font-size: 10px; color: #333; margin-top: 5px;">focielemzesek.com | Sütő Ferenc EV</p>
                 </div>
                 ${contentHTML}
             `;
@@ -1191,7 +1189,7 @@
                 margin:       [10, 10, 10, 10],
                 filename:     'adatkezelesi_tajekoztato_suto_ferenc_ev.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
