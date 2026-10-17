@@ -244,15 +244,15 @@
         </div>
     </div>
 
-    <!-- ADATVÉDELMI NYILATKOZAT MODAL (100%-ban szószerinti, részletes 8 pontos tartalommal és az összes alponttal) -->
+    <!-- ADATVÉDELMI NYILATKOZAT MODAL (Működő JavaScript letöltés gombbal és teljes tartalommal) -->
     <div id="privacy-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-4xl h-[90vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-hidden">
             <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold z-20 bg-black/40 px-2.5 py-0.5 rounded-full">&times;</button>
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2 flex-shrink-0">Adatvédelmi Nyilatkozat és Adatkezelési Tájékoztató</h3>
             
-            <div class="space-y-4 text-xs leading-relaxed text-gray-200 text-justify overflow-y-auto custom-scrollbar flex-grow pr-3">
+            <div id="privacy-text-content" class="space-y-4 text-xs leading-relaxed text-gray-200 text-justify overflow-y-auto custom-scrollbar flex-grow pr-3">
                 <p><strong>1. AZ ADATKEZELÉSI TÁJÉKOZTATÓ CÉLJA</strong><br>
-                Sütő Ferenc egyéni vállalkozó (székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7], a továbbiakban: szolgáltató, adatkezelő) mint adatkezelő, magára nézve kötelezőnek ismeri el jelen jogi közlemény tartalmát[cite: 8]. Kötelezettséget vállal arra, hogy tevékenységével kapcsolatos minden adatkezelés megfelel a jelen szabályzatban és a hatályos nemzeti jogszabályokban, valamint az Európai Unió jogi aktusaiban meghatározott elvárásoknak[cite: 8]. Jelen adatkezelési tájékoztató az alábbi domainre és azok aldomainjeire terjed ki: <strong>focielemzesek.com</strong>[cite: 8]. Adatkezelő adatkezeléseivel kapcsolatosan felmerülő adatvédelmi irányelvek folyamatosan elérhetők a focielemzesek.com/adatkezelesi-tajekoztato címen[cite: 8]. Adatkezelő fenntartja magának a jogot jelen tájékoztató bármikori módosítására[cite: 8]. A változásokról az érintettek kellő időben tájékoztatásra kerülnek[cite: 8]. Amennyiben kérdése lenne jelen közleményhez kapcsolódóan, kérjük, írja meg és megválaszoljuk kérdését[cite: 8]. Adatkezelő elkötelezett ügyfelei és partnerei személyes adatainak védelmében, kiemelten fontosnak tartja ügyfelei információs önrendelkezési jogának tiszteletben tartását[cite: 8]. Adatkezelő a személyes adatokat bizalmasan kezeli, és megtesz minden olyan biztonsági, technikai és szervezési intézkedést, mely az adatok biztonságát garantálja[cite: 8]. Adatkezelő az alábbiakban ismerteti adatkezelési gyakorlatát[cite: 8].</p>
+                Sütő Ferenc egyéni vállalkozó (székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7], a továbbiakban: szolgáltató, adatkezelő) mint adatkezelő, magára nézve kötelezőnek ismeri el jelen jogi közlemény tartalmát[cite: 8]. Kötelezettséget vállal arra, hogy tevékenységével kapcsolatos minden adatkezelés megfelel a jelen szabályzatban és a hatályos nemzeti jogszabályokban, valamint az Európai Unió jogi aktusaiban meghatározott elvárásoknak[cite: 8]. Jelen adatkezelési tájékoztató az alábbi domainre és azok aldomainjeire terjed ki: <strong>focielemzesek.com</strong>[cite: 8]. Adatkezelő adatkezeléseivel kapcsolatosan felmerülő adatvédelmi irányelvek folyamatosan elérhetők a focielemzesek.com oldalon[cite: 8]. Adatkezelő fenntartja magának a jogot jelen tájékoztató bármikori módosítására[cite: 8]. A változásokról az érintettek kellő időben tájékoztatásra kerülnek[cite: 8]. Amennyiben kérdése lenne jelen közleményhez kapcsolódóan, kérjük, írja meg és megválaszoljuk kérdését[cite: 8]. Adatkezelő elkötelezett ügyfelei és partnerei személyes adatainak védelmében, kiemelten fontosnak tartja ügyfelei információs önrendelkezési jogának tiszteletben tartását[cite: 8]. Adatkezelő a személyes adatokat bizalmasan kezeli, és megtesz minden olyan biztonsági, technikai és szervezési intézkedést, mely az adatok biztonságát garantálja[cite: 8]. Adatkezelő az alábbiakban ismerteti adatkezelési gyakorlatát[cite: 8].</p>
 
                 <p><strong>2. AZ ADATKEZELŐ ADATAI</strong><br>
                 Amennyiben megkeresné a vállalkozást, az info@focielemzesek.com email címen léphet kapcsolatba az adatkezelővel[cite: 8].<br>
@@ -260,7 +260,7 @@
                 - Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7, 8]<br>
                 - Nyilvántartási szám: 62943248[cite: 7, 8]<br>
                 - Adószám: 92466175-1-28[cite: 7, 8]<br>
-                - E-mail: info@focielemzesek.com[cite: 7, 8]<br>
+                - E-mail: info@focielemzesek.com[cite: 8]<br>
                 <strong>2.1 ADATVÉDELMI TISZTVISELŐ:</strong> Adatkezelő nem végez olyan tevékenységet, mely indokolttá tenné adatvédelmi tisztviselő kijelölését[cite: 9].</p>
 
                 <p><strong>3. A KEZELT SZEMÉLYES ADATOK KÖRE</strong><br>
@@ -271,11 +271,11 @@
                 <strong>3.2.3. HARMADIK FÉL ÁLTAL ELHELYEZETT COOKIE-K (ANALITIKA):</strong> A focielemzesek.com és aldomainjeik weboldalain alkalmazza a Google Analytics mint harmadik fél sütijeit is[cite: 11]. A Google Analytics statisztikai célú szolgáltatás használatával a weboldalak információkat gyűjtenek azzal kapcsolatban, hogy a látogatók hogyan használják a weboldalakat[cite: 11]. Az adatot a honlap fejlesztésének és a felhasználói élmény javításának céljával használja fel[cite: 11]. Ezen sütik szintén lejáratukig a látogató számítógépén vagy böngészésre használt más eszközén, annak böngészőjében maradnak, illetve amíg a látogató nem törli őket[cite: 11].<br>
                 <strong>3.2.4. A COOKIE KEZELÉS JOGALAPJA:</strong> A cookie kezelés jogalapja a weboldal látogatójának önkéntes hozzájárulása, a vonatkozó Rendelet 6. cikk (1) bekezdés a) pontja alapján[cite: 11]. Amennyiben nem fogadja el a cookie-k használatát, akkor a weboldal bizonyos funkciói nem lesznek elérhetőek a weboldalak használata során, illetve előfordulhat, hogy bizonyos funkciók hibásan működnek[cite: 11].<br>
                 <strong>3.2.5. AZ ADATKEZELŐ WEBOLDALAIN SZEREPLŐ COOKIE-K LISTÁJA:</strong><br>
-                - Működéshez szükséges sütik: A weboldal használatához nélkülözhetetlenek, és lehetővé teszik a weboldal alapvető funkcióinak használatát. Érvényesség: Munkamenet vége. Nem gyűjtenek személyes információkat[cite: 12].<br>
-                - Felhasználói élményt javító sütik: A weboldal használatáról gyűjtenek információkat és a felhasználói élmény javítását szolgálják. Érvényesség: Munkamenet vége vagy max. 2 óra[cite: 12, 13].<br>
-                - Utoljára megtekintett termék / kategória süti: Rögzíti az utoljára megtekintett terméket és kategóriát. Érvényesség: 60 nap[cite: 13, 14].<br>
+                - Működéshez szükséges sütik: A weboldal alapvető funkcióinak használatához nélkülözhetetlenek. Érvényesség: Munkamenet vége. Nem gyűjtenek személyes információkat[cite: 12].<br>
+                - Felhasználói élményt javító sütik: A felhasználói élmény javítását szolgálják, tárolják a nyelvet, pénznemet, tartózkodási helyet. Érvényesség: Munkamenet vége vagy max. 2 óra[cite: 12, 13].<br>
+                - Utoljára megtekintett termék / kategória süti: Rögzíti az utoljára megtekintett terméket vagy kategóriát. Érvényesség: 60 nap[cite: 13, 14].<br>
                 - Kosár süti: Tárolja a kosárba helyezett termék adatot. Érvényesség: 360 nap[cite: 14].<br>
-                - IP JAR / Google Analytics (_ga, _gat, _gid): Webhelystatisztikák összegyűjtésére és konverziós arányok követésére szolgálnak. Érvényesség: 2 év (NID esetében 10 év)[cite: 14, 15, 16, 17]. Nem gyűjtenek személyes információkat[cite: 14, 15, 16, 17].<br>
+                - IP JAR / Google Analytics (_ga, _gat, _gid): Webhelystatisztikák összegyűjtésére, forgalom mérésére szolgálnak. Érvényesség: 2 év (NID esetében 10 év)[cite: 14, 15, 16, 17]. Nem gyűjtenek személyes információkat[cite: 14, 15, 16, 17].<br>
                 - CONSENT: A cookie-k elfogadásával összefüggő beállítások tárolására szolgál. Érvényesség: 1 év[cite: 15].<br>
                 - viewedExitPopupWP: A weboldalak elhagyásakor közölt információk beállításainak tárolására szolgál. Érvényesség: 30 nap[cite: 15].</p>
 
@@ -319,9 +319,9 @@
             </div>
 
             <div class="mt-4 pt-3 border-t border-cyan-500/20 flex flex-wrap justify-between items-center gap-3 flex-shrink-0">
-                <a href="/adatkezelesi_tajekoztato_suto_ferenc.pdf" download class="bg-cyan-600/80 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider transition inline-flex items-center gap-2 border border-cyan-400/50 shadow">
-                    📥 Hivatalos PDF Dokumentum Letöltése
-                </a>
+                <button onclick="downloadPrivacyText()" class="bg-cyan-600/80 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider transition inline-flex items-center gap-2 border border-cyan-400/50 shadow cursor-pointer">
+                    📥 Adatvédelmi Tájékoztató Letöltése (.txt)
+                </button>
                 <button onclick="closePrivacyModal()" class="bg-slate-900/90 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
             </div>
         </div>
@@ -333,7 +333,8 @@
             <button onclick="closeTermsModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Általános Szerződési Feltételek (ÁSZF)</h3>
             <div class="space-y-3 text-xs leading-relaxed text-gray-200 text-justify">
-                <p><strong>1. SZOLGÁLTATÓI ADATOK:</strong> Sütő Ferenc EV, 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7], adószám: 92466175-1-28[cite: 7], nyilvántartási szám: 62943248[cite: 7].</p>
+                <p><strong>1. SZOLGÁLTATÓI ADATOK ÉS A HATÁLY</strong><br>
+                A weboldalon elérhető szolgáltatás nyújtója és üzemeltetője Sütő Ferenc egyéni vállalkozó (Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7]; Nyilvántartási szám: 62943248[cite: 7]; Adószám: 92466175-1-28[cite: 7]; E-mail: info@focielemzesek.com). Jelen ÁSZF hatálya kiterjed minden olyan kereskedelmi és információs szolgáltatásra, amelyet a weboldalon keresztül nyújtanak.</p>
             </div>
             <div class="mt-6 text-center border-t border-cyan-500/20 pt-4">
                 <button onclick="closeTermsModal()" class="bg-slate-900/50 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
@@ -1161,6 +1162,20 @@
                     msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${err.message}</span>`;
                 }
             }
+        }
+
+        // Működő letöltés funkció JavaScript-tel
+        function downloadPrivacyText() {
+            const content = document.getElementById('privacy-text-content').innerText;
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Adatvedelmi_Tajekoztato_Suto_Ferenc_EV.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
     </script>
 </body>
