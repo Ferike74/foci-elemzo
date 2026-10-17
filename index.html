@@ -1166,7 +1166,7 @@
             }
         }
 
-        // ABSZOLÚT PONTOS, HIÁNYTALAN ÉS ÜRES OLDAL NÉLKÜLI PDF GENERÁTOR
+        // VÉGLEGESEN KIKÜSZÖBÖLT, TISZTÁN MEMÓRIÁBÓL GENERÁLÓ PDF FUNKCIÓ (ÜRES OLDAL NÉLKÜL, AZ 1. OLDALTÓL KEZDVE)
         function downloadPrivacyPDF() {
             const contentHTML = document.getElementById('privacy-pdf-content').innerHTML;
             
@@ -1178,15 +1178,15 @@
             wrapper.style.fontSize = '10px';
             wrapper.style.lineHeight = '1.4';
             wrapper.innerHTML = `
-                <div style="text-align: center; margin-bottom: 12px; border-bottom: 2px solid #000; padding-bottom: 6px;">
+                <div style="text-align: center; margin-bottom: 15px; border-bottom: 2px solid #000; padding-bottom: 8px;">
                     <h1 style="font-size: 14px; font-weight: bold; margin: 0;">ADATKEZELÉSI TÁJÉKOZTATÓ</h1>
-                    <p style="font-size: 9px; color: #333; margin-top: 2px;">focielemzesek.com | Sütő Ferenc EV</p>
+                    <p style="font-size: 9px; color: #333; margin-top: 3px;">focielemzesek.com | Sütő Ferenc EV</p>
                 </div>
                 ${contentHTML}
             `;
 
             const opt = {
-                margin:       [5, 5, 5, 5],
+                margin:       [0, 0, 0, 0],
                 filename:     'adatkezelesi_tajekoztato_suto_ferenc_ev.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, useCORS: true, logging: false },
