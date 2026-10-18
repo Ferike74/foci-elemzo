@@ -724,6 +724,17 @@
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
             
+            // Speciális szűrések a kategóriák szigorú elválasztásához (pl. Belga kupa vs Premier League / Jupiler Liga)
+            if (leagueConfig.key === "premier" && (lowerDb.includes("kupa") || lowerDb.includes("cup") || lowerDb.includes("pokal") || lowerDb.includes("croky") || lowerDb.includes("belga"))) {
+                return false;
+            }
+            if (leagueConfig.key === "belgakupa" && (!lowerDb.includes("belga") && !lowerDb.includes("croky") && !lowerDb.includes("cup"))) {
+                return false;
+            }
+            if (leagueConfig.key === "belga" && (lowerDb.includes("kupa") || lowerDb.includes("cup") || lowerDb.includes("croky"))) {
+                return false;
+            }
+
             const isSlovenianMatch = lowerDb.includes("szlovén") || lowerDb.includes("slovenia") || lowerDb.includes("1. snl") || lowerDb.includes("aluminij") || lowerDb.includes("olimpija");
             const isSerbianMatch = lowerDb.includes("szerb") || lowerDb.includes("serbia") || lowerDb.includes("super liga srbije") || lowerDb.includes("prva liga srbije") || lowerDb.includes("radnik") || lowerDb.includes("radnicki");
 
@@ -1166,27 +1177,27 @@
             }
         }
 
-        // VÉGLEGESEN KIKÜSZÖBÖLT, TISZTÁN MEMÓRIÁBÓL GENERÁLÓ PDF FUNKCIÓ (ÜRES OLDAL NÉLKÜL, AZ 1. OLDALTÓL KEZDVE)
+        // TÖKÉLETESEN JAVÍTOTT, KÖZVETLEN RENDERELÉSŰ PDF FUNKCIÓ (NINCS ÜRES ELSŐ OLDAL, AZONNAL KEZDŐDIK)
         function downloadPrivacyPDF() {
             const contentHTML = document.getElementById('privacy-pdf-content').innerHTML;
             
             const wrapper = document.createElement('div');
             wrapper.style.background = '#ffffff';
             wrapper.style.color = '#000000';
-            wrapper.style.padding = '15px';
+            wrapper.style.padding = '10px';
             wrapper.style.fontFamily = 'Arial, sans-serif';
             wrapper.style.fontSize = '10px';
             wrapper.style.lineHeight = '1.4';
             wrapper.innerHTML = `
-                <div style="text-align: center; margin-bottom: 15px; border-bottom: 2px solid #000; padding-bottom: 8px;">
-                    <h1 style="font-size: 14px; font-weight: bold; margin: 0;">ADATKEZELÉSI TÁJÉKOZTATÓ</h1>
-                    <p style="font-size: 9px; color: #333; margin-top: 3px;">focielemzesek.com | Sütő Ferenc EV</p>
+                <div style="text-align: center; margin-bottom: 10px; border-bottom: 2px solid #000; padding-bottom: 5px;">
+                    <h1 style="font-size: 13px; font-weight: bold; margin: 0;">ADATKEZELÉSI TÁJÉKOZTATÓ</h1>
+                    <p style="font-size: 8px; color: #333; margin: 2px 0 0 0;">focielemzesek.com | Sütő Ferenc EV</p>
                 </div>
                 ${contentHTML}
             `;
 
             const opt = {
-                margin:       [0, 0, 0, 0],
+                margin:       0,
                 filename:     'adatkezelesi_tajekoztato_suto_ferenc_ev.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, useCORS: true, logging: false },
