@@ -682,16 +682,19 @@
                 return false;
             }
 
-            // Első és másodosztályok szigorú szétválasztása
-            const isSecondDivisionMatch = lowerDb.includes("2") || lowerDb.includes("segunda") || lowerDb.includes("challenger") || lowerDb.includes("prva liga");
-            const isLeagueConfigSecond = leagueConfig.key.includes("2") || leagueConfig.key === "segunda" || leagueConfig.key === "belga2" || leagueConfig.key === "skocia2" || leagueConfig.key === "portugal2";
+            // Országspecifikus másodosztályok szigorú szétválasztása
+            const isAustrian2 = lowerDb.includes("2. liga") || lowerDb.includes("osztrák 2") || (lowerDb.includes("2") && (lowerDb.includes("austria") || lowerDb.includes("osztrák") || lowerDb.includes("teq")));
+            const isSlovak2 = lowerDb.includes("szlovák") || lowerDb.includes("slovakia") || lowerDb.includes("slovnaft") || (lowerDb.includes("2. liga") && (lowerDb.includes("szlovák") || lowerDb.includes("slovakia")));
 
-            if (isSecondDivisionMatch && !isLeagueConfigSecond) {
-                return false;
+            if (countryName === "Ausztria" && leagueConfig.key === "ausztria2") {
+                if (!lowerDb.includes("2. liga") && !lowerDb.includes("austria") && !lowerDb.includes("osztrák")) return false;
             }
-            if (!isSecondDivisionMatch && isLeagueConfigSecond) {
-                return false;
+            if (countryName === "Szlovákia" && leagueConfig.key === "szlovakia2") {
+                if (!lowerDb.includes("szlovák") && !lowerDb.includes("slovakia") && !lowerDb.includes("2. liga")) return false;
             }
+
+            if (leagueConfig.key === "ausztria2" && !isAustrian2 && lowerDb.includes("szlovák")) return false;
+            if (leagueConfig.key === "szlovakia2" && !isSlovak2 && (lowerDb.includes("osztrák") || lowerDb.includes("austria"))) return false;
 
             const isSlovenianMatch = lowerDb.includes("szlovén") || lowerDb.includes("slovenia") || lowerDb.includes("1. snl") || lowerDb.includes("aluminij") || lowerDb.includes("olimpija");
             const isSerbianMatch = lowerDb.includes("szerb") || lowerDb.includes("serbia") || lowerDb.includes("super liga srbije") || lowerDb.includes("prva liga srbije") || lowerDb.includes("radnik") || lowerDb.includes("radnicki");
