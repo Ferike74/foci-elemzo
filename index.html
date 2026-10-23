@@ -661,6 +661,7 @@
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
             
+            // Német Bundesliga szűrése az osztrák ellen
             if (leagueConfig.key === "bundesliga") {
                 if (lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria") || lowerDb.includes("aut")) {
                     return false;
@@ -671,13 +672,14 @@
                 return lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria") || lowerDb.includes("aut");
             }
 
-            if (leagueConfig.key === "premier" && (lowerDb.includes("kupa") || lowerDb.includes("cup") || lowerDb.includes("pokal") || lowerDb.includes("croky") || lowerDb.includes("belga"))) {
+            // Kupák és bajnokságok szigorú szétválasztása (ne csússzon be kupameccs a sima bajnokságba)
+            const isCupMatch = lowerDb.includes("kupa") || lowerDb.includes("cup") || lowerDb.includes("pokal") || lowerDb.includes("croky");
+            const isLeagueConfigCup = leagueConfig.key.includes("kupa") || leagueConfig.name.toLowerCase().includes("kupa") || leagueConfig.name.toLowerCase().includes("cup");
+
+            if (isCupMatch && !isLeagueConfigCup) {
                 return false;
             }
-            if (leagueConfig.key === "belgakupa" && (!lowerDb.includes("belga") && !lowerDb.includes("croky") && !lowerDb.includes("cup"))) {
-                return false;
-            }
-            if (leagueConfig.key === "belga" && (lowerDb.includes("kupa") || lowerDb.includes("cup") || lowerDb.includes("croky"))) {
+            if (!isCupMatch && isLeagueConfigCup) {
                 return false;
             }
 
@@ -690,7 +692,7 @@
             if (countryName === "Szerbia" && leagueConfig.key === "szerbia2" && !isSerbianMatch) return false;
             if (countryName === "Szlovénia" && leagueConfig.key === "szloven2" && !isSlovenianMatch) return false;
 
-            if (lowerDb.includes("championship") && leagueConfig.key !== "championship") {
+            if (lowerDb.includes("championship") && leagueConfig.key !== "championship" && leagueConfig.key !== "skocia2") {
                 return false;
             }
 
@@ -711,23 +713,7 @@
                 if (isSecondBundesliga) return false;
             }
 
-            const isSwissCup = lowerDb.includes("svájci kupa") || lowerDb.includes("swiss cup");
-            const isItalianCup = lowerDb.includes("olasz kupa") || lowerDb.includes("coppa italia");
-
-            if (leagueConfig.key === "svajckupa") {
-                return isSwissCup;
-            }
-            if (leagueConfig.key === "olaszkupa") {
-                return isItalianCup;
-            }
-            if (isSwissCup && leagueConfig.key !== "svajckupa") {
-                return false;
-            }
-            if (isItalianCup && leagueConfig.key !== "olaszkupa") {
-                return false;
-            }
-
-            // Szinonimák ellenőrzése: rövid szinonimák teljes szóhatár vizsgálata a téves egyezések (pl. "ll" az Allsvenskanban) elkerülésére
+            // Szinonimák ellenőrzése szóhatár vizsgálattal a rövid szinonimákhoz (pl. "ll")
             const matchesSynonym = leagueConfig.synonyms.some(syn => {
                 if (syn.length <= 3) {
                     const regex = new RegExp(`\\b${syn}\\b`, 'i');
@@ -783,7 +769,7 @@
                     countryTotalMatches += leagueMatches.length;
 
                     leaguesHtml += `
-                        <div onclick="event.stopPropagation(); openLeagueModal(${JSON.stringify(league).replace(/"/g, '&quot;')}, ${JSON.stringify(leagueMatches).replace(/"/g, '&quot;')})" 
+                        <div onclick="event.stopPropagation(); openLeagueModal(${JSON.stringify(league).replace(/"/g, '&quot;')}, ${JSON.stringify(leagueMatches).replace(JSON.stringify(leagueMatches).replace(/"/g, '&quot;'))})" 
                              class="flex justify-between items-center py-2 px-3 hover:bg-pink-950/40 rounded-xl text-xs cursor-pointer transition border border-transparent hover:border-cyan-500/40">
                             <span class="font-medium slightly-lighter-green">⚽ ${league.name}</span>
                             <span class="bg-pink-600 text-white font-bold px-2 py-0.5 rounded shadow">${leagueMatches.length} meccs</span>
