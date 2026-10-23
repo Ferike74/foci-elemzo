@@ -661,7 +661,6 @@
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
             
-            // Német Bundesliga szűrése az osztrák ellen
             if (leagueConfig.key === "bundesliga") {
                 if (lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria") || lowerDb.includes("aut")) {
                     return false;
@@ -672,7 +671,6 @@
                 return lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria") || lowerDb.includes("aut");
             }
 
-            // Kupák és bajnokságok szigorú szétválasztása (ne csússzon be kupameccs a sima bajnokságba)
             const isCupMatch = lowerDb.includes("kupa") || lowerDb.includes("cup") || lowerDb.includes("pokal") || lowerDb.includes("croky");
             const isLeagueConfigCup = leagueConfig.key.includes("kupa") || leagueConfig.name.toLowerCase().includes("kupa") || leagueConfig.name.toLowerCase().includes("cup");
 
@@ -713,7 +711,6 @@
                 if (isSecondBundesliga) return false;
             }
 
-            // Szinonimák ellenőrzése szóhatár vizsgálattal a rövid szinonimákhoz (pl. "ll")
             const matchesSynonym = leagueConfig.synonyms.some(syn => {
                 if (syn.length <= 3) {
                     const regex = new RegExp(`\\b${syn}\\b`, 'i');
@@ -768,8 +765,11 @@
                     const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league, item.country));
                     countryTotalMatches += leagueMatches.length;
 
+                    const leagueJsonStr = JSON.stringify(league).replace(/"/g, '&quot;');
+                    const matchesJsonStr = JSON.stringify(leagueMatches).replace(/"/g, '&quot;');
+
                     leaguesHtml += `
-                        <div onclick="event.stopPropagation(); openLeagueModal(${JSON.stringify(league).replace(/"/g, '&quot;')}, ${JSON.stringify(leagueMatches).replace(JSON.stringify(leagueMatches).replace(/"/g, '&quot;'))})" 
+                        <div onclick="event.stopPropagation(); openLeagueModal(${leagueJsonStr}, ${matchesJsonStr})" 
                              class="flex justify-between items-center py-2 px-3 hover:bg-pink-950/40 rounded-xl text-xs cursor-pointer transition border border-transparent hover:border-cyan-500/40">
                             <span class="font-medium slightly-lighter-green">⚽ ${league.name}</span>
                             <span class="bg-pink-600 text-white font-bold px-2 py-0.5 rounded shadow">${leagueMatches.length} meccs</span>
@@ -874,7 +874,15 @@
             document.body.style.overflow = 'hidden';
 
             const container = document.getElementById('modal-html-container');
+            
+            // BIZTONSÁGOS HTML MEGJELENÍTÉS: Ha a full_html JSON stringként escapelt \n karaktereket tartalmaz, feloldjuk őket, hogy tiszta HTML-ként rendereljen
             let htmlContent = currentActiveMatch.full_html || "";
+            if (typeof htmlContent === 'string') {
+                htmlContent = htmlContent
+                    .replace(/\\n/g, '\n')
+                    .replace(/\\"/g, '"')
+                    .replace(/\\'/g, "'");
+            }
 
             htmlContent = htmlContent.replace(/<!DOCTYPE[^>]*>/gi, '');
             htmlContent = htmlContent.replace(/<\/?html[^>]*>/gi, '');
