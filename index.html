@@ -660,7 +660,16 @@
         function matchBelongsToLeague(dbLeagueName, leagueConfig, countryName, matchItem) {
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
+            const badge = matchItem && matchItem.match_badge ? matchItem.match_badge.toLowerCase() : "";
             
+            // Ha a meccshez tartozik match_badge (pl. AUT2, SVK2), az alapján azonnal és hibátlanul szétválasztjuk!
+            if (badge) {
+                if (leagueConfig.key === "ausztria2") return badge === "aut2";
+                if (leagueConfig.key === "szlovakia2") return badge === "svk2";
+                if (badge === "aut2" && leagueConfig.key !== "ausztria2") return false;
+                if (badge === "svk2" && leagueConfig.key !== "szlovakia2") return false;
+            }
+
             if (leagueConfig.key === "bundesliga") {
                 if (lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria") || lowerDb.includes("aut")) {
                     return false;
@@ -681,18 +690,6 @@
             if (!isCupMatch && isLeagueConfigCup) {
                 return false;
             }
-
-            // Országspecifikus másodosztályok szigorú szétválasztása (badge vagy kontextus alapján)
-            const badge = matchItem && matchItem.match_badge ? matchItem.match_badge.toLowerCase() : "";
-            
-            if (countryName === "Ausztria" && leagueConfig.key === "ausztria2") {
-                return badge === "aut2" || lowerDb.includes("osztrák 2") || (lowerDb.includes("2. liga") && (lowerDb.includes("ausztria") || lowerDb.includes("osztrák") || badge === "aut2"));
-            }
-            if (countryName === "Szlovákia" && leagueConfig.key === "szlovakia2") {
-                return badge === "svk2" || lowerDb.includes("szlovák 2") || (lowerDb.includes("2. liga") && (lowerDb.includes("szlovák") || lowerDb.includes("slovakia") || badge === "svk2"));
-            }
-            if (leagueConfig.key === "ausztria2" && badge === "svk2") return false;
-            if (leagueConfig.key === "szlovakia2" && badge === "aut2") return false;
 
             const isSlovenianMatch = lowerDb.includes("szlovén") || lowerDb.includes("slovenia") || lowerDb.includes("1. snl") || lowerDb.includes("aluminij") || lowerDb.includes("olimpija");
             const isSerbianMatch = lowerDb.includes("szerb") || lowerDb.includes("serbia") || lowerDb.includes("super liga srbije") || lowerDb.includes("prva liga srbije") || lowerDb.includes("radnik") || lowerDb.includes("radnicki");
