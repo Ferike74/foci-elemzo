@@ -657,7 +657,7 @@
             }
         });
 
-        function matchBelongsToLeague(dbLeagueName, leagueConfig, countryName) {
+        function matchBelongsToLeague(dbLeagueName, leagueConfig, countryName, matchItem) {
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
             
@@ -682,19 +682,17 @@
                 return false;
             }
 
-            // Országspecifikus másodosztályok szigorú szétválasztása
-            const isAustrian2 = lowerDb.includes("2. liga") || lowerDb.includes("osztrák 2") || (lowerDb.includes("2") && (lowerDb.includes("austria") || lowerDb.includes("osztrák") || lowerDb.includes("teq")));
-            const isSlovak2 = lowerDb.includes("szlovák") || lowerDb.includes("slovakia") || lowerDb.includes("slovnaft") || (lowerDb.includes("2. liga") && (lowerDb.includes("szlovák") || lowerDb.includes("slovakia")));
-
+            // Országspecifikus másodosztályok szigorú szétválasztása (badge vagy kontextus alapján)
+            const badge = matchItem && matchItem.match_badge ? matchItem.match_badge.toLowerCase() : "";
+            
             if (countryName === "Ausztria" && leagueConfig.key === "ausztria2") {
-                if (!lowerDb.includes("2. liga") && !lowerDb.includes("austria") && !lowerDb.includes("osztrák")) return false;
+                return badge === "aut2" || lowerDb.includes("osztrák 2") || (lowerDb.includes("2. liga") && (lowerDb.includes("ausztria") || lowerDb.includes("osztrák") || badge === "aut2"));
             }
             if (countryName === "Szlovákia" && leagueConfig.key === "szlovakia2") {
-                if (!lowerDb.includes("szlovák") && !lowerDb.includes("slovakia") && !lowerDb.includes("2. liga")) return false;
+                return badge === "svk2" || lowerDb.includes("szlovák 2") || (lowerDb.includes("2. liga") && (lowerDb.includes("szlovák") || lowerDb.includes("slovakia") || badge === "svk2"));
             }
-
-            if (leagueConfig.key === "ausztria2" && !isAustrian2 && lowerDb.includes("szlovák")) return false;
-            if (leagueConfig.key === "szlovakia2" && !isSlovak2 && (lowerDb.includes("osztrák") || lowerDb.includes("austria"))) return false;
+            if (leagueConfig.key === "ausztria2" && badge === "svk2") return false;
+            if (leagueConfig.key === "szlovakia2" && badge === "aut2") return false;
 
             const isSlovenianMatch = lowerDb.includes("szlovén") || lowerDb.includes("slovenia") || lowerDb.includes("1. snl") || lowerDb.includes("aluminij") || lowerDb.includes("olimpija");
             const isSerbianMatch = lowerDb.includes("szerb") || lowerDb.includes("serbia") || lowerDb.includes("super liga srbije") || lowerDb.includes("prva liga srbije") || lowerDb.includes("radnik") || lowerDb.includes("radnicki");
@@ -757,7 +755,7 @@
                 }
 
                 const cup = internationalConfig[idx];
-                const cupMatches = matches.filter(m => matchBelongsToLeague(m.league_name, cup));
+                const cupMatches = matches.filter(m => matchBelongsToLeague(m.league_name, cup, null, m));
                 
                 const card = document.createElement('div');
                 card.className = "league-card-custom rounded-2xl p-4 flex justify-between items-center shadow-xl cursor-pointer transition";
@@ -777,7 +775,7 @@
                 let leaguesHtml = '';
 
                 item.leagues.forEach(league => {
-                    const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league, item.country));
+                    const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league, item.country, m));
                     countryTotalMatches += leagueMatches.length;
 
                     const leagueJsonStr = JSON.stringify(league).replace(/"/g, '&quot;');
