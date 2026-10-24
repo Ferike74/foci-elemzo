@@ -484,8 +484,8 @@
             {
                 country: "Görögország",
                 leagues: [
-                    { key: "gorog", name: "Görög Szuperliga", synonyms: ["görög", "super league 1", "sl1", "super league"] },
-                    { key: "gorog2", name: "Görög Szuperliga 2", synonyms: ["görög 2", "super league 2"] },
+                    { key: "gorog", name: "Szuperliga", synonyms: ["görög", "super league 1", "sl1", "super league", "szuperliga"] },
+                    { key: "gorog2", name: "Szuperliga 2", synonyms: ["görög 2", "super league 2"] },
                     { key: "gorogkupa", name: "Görög Kupa", synonyms: ["görög kupa"] },
                     { key: "gorogszuperkupa", name: "Görög Szuperkupa", synonyms: ["görög szuperkupa"] }
                 ]
@@ -585,7 +585,7 @@
             {
                 country: "Szerbia",
                 leagues: [
-                    { key: "szerbia", name: "Szerb Szuperliga", synonyms: ["szerbia", "szerb", "super liga", "superliga"] },
+                    { key: "szerbia", name: "Szuperliga", synonyms: ["szerbia", "szerb", "super liga", "superliga"] },
                     { key: "szerbia2", name: "Prva Liga", synonyms: ["prva liga", "szerb 2"] },
                     { key: "szerbiakupa", name: "Szerb Kupa", synonyms: ["szerb kupa", "kup srbije"] }
                 ]
@@ -691,13 +691,35 @@
                 return false;
             }
 
-            // Görög, szerb és szlovén mérkőzések szigorú szétválasztása az átfedések ellen
-            const isGreekMatch = lowerDb.includes("görög") || lowerDb.includes("greece") || lowerDb.includes("hellas") || lowerDb.includes("super league 1");
+            // --- GÖRÖG ÉS SZERB SZUPERLIGA PONTOS KÜLÖNVÁLASZTÁSA ---
+            if (leagueConfig.key === "gorog") {
+                // Ha a rekordban szerb utalás van, kizárjuk a görögből
+                if (lowerDb.includes("szerb") || lowerDb.includes("serbia") || lowerDb.includes("srb")) return false;
+                
+                // Elfogadjuk, ha görögként van rögzítve, vagy Super League 1 / Super League az elnevezés
+                return lowerDb.includes("görög") || 
+                       lowerDb.includes("greece") || 
+                       lowerDb.includes("super league 1") || 
+                       lowerDb.includes("super league") || 
+                       lowerDb.includes("sl1");
+            }
+
+            if (leagueConfig.key === "szerbia") {
+                // Ha a rekordban görög vagy szlovén utalás van, kizárjuk a szerbből
+                if (lowerDb.includes("görög") || lowerDb.includes("greece") || lowerDb.includes("super league 1")) return false;
+                if (lowerDb.includes("szlovén") || lowerDb.includes("slovenia") || lowerDb.includes("1. snl")) return false;
+                
+                // Csak akkor fogadjuk el, ha kifejezetten a szerb bajnoksághoz tartozik
+                return lowerDb.includes("szerb") || 
+                       lowerDb.includes("serbia") || 
+                       lowerDb.includes("super liga srbije") || 
+                       lowerDb.includes("superliga srbije") || 
+                       (lowerDb.includes("super liga") && !lowerDb.includes("greece"));
+            }
+
+            // Szlovén és szerb kizárások a többi ligánál
             const isSlovenianMatch = lowerDb.includes("szlovén") || lowerDb.includes("slovenia") || lowerDb.includes("1. snl") || lowerDb.includes("aluminij") || lowerDb.includes("olimpija");
             const isSerbianMatch = lowerDb.includes("szerb") || lowerDb.includes("serbia") || lowerDb.includes("super liga srbije") || lowerDb.includes("prva liga srbije") || lowerDb.includes("radnik") || lowerDb.includes("radnicki");
-
-            if (countryName === "Szerbia" && isGreekMatch) return false;
-            if (countryName === "Görögország" && isSerbianMatch) return false;
 
             if (countryName === "Szerbia" && isSlovenianMatch) return false;
             if (countryName === "Szlovénia" && isSerbianMatch) return false;
