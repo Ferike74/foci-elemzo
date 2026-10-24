@@ -254,7 +254,7 @@
             
             <div id="privacy-pdf-content" class="space-y-4 text-xs leading-relaxed text-gray-200 text-justify overflow-y-auto custom-scrollbar flex-grow pr-3">
                 <p><strong>1. AZ ADATKEZELÉSI TÁJÉKOZTATÓ CÉLJA</strong><br>
-                Sütő Ferenc egyéni vállalkozó (székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7, 8], a továbbiakban: szolgáltató, adatkezelő) mint adatkezelő, magára nézve kötelezőnek ismeri el jelen jogi közlemény tartalmát[cite: 8]. Kötelezettséget vállal arra, hogy tevékenységével kapcsolatos minden adatkezelés megfelel a jelen szabályzatban és a hatályos nemzeti jogszabályokban, valamint az Európai Unió jogi aktusaiban meghatározott elvárásoknak[cite: 8]. Jelen adatkezelési tájékoztató az alábbi domainre és azok aldomainjeire terjed ki: <strong>focielemzesek.com</strong>[cite: 8].</p>
+                Sütő Ferenc egyéni vállalkozó (székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7], a továbbiakban: szolgáltató, adatkezelő) mint adatkezelő, magára nézve kötelezőnek ismeri el jelen jogi közlemény tartalmát. Kötelezettséget vállal arra, hogy tevékenységével kapcsolatos minden adatkezelés megfelel a jelen szabályzatban és a hatályos nemzeti jogszabályokban, valamint az Európai Unió jogi aktusaiban meghatározott elvárásoknak. Jelen adatkezelési tájékoztató az alábbi domainre és azok aldomainjeire terjed ki: <strong>focielemzesek.com</strong>.</p>
             </div>
 
             <div class="mt-4 pt-3 border-t border-cyan-500/20 flex flex-wrap justify-between items-center gap-3 flex-shrink-0">
@@ -484,8 +484,8 @@
             {
                 country: "Görögország",
                 leagues: [
-                    { key: "gorog", name: "Szuperliga", synonyms: ["görög", "szuperliga", "super league"] },
-                    { key: "gorog2", name: "Szuperliga 2", synonyms: ["görög 2", "super league 2"] },
+                    { key: "gorog", name: "Görög Szuperliga", synonyms: ["görög", "super league 1", "sl1", "super league"] },
+                    { key: "gorog2", name: "Görög Szuperliga 2", synonyms: ["görög 2", "super league 2"] },
                     { key: "gorogkupa", name: "Görög Kupa", synonyms: ["görög kupa"] },
                     { key: "gorogszuperkupa", name: "Görög Szuperkupa", synonyms: ["görög szuperkupa"] }
                 ]
@@ -585,7 +585,7 @@
             {
                 country: "Szerbia",
                 leagues: [
-                    { key: "szerbia", name: "Szuperliga", synonyms: ["szerbia", "szerb", "super liga"] },
+                    { key: "szerbia", name: "Szerb Szuperliga", synonyms: ["szerbia", "szerb", "super liga", "superliga"] },
                     { key: "szerbia2", name: "Prva Liga", synonyms: ["prva liga", "szerb 2"] },
                     { key: "szerbiakupa", name: "Szerb Kupa", synonyms: ["szerb kupa", "kup srbije"] }
                 ]
@@ -691,8 +691,13 @@
                 return false;
             }
 
+            // Görög, szerb és szlovén mérkőzések szigorú szétválasztása az átfedések ellen
+            const isGreekMatch = lowerDb.includes("görög") || lowerDb.includes("greece") || lowerDb.includes("hellas") || lowerDb.includes("super league 1");
             const isSlovenianMatch = lowerDb.includes("szlovén") || lowerDb.includes("slovenia") || lowerDb.includes("1. snl") || lowerDb.includes("aluminij") || lowerDb.includes("olimpija");
             const isSerbianMatch = lowerDb.includes("szerb") || lowerDb.includes("serbia") || lowerDb.includes("super liga srbije") || lowerDb.includes("prva liga srbije") || lowerDb.includes("radnik") || lowerDb.includes("radnicki");
+
+            if (countryName === "Szerbia" && isGreekMatch) return false;
+            if (countryName === "Görögország" && isSerbianMatch) return false;
 
             if (countryName === "Szerbia" && isSlovenianMatch) return false;
             if (countryName === "Szlovénia" && isSerbianMatch) return false;
