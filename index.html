@@ -1151,6 +1151,7 @@
         function downloadPrivacyPDF() {
             const contentHTML = document.getElementById('privacy-pdf-content').innerHTML;
             
+            $wrapper = document.createElement('div');
             const wrapper = document.createElement('div');
             wrapper.style.background = '#ffffff';
             wrapper.style.color = '#000000';
