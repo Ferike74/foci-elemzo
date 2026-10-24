@@ -1053,7 +1053,7 @@
             if (error) {
                 msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${error.message}</span>`;
             } else {
-                // n8n Webhook hívás az üdvözlő email küldéséhez
+                // n8n ÉLES Production Webhook hívás az üdvözlő email küldéséhez
                 try {
                     await fetch('https://ferike74.app.n8n.cloud/webhook/welcome-email', {
                         method: 'POST',
