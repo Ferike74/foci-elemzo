@@ -409,7 +409,7 @@
             {
                 country: "Anglia",
                 leagues: [
-                    { key: "premier", name: "Premier League", synonyms: ["premier league", "anglia premier", "premier", "prl", "eng1"] },
+                    { key: "premier", name: "Premier League", synonyms: ["premier league", "anglia premier", "prl", "eng1"] },
                     { key: "championship", name: "EFL Championship", synonyms: ["efl championship", "championship", "champ", "eng2"] },
                     { key: "leagueone", name: "League One", synonyms: ["league one", "league 1", "leagueone", "l1"] },
                     { key: "leaguetwo", name: "League Two", synonyms: ["league two", "league 2", "leaguetwo", "l2"] },
@@ -487,7 +487,7 @@
                     { key: "gorog", name: "Szuperliga", synonyms: ["görög", "super league 1", "sl1", "super league", "szuperliga", "gre1"] },
                     { key: "gorog2", name: "Szuperliga 2", synonyms: ["görög 2", "super league 2", "gre2"] },
                     { key: "gorogkupa", name: "Görög Kupa", synonyms: ["görög kupa"] },
-                    { key: "gorogszuperkupa", name: "Görög Szuperkupa", synonyms: ["görög szuperkupa"] }
+                    { key: "gorogszuperkupa", name: "Görög Szuperkupa", synonyms: ["gorog szuperkupa"] }
                 ]
             },
             {
@@ -510,8 +510,8 @@
             {
                 country: "Skócia",
                 leagues: [
-                    { key: "skocia", name: "Premiership", synonyms: ["skócia", "skót", "premiership", "sco1"] },
-                    { key: "skocia2", name: "Scottish Championship", synonyms: ["scottish championship", "skót 2", "sco2"] },
+                    { key: "skocia", name: "Premiership", synonyms: ["premiership", "scottish premiership", "skót premiership", "skót 1", "sco1"] },
+                    { key: "skocia2", name: "Scottish Championship", synonyms: ["scottish championship", "skót championship", "skót 2", "sco2"] },
                     { key: "skociakupa", name: "Skót Kupa", synonyms: ["skót kupa", "scottish cup"] },
                     { key: "skocialigakupa", name: "Skót Ligakupa", synonyms: ["skót ligakupa", "scottish league cup"] }
                 ]
@@ -660,9 +660,9 @@
         function matchBelongsToLeague(dbLeagueName, leagueConfig, countryName, matchItem) {
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase();
-            const badge = matchItem && matchItem.match_badge ? matchItem.match_badge.toLowerCase() : "";
+            const badge = matchItem && matchItem.match_badge ? matchItem.match_badge.toLowerCase().trim() : "";
             
-            // 1. MATCH_BADGE ALAPJÁN TÖRTÉNŐ AZONNALI ÉS BIZTOS SZÉTVÁLASZTÁS
+            // 1. MATCH_BADGE ALAPJÁN TÖRTÉNŐ BIZTOS SZÉTVÁLASZTÁS
             if (badge) {
                 if (leagueConfig.key === "ausztria2") return badge === "aut2";
                 if (leagueConfig.key === "szlovakia2") return badge === "svk2";
@@ -671,7 +671,6 @@
                 if (leagueConfig.key === "szerbia") return badge === "srb1";
                 if (leagueConfig.key === "szerbia2") return badge === "srb2";
                 if (leagueConfig.key === "skocia2") return badge === "sco2";
-                if (leagueConfig.key === "championship") return badge === "eng2";
 
                 if (badge === "aut2" && leagueConfig.key !== "ausztria2") return false;
                 if (badge === "svk2" && leagueConfig.key !== "szlovakia2") return false;
@@ -680,10 +679,30 @@
                 if (badge === "srb1" && leagueConfig.key !== "szerbia") return false;
                 if (badge === "srb2" && leagueConfig.key !== "szerbia2") return false;
                 if (badge === "sco2" && leagueConfig.key !== "skocia2") return false;
-                if (badge === "eng2" && leagueConfig.key !== "championship") return false;
             }
 
-            // Bundesliga és Osztrák Bundesliga szétválasztása
+            // 2. SKÓT ÉS ANGOL LIGÁK SZÉTVÁLASZTÁSA (PREMIER ÉS CHAMPIONSHIP)
+            const isScottish = lowerDb.includes("skót") || lowerDb.includes("scottish") || lowerDb.includes("scotland") || badge === "sco1" || badge === "sco2";
+
+            // Angol Premier League védelem: Skót meccs SOHA nem mehet az angolba!
+            if (leagueConfig.key === "premier") {
+                if (isScottish || lowerDb.includes("premiership")) return false;
+            }
+
+            // Skót Premiership
+            if (leagueConfig.key === "skocia") {
+                return isScottish && (lowerDb.includes("premiership") || lowerDb.includes("premier") || badge === "sco1");
+            }
+
+            // Championship szétválasztás
+            if (lowerDb.includes("championship")) {
+                if (badge === "sco2" || isScottish) {
+                    return leagueConfig.key === "skocia2";
+                }
+                return leagueConfig.key === "championship";
+            }
+
+            // 3. Bundesliga és Osztrák Bundesliga szétválasztása
             if (leagueConfig.key === "bundesliga") {
                 if (lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria") || lowerDb.includes("aut")) {
                     return false;
@@ -694,18 +713,14 @@
                 return lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria") || lowerDb.includes("aut");
             }
 
-            // Kupák szigorú szétválasztása
+            // 4. Kupák szigorú szétválasztása
             const isCupMatch = lowerDb.includes("kupa") || lowerDb.includes("cup") || lowerDb.includes("pokal") || lowerDb.includes("croky");
             const isLeagueConfigCup = leagueConfig.key.includes("kupa") || leagueConfig.name.toLowerCase().includes("kupa") || leagueConfig.name.toLowerCase().includes("cup");
 
-            if (isCupMatch && !isLeagueConfigCup) {
-                return false;
-            }
-            if (!isCupMatch && isLeagueConfigCup) {
-                return false;
-            }
+            if (isCupMatch && !isLeagueConfigCup) return false;
+            if (!isCupMatch && isLeagueConfigCup) return false;
 
-            // Szlovén és szerb szétválasztás
+            // 5. Szlovén és szerb szétválasztás
             const isSlovenianMatch = lowerDb.includes("szlovén") || lowerDb.includes("slovenia") || lowerDb.includes("1. snl") || lowerDb.includes("aluminij") || lowerDb.includes("olimpija");
             const isSerbianMatch = lowerDb.includes("szerb") || lowerDb.includes("serbia") || lowerDb.includes("super liga srbije") || lowerDb.includes("prva liga srbije") || lowerDb.includes("radnik") || lowerDb.includes("radnicki");
 
@@ -715,36 +730,16 @@
             if (countryName === "Szerbia" && leagueConfig.key === "szerbia2" && !isSerbianMatch) return false;
             if (countryName === "Szlovénia" && leagueConfig.key === "szloven2" && !isSlovenianMatch) return false;
 
-            // Skót és Angol Championship szétválasztása
-            if (lowerDb === "championship" || lowerDb.includes("championship")) {
-                if (countryName === "Skócia" || badge === "sco2") {
-                    return leagueConfig.key === "skocia2";
-                }
-                if (countryName === "Anglia" || badge === "eng2") {
-                    return leagueConfig.key === "championship";
-                }
-                if (leagueConfig.key !== "championship" && leagueConfig.key !== "skocia2") {
-                    return false;
-                }
-            }
-
+            // 6. Bajnokok Ligája és 2. Bundesliga szűrések
             const isChampionsLeague = (lowerDb.includes("champions") || lowerDb.includes("bajnokok") || lowerDb.includes("ucl") || lowerDb.includes("bl")) && !lowerDb.includes("championship");
-            if (isChampionsLeague && leagueConfig.key !== "ucl") {
-                return false;
-            }
-
-            if (leagueConfig.key === "ucl") {
-                return isChampionsLeague;
-            }
+            if (isChampionsLeague && leagueConfig.key !== "ucl") return false;
+            if (leagueConfig.key === "ucl") return isChampionsLeague;
             
             const isSecondBundesliga = lowerDb.includes("2. bundesliga") || lowerDb.includes("bundesliga 2") || lowerDb.includes("2bundesliga");
-            if (leagueConfig.key === "bundesliga2") {
-                return isSecondBundesliga;
-            }
-            if (leagueConfig.key === "bundesliga") {
-                if (isSecondBundesliga) return false;
-            }
+            if (leagueConfig.key === "bundesliga2") return isSecondBundesliga;
+            if (leagueConfig.key === "bundesliga" && isSecondBundesliga) return false;
 
+            // 7. Általános szinonimák vizsgálata
             const matchesSynonym = leagueConfig.synonyms.some(syn => {
                 if (syn.length <= 3) {
                     const regex = new RegExp(`\\b${syn}\\b`, 'i');
