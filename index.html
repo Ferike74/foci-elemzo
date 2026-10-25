@@ -69,17 +69,18 @@
         }
 
         .custom-scrollbar::-webkit-scrollbar {
-            width: 5px;
+            width: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(2, 4, 10, 0.2);
+            background: rgba(2, 4, 10, 0.4);
+            border-radius: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(236, 72, 153, 0.4);
-            border-radius: 3px;
+            background: rgba(236, 72, 153, 0.5);
+            border-radius: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(236, 72, 153, 0.7);
+            background: rgba(236, 72, 153, 0.8);
         }
     </style>
 </head>
@@ -246,17 +247,83 @@
         </div>
     </div>
 
-    <!-- ADATVÉDELMI NYILATKOZAT MODAL -->
+    <!-- ADATVÉDELMI NYILATKOZAT MODAL (GÖRGETHETŐ DOBOZZal) -->
     <div id="privacy-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-4xl h-[90vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-hidden">
             <button onclick="closePrivacyModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold z-20 bg-black/40 px-2.5 py-0.5 rounded-full">&times;</button>
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2 flex-shrink-0">Adatvédelmi Nyilatkozat és Adatkezelési Tájékoztató</h3>
             
+            <!-- GÖRGETHETŐ TARTALMI DOBOZ -->
             <div id="privacy-pdf-content" class="space-y-4 text-xs leading-relaxed text-gray-200 text-justify overflow-y-auto custom-scrollbar flex-grow pr-3">
+                <p><strong>Tartalomjegyzék</strong><br>
+                1. Az adatkezelési tájékoztató célja<br>
+                2. Az adatkezelő adatai<br>
+                &nbsp;&nbsp;2.1 Adatvédelmi tisztviselő<br>
+                3. A kezelt személyes adatok köre<br>
+                &nbsp;&nbsp;3.1. Technikai adatok<br>
+                &nbsp;&nbsp;3.2 Cookie-k (Sütik)<br>
+                4. Általános adatkezelési irányelvek, jogalap és megőrzési idő<br>
+                5. Az adatok fizikai tárolási helyei<br>
+                6. Adattovábbítás, adatfeldolgozás, az adatokat megismerők köre<br>
+                7. Érintett jogai és jogérvényesítési lehetőségei<br>
+                8. Egyéb rendelkezések</p>
+
                 <p><strong>1. AZ ADATKEZELÉSI TÁJÉKOZTATÓ CÉLJA</strong><br>
-                Sütő Ferenc egyéni vállalkozó (székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7, 8], a továbbiakban: szolgáltató, adatkezelő) mint adatkezelő, magára nézve kötelezőnek ismeri el jelen jogi közlemény tartalmát[cite: 8]. Kötelezettséget vállal arra, hogy tevékenységével kapcsolatos minden adatkezelés megfelel a jelen szabályzatban és a hatályos nemzeti jogszabályokban, valamint az Európai Unió jogi aktusaiban meghatározott elvárásoknak[cite: 8]. Jelen adatkezelési tájékoztató az alábbi domainre és azok aldomainjeire terjed ki: <strong>focielemzesek.com</strong>[cite: 8].</p>
+                Sütő Ferenc egyéni vállalkozó (székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7, 8], a továbbiakban: szolgáltató, adatkezelő) mint adatkezelő, magára nézve kötelezőnek ismeri el jelen jogi közlemény tartalmát[cite: 8]. Kötelezettséget vállal arra, hogy tevékenységével kapcsolatos minden adatkezelés megfelel a jelen szabályzatban és a hatályos nemzeti jogszabályokban, valamint az Európai Unió jogi aktusaiban meghatározott elvárásoknak[cite: 8]. Jelen adatkezelési tájékoztató az alábbi domainre és azok aldomainjeire terjed ki: <strong>focielemzesek.com</strong>[cite: 8]. Adatkezelő adatkezeléseivel kapcsolatosan felmerülő adatvédelmi irányelvek folyamatosan elérhetők a focielemzesek.com címen. Adatkezelő fenntartja magának a jogot jelen tájékoztató bármikori módosítására. A változásokról az érintettek kellő időben tájékoztatásra kerülnek. Amennyiben kérdése lenne jelen közleményhez kapcsolódóan, kérjük, írja meg és megválaszoljuk kérdését. Adatkezelő elkötelezett ügyfelei és partnerei személyes adatainak védelmében, kiemelten fontosnak tartja ügyfelei információs önrendelkezési jogának tiszteletben tartását. Adatkezelő a személyes adatokat bizalmasan kezeli, és megtesz minden olyan biztonsági, technikai és szervezési intézkedést, mely az adatok biztonságát garanálja.</p>
+
+                <p><strong>2. AZ ADATKEZELŐ ADATAI</strong><br>
+                Amennyiben megkeresné a vállalkozást, az info@focielemzesek.com email címen léphet kapcsolatba az adatkezelővel[cite: 7, 21].<br>
+                - Név: Sütő Ferenc egyéni vállalkozó[cite: 7]<br>
+                - Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7, 8]<br>
+                - Adószám: 92466175-1-28[cite: 7]<br>
+                - Nyilvántartási szám: 62943248[cite: 7]<br>
+                - E-mail: info@focielemzesek.com[cite: 7]</p>
+
+                <p><strong>2.1 ADATVÉDELMI TISZTVISELŐ</strong><br>
+                Adatkezelő nem végez olyan tevékenységet, mely indokolttá tenné adatvédelmi tisztviselő kijelölését[cite: 22].</p>
+
+                <p><strong>3. A KEZELT SZEMÉLYES ADATOK KÖRE</strong><br>
+                <strong>3.1. TECHNIKAI ADATOK</strong><br>
+                Adatkezelő a személyes adatok kezeléséhez a szolgáltatás nyújtása során alkalmazott informatikai eszközöket úgy választja meg és üzemelteti, hogy a kezelt adat hozzáférhető, hiteles, változatlan és a jogosulatlan hozzáférés ellen védett legyen[cite: 22]. Adatkezelő megfelelő technikai és szervezési intézkedésekkel gondoskodik az adatkezelés biztonságáról.</p>
+
+                <p><strong>3.2 COOKIE-K (SÜTIK)</strong><br>
+                A sütik információkat gyűjtenek a látogatókról és eszközeikről; megjegyzik a látogatók egyéni beállításait, megkönnyítik a weboldal használatát, minőségi felhasználói élményt biztosítanak, valamint statisztikai információkat gyűjtenek[cite: 22].<br>
+                <strong>3.2.1 Feltétlenül szükséges, munkamenet (session) cookie-k:</strong> A látogatók zökkenőmentes böngészését biztosítják a focielemzesek.com oldalon, a böngésző bezárásával automatikusan törlődnek[cite: 23].<br>
+                <strong>3.2.2 Harmadik fél általi cookie-k (analitika):</strong> Google Analytics vagy hasonló látogatottságmérési sütik a forgalom és a felhasználói élmény elemzésére[cite: 23].<br>
+                <strong>3.2.3 A cookie kezelés jogalapja:</strong> A látogató önkéntes hozzájárulása a GDPR 6. cikk (1) bekezdés a) pontja alapján[cite: 23].</p>
+
+                <p><strong>4. ÁLTALÁNOS ADATKEZELÉSI IRÁNYELVEK, JOGALAP ÉS MEGŐRZÉSI IDŐ</strong><br>
+                - <strong>Online rendeléshez / előfizetéshez kapcsolódó adatok:</strong> Név, e-mail cím, telefonszám. Cél: az előfizetéses sportelemzési szolgáltatás teljesítése. Jogalap: szerződéses megbízás. Megőrzési idő: üzleti kapcsolat időtartama vagy törlési kérelem[cite: 28, 30].<br>
+                - <strong>Online és telefonos ügyintézés:</strong> Név, e-mail cím, telefonszám. Cél: kapcsolatfelvétel. Jogalap: önkéntes hozzájárulás. Megőrzési idő: törlési kérelemig[cite: 29, 30].<br>
+                - <strong>Hírlevél / eDM:</strong> Név, e-mail cím. Cél: hírlevelek küldése. Jogalap: önkéntes hozzájárulás. Megőrzési idő: leiratkozásig[cite: 29, 30].<br>
+                - <strong>Regisztráció és Vásárlás / Előfizetés:</strong> Név, e-mail cím, számlázási adatok. Cél: felhasználói fiók és előfizetés kezelése. Jogalap: szerződéses megbízás. Megőrzési idő: számviteli törvény alapján tárgyév + 5 év[cite: 31].<br>
+                - <strong>Számlázás:</strong> Név, e-mail cím, számlázási adatok (Számlázz.hu). Jogalap: jogszabályi előírás. Megőrzési idő: tárgyév + 5 év[cite: 31].<br>
+                - <strong>Fogyasztóvédelmi panaszok kezelése:</strong> Név, e-mail cím, panasz leírása. Jogalap: jogi kötelezettség. Megőrzési idő: tárgyév + 5 év[cite: 31, 32].</p>
+
+                <p><strong>5. AZ ADATOK FIZIKAI TÁROLÁSI HELYEI</strong><br>
+                Személyes adatai a felhőalapú adatbázisainkban (Supabase, Vercel) és a tárhelyszolgáltatónál (Rackhost) kerülnek biztonságos titkosítással tárolásra[cite: 31, 32].</p>
+
+                <p><strong>6. ADATTOVÁBBÍTÁS, ADATFELDOLGOZÁS, AZ ADATOKAT MEGISMERŐK KÖRE</strong><br>
+                Adatkezelő a vállalkozási tevékenysége keretében az alábbi adatfeldolgozókat veszi igénybe: Supabase, Vercel, Rackhost (tárhely és adatbázis), Stripe (online fizetés és előfizetés), Számlázz.hu (számlázás)[cite: 31, 32].</p>
+
+                <p><strong>7. ÉRINTETT JOGAI ÉS JOGÉRVÉNYESÍTÉSI LEHETŐSÉGEI</strong><br>
+                Az érintett tájékoztatást kérhet személyes adatai kezeléséről, kérheti azok helyesbítését, törlését, visszavonását, élhet adathordozási- és tiltakozási jogával az info@focielemzesek.com e-mail címen[cite: 32].<br>
+                - 7.1 Tájékoztatáshoz való jog<br>
+                - 7.2 Hozzáféréshez való jog<br>
+                - 7.3 Helyesbítés joga<br>
+                - 7.4 Törléshez való jog ("elfeledtetéshez való jog")<br>
+                - 7.5 Az adatkezelés korlátozása<br>
+                - 7.6 Adathordozhatóság<br>
+                - 7.7 Tiltakozás joga<br>
+                - 7.8 Automatizált döntéshozatal és profilalkotás tiltása<br>
+                - 7.9 Hozzájárulás visszavonása<br>
+                - 7.10 Bírósághoz vagy a NAIH-hoz fordulás joga (panasszal élhet a hatóságnál).</p>
+
+                <p><strong>8. EGYÉB RENDELKEZÉSEK</strong><br>
+                E tájékoztatóban fel nem sorolt adatkezelésekről az adat felvételekor adunk tájékoztatást. Jogszabályi felhatalmazás alapján a bíróságok, hatóságok (pl. NAIH) megkereshetik az adatkezelőt, ekkor személyes adatot csak annyit és olyan mértékben adunk ki, amennyi a megkeresés céljának megvalósításához elengedhetetlenül szükséges.</p>
             </div>
 
+            <!-- GOMBSOR ALUL -->
             <div class="mt-4 pt-3 border-t border-cyan-500/20 flex flex-wrap justify-between items-center gap-3 flex-shrink-0">
                 <button onclick="downloadPrivacyPDF()" class="bg-cyan-600/80 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider transition inline-flex items-center gap-2 border border-cyan-400/50 shadow cursor-pointer">
                     📥 Hivatalos PDF Dokumentum Letöltése
@@ -272,7 +339,7 @@
             <button onclick="closeTermsModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Általános Szerződési Feltételek (ÁSZF)</h3>
             <div class="space-y-3 text-xs leading-relaxed text-gray-200 text-justify">
-                <p><strong>1. SZOLGÁLTATÓI ADATOK ÉS A HATÁLY</strong><br>
+                <p><strong>1. SZOLGÁLTATÓI ADATok ÉS A HATÁLY</strong><br>
                 A weboldalon elérhető szolgáltatás nyújtója és üzemeltetője Sütő Ferenc egyéni vállalkozó (Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7]; Nyilvántartási szám: 62943248[cite: 7]; Adószám: 92466175-1-28[cite: 7]; E-mail: info@focielemzesek.com).</p>
             </div>
             <div class="mt-6 text-center border-t border-cyan-500/20 pt-4">
@@ -601,7 +668,7 @@
             {
                 country: "Bosznia-Hercegovina",
                 leagues: [
-                    { key: "bosznia", name: "Premijer Liga BiH", synonyms: ["bosznia", "premijer liga bih", "premijer liga", "bosnyák", "plbih", "bih1", "bih"] },
+                    { key: "bosznia", name: "Premier Liga BiH", synonyms: ["bosznia", "premijer liga bih", "premijer liga", "bosnyák", "plbih", "bih1", "bih"] },
                     { key: "boszniakupa", name: "Bosnyák Kupa", synonyms: ["bosnyák kupa", "kup bih", "bihc"] }
                 ]
             },
@@ -662,7 +729,6 @@
             const lowerDb = dbLeagueName.toLowerCase();
             const badge = matchItem && matchItem.match_badge ? matchItem.match_badge.toLowerCase().trim() : "";
             
-            // 0. Osztrák meccsek szigorú kizárása a német ligákból!
             const isAustrian = lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria") || badge.startsWith("aut");
             if (isAustrian && (leagueConfig.key === "bundesliga" || leagueConfig.key === "bundesliga2")) {
                 return false;
@@ -673,21 +739,18 @@
                 return false;
             }
 
-            // 0.1 Német 1. és 2. Bundesliga szigorú szétválasztása!
             const isGerman2 = lowerDb.includes("2. bundesliga") || lowerDb.includes("bundesliga 2") || lowerDb.includes("2bun") || badge === "ger2";
             if (leagueConfig.key === "bundesliga" && isGerman2) return false;
             if (leagueConfig.key === "bundesliga2" && !isGerman2 && !lowerDb.includes("bundesliga 2") && !lowerDb.includes("2. bundesliga")) {
                 if (lowerDb.includes("bundesliga") && !lowerDb.includes("2")) return false;
             }
 
-            // 1. Bosnyák (Premier Liga BiH / PLBiH) közvetlen felismerése badge vagy név alapján
             if (leagueConfig.key === "bosznia") {
                 const isBosnia = badge === "plbih" || lowerDb.includes("premier liga bih") || lowerDb.includes("bosznia") || lowerDb.includes("bosnyák");
                 const isOtherPremiership = lowerDb.includes("scottish") || lowerDb.includes("skót") || lowerDb.includes("cyprus");
                 return isBosnia && !isOtherPremiership;
             }
 
-            // 2. Biztonsági badge ellenőrzés más ligákhoz
             if (badge) {
                 if (leagueConfig.key === "portugal2" && badge !== "por2") return false;
                 if (leagueConfig.key === "portugal" && badge === "por2") return false;
@@ -700,23 +763,19 @@
                 if (leagueConfig.key === "skocia2" && badge !== "sco2") return false;
             }
 
-            // 3. Portugál 1 és 2 szigorú szétválasztása
             const isPort2 = lowerDb.includes("2") || lowerDb.includes("portugal 2") || lowerDb.includes("ii") || badge === "por2";
             if (leagueConfig.key === "portugal" && isPort2) return false;
             if (leagueConfig.key === "portugal2" && !isPort2) return false;
 
-            // 4. Skót / Angol Premier League szétválasztás
             const isScottish = lowerDb.includes("skót") || lowerDb.includes("scottish") || lowerDb.includes("scotland") || badge === "sco1" || badge === "sco2";
             if (leagueConfig.key === "premier" && (isScottish || lowerDb.includes("premiership"))) return false;
             if (leagueConfig.key === "skocia" && !isScottish) return false;
 
-            // 5. Kupák szűrése
             const isCupMatch = lowerDb.includes("kupa") || lowerDb.includes("cup") || lowerDb.includes("pokal") || lowerDb.includes("croky");
             const isLeagueConfigCup = leagueConfig.key.includes("kupa") || leagueConfig.name.toLowerCase().includes("kupa") || leagueConfig.name.toLowerCase().includes("cup");
             if (isCupMatch && !isLeagueConfigCup) return false;
             if (!isCupMatch && isLeagueConfigCup) return false;
 
-            // 6. Általános szinonima keresés
             const matchesSynonym = leagueConfig.synonyms.some(syn => {
                 if (syn.length <= 3) {
                     const regex = new RegExp(`\\b${syn}\\b`, 'i');
