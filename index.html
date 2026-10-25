@@ -601,7 +601,7 @@
             {
                 country: "Bosznia-Hercegovina",
                 leagues: [
-                    { key: "bosznia", name: "Premijer Liga", synonyms: ["bosznia", "premijer liga", "bosnyák", "premijer liga bih", "plbih", "bih1"] },
+                    { key: "bosznia", name: "Premijer Liga", synonyms: ["bosznia", "premijer liga", "bosnyák", "premijer liga bih", "plbih", "bih1", "bih"] },
                     { key: "boszniakupa", name: "Bosnyák Kupa", synonyms: ["bosnyák kupa", "kup bih", "bihc"] }
                 ]
             },
@@ -674,10 +674,9 @@
             }
 
             // 0.1 Német 1. és 2. Bundesliga szigorú szétválasztása!
-            const isGerman2 = lowerDb.includes("2. bundesliga") || lowerDb.includes("bundesliga 2") || lowerDb.includes("2bun") || badge === "ger2" || lowerDb.includes("2. bundesliga");
+            const isGerman2 = lowerDb.includes("2. bundesliga") || lowerDb.includes("bundesliga 2") || lowerDb.includes("2bun") || badge === "ger2";
             if (leagueConfig.key === "bundesliga" && isGerman2) return false;
             if (leagueConfig.key === "bundesliga2" && !isGerman2 && !lowerDb.includes("bundesliga 2") && !lowerDb.includes("2. bundesliga")) {
-                // Ha explicit német bundesliga, de nem 2-es, akkor a 2-esből kizárjuk
                 if (lowerDb.includes("bundesliga") && !lowerDb.includes("2")) return false;
             }
 
@@ -692,7 +691,7 @@
                 if (leagueConfig.key === "szerbia" && badge !== "srb1") return false;
                 if (leagueConfig.key === "szerbia2" && badge !== "srb2") return false;
                 if (leagueConfig.key === "skocia2" && badge !== "sco2") return false;
-                if (leagueConfig.key === "bosznia" && badge !== "bih1" && !lowerDb.includes("premijer liga")) return false;
+                if (leagueConfig.key === "bosznia" && badge !== "bih1" && !lowerDb.includes("premijer liga") && !lowerDb.includes("bosznia") && !lowerDb.includes("bosnyák")) return false;
             }
 
             // 2. Portugál 1 és 2 szigorú szétválasztása
@@ -700,9 +699,9 @@
             if (leagueConfig.key === "portugal" && isPort2) return false;
             if (leagueConfig.key === "portugal2" && !isPort2) return false;
 
-            // 3. Bosnyák meccsek pontos illesztése
+            // 3. Bosnyák meccsek pontos illesztése (javítva)
             if (leagueConfig.key === "bosznia") {
-                const isBosnia = lowerDb.includes("bosznia") || lowerDb.includes("bosnyák") || lowerDb.includes("premijer liga bih") || lowerDb.includes("plbih") || badge === "bih1";
+                const isBosnia = lowerDb.includes("bosznia") || lowerDb.includes("bosnyák") || lowerDb.includes("premijer") || lowerDb.includes("plbih") || badge === "bih1" || badge === "bih";
                 const isOtherPremiership = lowerDb.includes("scottish") || lowerDb.includes("skót") || lowerDb.includes("cyprus");
                 return isBosnia && !isOtherPremiership;
             }
