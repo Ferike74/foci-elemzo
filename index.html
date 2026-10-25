@@ -272,7 +272,7 @@
             <button onclick="closeTermsModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Általános Szerződési Feltételek (ÁSZF)</h3>
             <div class="space-y-3 text-xs leading-relaxed text-gray-200 text-justify">
-                <p><strong>1. SZOLGÁLTATÓI ADATok ÉS A HATÁLY</strong><br>
+                <p><strong>1. SZOLGÁLTATÓI ADATOK ÉS A HATÁLY</strong><br>
                 A weboldalon elérhető szolgáltatás nyújtója és üzemeltetője Sütő Ferenc egyéni vállalkozó (Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7]; Nyilvántartási szám: 62943248[cite: 7]; Adószám: 92466175-1-28[cite: 7]; E-mail: info@focielemzesek.com).</p>
             </div>
             <div class="mt-6 text-center border-t border-cyan-500/20 pt-4">
@@ -601,7 +601,7 @@
             {
                 country: "Bosznia-Hercegovina",
                 leagues: [
-                    { key: "bosznia", name: "Premijer Liga", synonyms: ["bosznia", "premijer liga", "bosnyák", "premijer liga bih", "plbih", "bih1", "bih"] },
+                    { key: "bosznia", name: "Premijer Liga BiH", synonyms: ["bosznia", "premijer liga bih", "premijer liga", "bosnyák", "plbih", "bih1", "bih"] },
                     { key: "boszniakupa", name: "Bosnyák Kupa", synonyms: ["bosnyák kupa", "kup bih", "bihc"] }
                 ]
             },
@@ -680,7 +680,14 @@
                 if (lowerDb.includes("bundesliga") && !lowerDb.includes("2")) return false;
             }
 
-            // 1. Biztonsági badge ellenőrzés más ligákhoz
+            // 1. Bosnyák (Premier Liga BiH / PLBiH) közvetlen felismerése badge vagy név alapján
+            if (leagueConfig.key === "bosznia") {
+                const isBosnia = badge === "plbih" || lowerDb.includes("premier liga bih") || lowerDb.includes("bosznia") || lowerDb.includes("bosnyák");
+                const isOtherPremiership = lowerDb.includes("scottish") || lowerDb.includes("skót") || lowerDb.includes("cyprus");
+                return isBosnia && !isOtherPremiership;
+            }
+
+            // 2. Biztonsági badge ellenőrzés más ligákhoz
             if (badge) {
                 if (leagueConfig.key === "portugal2" && badge !== "por2") return false;
                 if (leagueConfig.key === "portugal" && badge === "por2") return false;
@@ -691,20 +698,12 @@
                 if (leagueConfig.key === "szerbia" && badge !== "srb1") return false;
                 if (leagueConfig.key === "szerbia2" && badge !== "srb2") return false;
                 if (leagueConfig.key === "skocia2" && badge !== "sco2") return false;
-                if (leagueConfig.key === "bosznia" && badge !== "bih1" && !lowerDb.includes("premijer liga") && !lowerDb.includes("bosznia") && !lowerDb.includes("bosnyák")) return false;
             }
 
-            // 2. Portugál 1 és 2 szigorú szétválasztása
+            // 3. Portugál 1 és 2 szigorú szétválasztása
             const isPort2 = lowerDb.includes("2") || lowerDb.includes("portugal 2") || lowerDb.includes("ii") || badge === "por2";
             if (leagueConfig.key === "portugal" && isPort2) return false;
             if (leagueConfig.key === "portugal2" && !isPort2) return false;
-
-            // 3. Bosnyák meccsek pontos illesztése (javítva)
-            if (leagueConfig.key === "bosznia") {
-                const isBosnia = lowerDb.includes("bosznia") || lowerDb.includes("bosnyák") || lowerDb.includes("premijer") || lowerDb.includes("plbih") || badge === "bih1" || badge === "bih";
-                const isOtherPremiership = lowerDb.includes("scottish") || lowerDb.includes("skót") || lowerDb.includes("cyprus");
-                return isBosnia && !isOtherPremiership;
-            }
 
             // 4. Skót / Angol Premier League szétválasztás
             const isScottish = lowerDb.includes("skót") || lowerDb.includes("scottish") || lowerDb.includes("scotland") || badge === "sco1" || badge === "sco2";
