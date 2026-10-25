@@ -662,74 +662,44 @@
             const lowerDb = dbLeagueName.toLowerCase();
             const badge = matchItem && matchItem.match_badge ? matchItem.match_badge.toLowerCase().trim() : "";
             
+            // 1. Biztonsági badge ellenőrzés
             if (badge) {
-                if (leagueConfig.key === "ausztria2") return badge === "aut2";
-                if (leagueConfig.key === "szlovakia2") return badge === "svk2";
-                if (leagueConfig.key === "gorog") return badge === "gre1";
-                if (leagueConfig.key === "gorog2") return badge === "gre2";
-                if (leagueConfig.key === "szerbia") return badge === "srb1";
-                if (leagueConfig.key === "szerbia2") return badge === "srb2";
-                if (leagueConfig.key === "skocia2") return badge === "sco2";
-
-                if (badge === "aut2" && leagueConfig.key !== "ausztria2") return false;
-                if (badge === "svk2" && leagueConfig.key !== "szlovakia2") return false;
-                if (badge === "gre1" && leagueConfig.key !== "gorog") return false;
-                if (badge === "gre2" && leagueConfig.key !== "gorog2") return false;
-                if (badge === "srb1" && leagueConfig.key !== "szerbia") return false;
-                if (badge === "srb2" && leagueConfig.key !== "szerbia2") return false;
-                if (badge === "sco2" && leagueConfig.key !== "skocia2") return false;
+                if (leagueConfig.key === "portugal2" && badge !== "por2") return false;
+                if (leagueConfig.key === "portugal" && badge === "por2") return false;
+                if (leagueConfig.key === "ausztria2" && badge !== "aut2") return false;
+                if (leagueConfig.key === "szlovakia2" && badge !== "svk2") return false;
+                if (leagueConfig.key === "gorog" && badge !== "gre1") return false;
+                if (leagueConfig.key === "gorog2" && badge !== "gre2") return false;
+                if (leagueConfig.key === "szerbia" && badge !== "srb1") return false;
+                if (leagueConfig.key === "szerbia2" && badge !== "srb2") return false;
+                if (leagueConfig.key === "skocia2" && badge !== "sco2") return false;
+                if (leagueConfig.key === "bosznia" && badge !== "bih1" && !lowerDb.includes("premijer liga")) return false;
             }
 
+            // 2. Portugál 1 és 2 szigorú szétválasztása
+            const isPort2 = lowerDb.includes("2") || lowerDb.includes("portugal 2") || lowerDb.includes("ii") || badge === "por2";
+            if (leagueConfig.key === "portugal" && isPort2) return false;
+            if (leagueConfig.key === "portugal2" && !isPort2) return false;
+
+            // 3. Bosnyák meccsek pontos illesztése
+            if (leagueConfig.key === "bosznia") {
+                const isBosnia = lowerDb.includes("bosznia") || lowerDb.includes("bosnyák") || lowerDb.includes("premijer liga bih") || lowerDb.includes("plbih") || badge === "bih1";
+                const isOtherPremiership = lowerDb.includes("scottish") || lowerDb.includes("skót") || lowerDb.includes("cyprus");
+                return isBosnia && !isOtherPremiership;
+            }
+
+            // 4. Skót / Angol Premier League szétválasztás
             const isScottish = lowerDb.includes("skót") || lowerDb.includes("scottish") || lowerDb.includes("scotland") || badge === "sco1" || badge === "sco2";
+            if (leagueConfig.key === "premier" && (isScottish || lowerDb.includes("premiership"))) return false;
+            if (leagueConfig.key === "skocia" && !isScottish) return false;
 
-            if (leagueConfig.key === "premier") {
-                if (isScottish || lowerDb.includes("premiership")) return false;
-            }
-
-            if (leagueConfig.key === "skocia") {
-                return isScottish && (lowerDb.includes("premiership") || lowerDb.includes("premier") || badge === "sco1");
-            }
-
-            if (lowerDb.includes("championship")) {
-                if (badge === "sco2" || isScottish) {
-                    return leagueConfig.key === "skocia2";
-                }
-                return leagueConfig.key === "championship";
-            }
-
-            if (leagueConfig.key === "bundesliga") {
-                if (lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria") || lowerDb.includes("aut")) {
-                    return false;
-                }
-            }
-
-            if (leagueConfig.key === "ausztria") {
-                return lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria") || lowerDb.includes("aut");
-            }
-
+            // 5. Kupák szűrése
             const isCupMatch = lowerDb.includes("kupa") || lowerDb.includes("cup") || lowerDb.includes("pokal") || lowerDb.includes("croky");
             const isLeagueConfigCup = leagueConfig.key.includes("kupa") || leagueConfig.name.toLowerCase().includes("kupa") || leagueConfig.name.toLowerCase().includes("cup");
-
             if (isCupMatch && !isLeagueConfigCup) return false;
             if (!isCupMatch && isLeagueConfigCup) return false;
 
-            const isSlovenianMatch = lowerDb.includes("szlovén") || lowerDb.includes("slovenia") || lowerDb.includes("1. snl") || lowerDb.includes("aluminij") || lowerDb.includes("olimpija");
-            const isSerbianMatch = lowerDb.includes("szerb") || lowerDb.includes("serbia") || lowerDb.includes("super liga srbije") || lowerDb.includes("prva liga srbije") || lowerDb.includes("radnik") || lowerDb.includes("radnicki");
-
-            if (countryName === "Szerbia" && isSlovenianMatch) return false;
-            if (countryName === "Szlovénia" && isSerbianMatch) return false;
-
-            if (countryName === "Szerbia" && leagueConfig.key === "szerbia2" && !isSerbianMatch) return false;
-            if (countryName === "Szlovénia" && leagueConfig.key === "szloven2" && !isSlovenianMatch) return false;
-
-            const isChampionsLeague = (lowerDb.includes("champions") || lowerDb.includes("bajnokok") || lowerDb.includes("ucl") || lowerDb.includes("bl")) && !lowerDb.includes("championship");
-            if (isChampionsLeague && leagueConfig.key !== "ucl") return false;
-            if (leagueConfig.key === "ucl") return isChampionsLeague;
-            
-            const isSecondBundesliga = lowerDb.includes("2. bundesliga") || lowerDb.includes("bundesliga 2") || lowerDb.includes("2bundesliga");
-            if (leagueConfig.key === "bundesliga2") return isSecondBundesliga;
-            if (leagueConfig.key === "bundesliga" && isSecondBundesliga) return false;
-
+            // 6. Általános szinonima keresés
             const matchesSynonym = leagueConfig.synonyms.some(syn => {
                 if (syn.length <= 3) {
                     const regex = new RegExp(`\\b${syn}\\b`, 'i');
@@ -853,7 +823,7 @@
         }
 
         function openLeagueModal(league, leagueMatches) {
-            currentActiveLeague = league;              
+            currentActiveLeague = league;             
             currentActiveLeagueMatches = leagueMatches; 
             document.body.style.overflow = 'hidden';
 
@@ -1053,7 +1023,6 @@
             if (error) {
                 msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${error.message}</span>`;
             } else {
-                // n8n ÉLES Production Webhook hívás az üdvözlő email küldéséhez
                 try {
                     await fetch('https://ferike74.app.n8n.cloud/webhook/welcome-email', {
                         method: 'POST',
@@ -1151,7 +1120,6 @@
         function downloadPrivacyPDF() {
             const contentHTML = document.getElementById('privacy-pdf-content').innerHTML;
             
-            $wrapper = document.createElement('div');
             const wrapper = document.createElement('div');
             wrapper.style.background = '#ffffff';
             wrapper.style.color = '#000000';
