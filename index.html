@@ -282,7 +282,7 @@
                 <p><strong>2.1 ADATVÉDELMI TISZTVISELŐ</strong><br>
                 Adatkezelő nem végez olyan tevékenységet, mely indokolttá tenné adatvédelmi tisztviselő kijelölését[cite: 22].</p>
 
-                <p><strong>3. A KEZELT SZEMÉLYES ADATOK KÖRE</strong><br>
+                <p><strong>3. A KEZELT SZEMÉLYES ADATok KÖRE</strong><br>
                 <strong>3.1. TECHNIKAI ADATOK</strong><br>
                 Adatkezelő a személyes adatok kezeléséhez a szolgáltatás nyújtása során alkalmazott informatikai eszközöket úgy választja meg és üzemelteti, hogy a kezelt adat hozzáférhető, hiteles, változatlan és a jogosulatlan hozzáférés ellen védett legyen[cite: 22]. Adatkezelő megfelelő technikai és szervezési intézkedésekkel gondoskodik az adatkezelés biztonságáról.</p>
 
@@ -339,7 +339,7 @@
             <button onclick="closeTermsModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Általános Szerződési Feltételek (ÁSZF)</h3>
             <div class="space-y-3 text-xs leading-relaxed text-gray-200 text-justify">
-                <p><strong>1. SZOLGÁLTATÓI ADATok ÉS A HATÁLY</strong><br>
+                <p><strong>1. SZOLGÁLTATÓI ADATOK ÉS A HATÁLY</strong><br>
                 A weboldalon elérhető szolgáltatás nyújtója és üzemeltetője Sütő Ferenc egyéni vállalkozó (Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B[cite: 7]; Nyilvántartási szám: 62943248[cite: 7]; Adószám: 92466175-1-28[cite: 7]; E-mail: info@focielemzesek.com).</p>
             </div>
             <div class="mt-6 text-center border-t border-cyan-500/20 pt-4">
@@ -729,6 +729,13 @@
             const lowerDb = dbLeagueName.toLowerCase();
             const badge = matchItem && matchItem.match_badge ? matchItem.match_badge.toLowerCase().trim() : "";
             
+            // Szigorú kizárás: Idegen/Indonéz Szuperliga tiltása a magyar kártyákról
+            if (lowerDb.includes("indonéz") || lowerDb.includes("indonesia") || (lowerDb.includes("szuperliga") && !lowerDb.includes("magyar") && !lowerDb.includes("osztrák") && !lowerDb.includes("szerb"))) {
+                if (leagueConfig.key === "magyarkupa" || leagueConfig.key === "magyar" || leagueConfig.key === "magyar2") {
+                    return false;
+                }
+            }
+
             const isAustrian = lowerDb.includes("osztrák") || lowerDb.includes("ausztria") || lowerDb.includes("austria") || badge.startsWith("aut");
             if (isAustrian && (leagueConfig.key === "bundesliga" || leagueConfig.key === "bundesliga2")) {
                 return false;
@@ -1164,28 +1171,22 @@
                 msgEl.innerHTML = '<span class="text-gray-200">Törlés folyamatban...</span>';
                 
                 try {
-                    const { data: { session } } = await supabaseClient.auth.getSession();
-                    if (!session) throw new Error("Nincs aktív munkamenet.");
+                    if (!supabaseClient) throw new Error("Supabase kliens nem elérhető.");
 
-                    const response = await fetch(`${SUPABASE_URL}/functions/v1/delete-account`, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${session.access_token}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
+                    // Közvetlen Supabase RPC hívás a fiók biztonságos törléséhez
+                    const { error } = await supabaseClient.rpc('delete_user_self');
 
-                    const result = await response.json();
-
-                    if (!response.ok) {
-                        throw new Error(result.error || "Hiba történt a törlés során.");
+                    if (error) {
+                        throw new Error(error.message);
                     }
+
+                    await supabaseClient.auth.signOut();
 
                     msgEl.innerHTML = '<span class="text-cyan-300 font-bold">A fiók sikeresen törölve lett.</span>';
                     setTimeout(() => {
                         closeLoginModal();
                         location.reload();
-                    }, 2500);
+                    }, 2000);
 
                 } catch (err) {
                     msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${err.message}</span>`;
