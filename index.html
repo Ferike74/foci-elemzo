@@ -626,16 +626,16 @@
             {
                 country: "Magyarország",
                 leagues: [
-                    { key: "magyar", name: "NB I", synonyms: ["magyar", "nb i", "nemzeti bajnokság", "hun1"] },
-                    { key: "magyar2", name: "NB II", synonyms: ["nb ii", "magyar 2", "hun2"] },
+                    { key: "magyar", name: "NB I", synonyms: ["nb 1", "hun1"] },
+                    { key: "magyar2", name: "NB II", synonyms: ["nb ii", "nb 2", "magyar 2", "hun2"] },
                     { key: "magyarkupa", name: "Magyar Kupa", synonyms: ["magyar kupa", "mti kupa", "hunc"] }
                 ]
             },
             {
                 country: "Románia",
                 leagues: [
-                    { key: "romania", name: "Liga I", synonyms: ["románia", "liga 1", "román", "rou1"] },
-                    { key: "romania2", name: "Liga II", synonyms: ["liga ii", "román 2", "rou2"] },
+                    { key: "romania", name: "Liga I", synonyms: ["liga 1", "román liga 1", "rou1"] },
+                    { key: "romania2", name: "Liga II", synonyms: ["liga ii", "liga 2", "román 2", "rou2"] },
                     { key: "romaniakupa", name: "Román Kupa", synonyms: ["román kupa", "cupa româniei", "rouc"] },
                     { key: "romaniaszuperkupa", name: "Román Szuperkupa", synonyms: ["román szuperkupa", "supercupa româniei"] }
                 ]
@@ -725,10 +725,40 @@
 
         function matchBelongsToLeague(dbLeagueName, leagueConfig, countryName, matchItem) {
             if (!dbLeagueName) return false;
-            const lowerDb = dbLeagueName.toLowerCase();
+            const lowerDb = dbLeagueName.toLowerCase().trim();
             const badge = matchItem && matchItem.match_badge ? matchItem.match_badge.toLowerCase().trim() : "";
             
-            // 1. Portugália kupa és ligakupa pontos szétválasztása
+            // 1. Skócia vs Anglia Championship szétválasztása
+            const isScottish = badge === "sco2" || badge === "sco1" || lowerDb.includes("scottish") || lowerDb.includes("skót");
+            if (leagueConfig.key === "championship") {
+                if (isScottish || badge === "sco2") return false;
+            }
+            if (leagueConfig.key === "skocia2") {
+                if (badge === "sco2") return true;
+                return isScottish && lowerDb.includes("championship");
+            }
+
+            // 2. Magyarország NB I és NB II pontos szétválasztása
+            const isHun2 = badge === "hun2" || lowerDb === "nb ii" || lowerDb === "nb 2" || lowerDb.includes("nb ii") || lowerDb.includes("nb 2");
+            if (leagueConfig.key === "magyar2") {
+                return isHun2;
+            }
+            if (leagueConfig.key === "magyar") {
+                if (isHun2 || badge === "hun2") return false;
+                return badge === "hun1" || lowerDb === "nb i" || lowerDb === "nb 1" || lowerDb.includes("nb i") || lowerDb.includes("nemzeti bajnokság");
+            }
+
+            // 3. Románia Liga I és Liga II pontos szétválasztása
+            const isRou2 = badge === "rou2" || lowerDb === "liga ii" || lowerDb === "liga 2" || lowerDb.includes("liga ii") || lowerDb.includes("liga 2");
+            if (leagueConfig.key === "romania2") {
+                return isRou2;
+            }
+            if (leagueConfig.key === "romania") {
+                if (isRou2 || badge === "rou2") return false;
+                return badge === "rou1" || lowerDb === "liga i" || lowerDb === "liga 1" || lowerDb.includes("liga i");
+            }
+
+            // 4. Portugália kupa és ligakupa pontos szétválasztása
             const isTacaLiga = lowerDb.includes("liga") && (lowerDb.includes("taça") || lowerDb.includes("taca") || lowerDb.includes("cup"));
             if (leagueConfig.key === "portugalligakupa") {
                 return badge === "tdl" || isTacaLiga || lowerDb.includes("taça da liga") || lowerDb.includes("taca da liga");
@@ -740,7 +770,7 @@
                 return badge === "tdp" || lowerDb.includes("taça de portugal") || lowerDb.includes("taca de portugal") || (lowerDb.includes("portugál kupa") && !lowerDb.includes("liga"));
             }
 
-            // 2. Azonnali egyezés a badge (tag) vagy név alapján a kupáknál és ligáknál
+            // 5. Közvetlen badge egyezések
             if (badge) {
                 if (leagueConfig.key === "spanyolkupa" && (badge === "cdr" || lowerDb.includes("copa del rey"))) return true;
                 if (leagueConfig.key === "laliga" && badge === "cdr") return false;
@@ -760,7 +790,6 @@
                 if (leagueConfig.key === "gorog2" && badge !== "gre2") return false;
                 if (leagueConfig.key === "szerbia" && badge !== "srb1") return false;
                 if (leagueConfig.key === "szerbia2" && badge !== "srb2") return false;
-                if (leagueConfig.key === "skocia2" && badge !== "sco2") return false;
             }
 
             if (lowerDb.includes("indonéz") || lowerDb.includes("indonesia") || (lowerDb.includes("szuperliga") && !lowerDb.includes("magyar") && !lowerDb.includes("osztrák") && !lowerDb.includes("szerb"))) {
@@ -795,11 +824,10 @@
             if (leagueConfig.key === "portugal" && isPort2) return false;
             if (leagueConfig.key === "portugal2" && !isPort2) return false;
 
-            const isScottish = lowerDb.includes("skót") || lowerDb.includes("scottish") || lowerDb.includes("scotland") || badge === "sco1" || badge === "sco2";
             if (leagueConfig.key === "premier" && (isScottish || lowerDb.includes("premiership"))) return false;
             if (leagueConfig.key === "skocia" && !isScottish) return false;
 
-            // Kupa meccsek kibővített felismerése (copa, taça, coupe, pokal, beker)
+            // Kupa meccsek kibővített felismerése
             const isCupMatch = lowerDb.includes("kupa") || lowerDb.includes("cup") || lowerDb.includes("pokal") || lowerDb.includes("croky") || lowerDb.includes("copa") || lowerDb.includes("coupe") || lowerDb.includes("beker") || lowerDb.includes("taça") || lowerDb.includes("taca") || badge === "cdr" || badge === "tdp" || badge === "tdl";
             const isLeagueConfigCup = leagueConfig.key.includes("kupa") || leagueConfig.name.toLowerCase().includes("kupa") || leagueConfig.name.toLowerCase().includes("cup") || leagueConfig.synonyms.some(s => s.includes("kupa") || s.includes("copa") || s.includes("cup"));
             
