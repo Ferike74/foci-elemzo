@@ -685,6 +685,12 @@
             const lowerDb = dbLeagueName.toLowerCase().trim();
             const badge = matchItem && matchItem.match_badge ? matchItem.match_badge.toLowerCase().trim() : "";
             
+            // Biztosítjuk, hogy a Bajnokok Ligája (vagy más nemzetközi kupák) ne csússzanak be a hazai bajnokságokba
+            const isUCL = badge === "ucl" || lowerDb.includes("bajnokok ligája") || lowerDb.includes("champions league");
+            if (isUCL) {
+                return leagueConfig.key === "ucl";
+            }
+            
             const isScottish = badge === "sco2" || badge === "sco1" || lowerDb.includes("scottish") || lowerDb.includes("skót");
             if (leagueConfig.key === "championship") {
                 if (isScottish || badge === "sco2") return false;
@@ -850,7 +856,7 @@
         }
 
         function openLeagueModal(league, leagueMatches) {
-            currentActiveLeague = league;             
+            currentActiveLeague = league;              
             currentActiveLeagueMatches = leagueMatches; 
             document.body.style.overflow = 'hidden';
 
