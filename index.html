@@ -685,6 +685,19 @@
             const lowerDb = dbLeagueName.toLowerCase().trim();
             const badge = matchItem && matchItem.match_badge ? matchItem.match_badge.toLowerCase().trim() : "";
             
+const exactLeagueBadges = {
+    bundesliga: "bun",
+    bundesliga2: "2bun",
+    ausztria: "aut1",
+    ausztria2: "aut2",
+    championship: "champ",
+    skocia2: "sco2"
+};
+
+if (exactLeagueBadges[leagueConfig.key]) {
+    return badge === exactLeagueBadges[leagueConfig.key];
+}
+
             // Biztosítjuk, hogy a Bajnokok Ligája (vagy más nemzetközi kupák) ne csússzanak be a hazai bajnokságokba
             const isUCL = badge === "ucl" || lowerDb.includes("bajnokok ligája") || lowerDb.includes("champions league");
             if (isUCL) {
