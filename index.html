@@ -206,28 +206,43 @@
         </div>
     </div>
 
+
     <!-- Impresszum Modal -->
     <div id="impressum-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto custom-scrollbar">
             <button onclick="closeImpressumModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
             <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Impresszum</h3>
+
             <div class="space-y-3 text-xs leading-relaxed text-gray-200 text-justify">
-                <p><strong>SZOLGÁLTATÓ ADATAI:</strong><br>
-                - Név: Sütő Ferenc egyéni vállalkozó<br>
-                - Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B<br>
-                - Nyilvántartási szám: 62943248<br>
-                - Adószám: 92466175-1-28<br>
-                - E-mail: info@focielemzesek.com</p>
+                <p>
+                    <strong>SZOLGÁLTATÓ ADATAI:</strong><br>
+                    - Név: Sütő Ferenc egyéni vállalkozó<br>
+                    - Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B<br>
+                    - Nyilvántartási szám: 62943248<br>
+                    - Adószám: 92466175-1-28<br>
+                    - E-mail: info@focielemzesek.com
+                </p>
+
+                <p>
+                    <strong>TÁRHELYSZOLGÁLTATÓ:</strong><br>
+                    - Név: Vercel Inc.<br>
+                    - Weboldal:
+                    <a href="https://vercel.com"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="text-cyan-300 underline">vercel.com</a>
+                </p>
             </div>
+
             <div class="mt-6 text-center border-t border-cyan-500/20 pt-4">
-                <button onclick="closeImpressumModal()" class="bg-slate-900/50 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
+                <button onclick="closeImpressumModal()" class="bg-slate-900/50 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">
+                    Bezárás
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Liga Meccsei Modal -->
-    <div id="league-matches-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel border border-cyan-500/40 w-full max-w-lg rounded-3xl p-6 relative flex flex-col shadow-2xl">
+
             <button onclick="closeLeagueModal()" class="absolute top-4 right-4 text-cyan-300 hover:text-pink-400 text-2xl font-bold">&times;</button>
             <h3 id="league-modal-title" class="text-lg font-black slightly-lighter-green mb-4 border-b border-cyan-500/30 pb-2">Válassz meccset</h3>
             <div id="league-modal-list" class="space-y-2 max-h-[360px] overflow-y-auto pr-1 custom-scrollbar"></div>
