@@ -304,16 +304,33 @@
 
 
     <!-- Felhasználási Feltételek Modal -->
-    <div id="terms-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-2xl max-h-[85vh] rounded-3xl p-6 md:p-8 relative flex flex-col shadow-2xl overflow-y-auto custom-scrollbar">
-            <button onclick="closeTermsModal()" class="absolute top-4 right-6 text-cyan-300 hover:text-pink-400 text-3xl font-bold">&times;</button>
-            <h3 class="text-xl font-black text-cyan-300 mb-4 border-b border-cyan-500/20 pb-2">Általános Szerződési Feltételek (ÁSZF)</h3>
-            <div class="space-y-3 text-xs leading-relaxed text-gray-200 text-justify">
-                <p><strong>1. SZOLGÁLTATÓI ADATOK ÉS A HATÁLY</strong><br>
-                A weboldalon elérhető szolgáltatás nyújtója és üzemeltetője Sütő Ferenc egyéni vállalkozó (Székhely: 9400 Sopron, Szőlőskert utca 18. ép.: B; Nyilvántartási szám: 62943248; Adószám: 92466175-1-28; E-mail: info@focielemzesek.com).</p>
+       <div id="terms-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-2 md:p-4">
+        <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-5xl h-[92vh] rounded-2xl p-3 md:p-6 relative flex flex-col shadow-2xl overflow-hidden">
+            <div class="flex items-center justify-between gap-4 mb-3 flex-shrink-0">
+                <h3 class="text-base md:text-xl font-black text-cyan-300">
+                    Általános Szerződési Feltételek (ÁSZF)
+                </h3>
+                <button onclick="closeTermsModal()" class="text-cyan-300 hover:text-pink-400 text-3xl font-bold px-2" aria-label="Bezárás">
+                    &times;
+                </button>
             </div>
-            <div class="mt-6 text-center border-t border-cyan-500/20 pt-4">
-                <button onclick="closeTermsModal()" class="bg-slate-900/50 hover:bg-slate-900 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase tracking-wider border border-cyan-500/30">Bezárás</button>
+            <div class="flex-grow min-h-0 bg-white rounded-xl overflow-hidden">
+                <iframe
+                    src="/focielemzesek_aszf_vegleges_kozzetetelre.pdf"
+                    title="Általános Szerződési Feltételek"
+                    class="w-full h-full border-0">
+                </iframe>
+            </div>
+            <div class="mt-3 pt-3 border-t border-cyan-500/20 flex flex-wrap justify-between items-center gap-3 flex-shrink-0">
+                <a
+                    href="/focielemzesek_aszf_vegleges_kozzetetelre.pdf"
+                    download
+                    class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs uppercase">
+                    📥 PDF letöltése
+                </a>
+                <button onclick="closeTermsModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2 rounded-xl text-xs uppercase border border-cyan-500/30">
+                    Bezárás
+                </button>
             </div>
         </div>
     </div>
