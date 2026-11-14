@@ -135,6 +135,7 @@
                 </button>
             </div>
         </header>
+        <div id="checkout-result" role="status" aria-live="polite" class="hidden glass-panel rounded-2xl p-4 border border-cyan-500/40 text-sm text-cyan-100"></div>
 
         <!-- 2. INFORMÁCIÓS PANEL -->
         <section class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl space-y-4 text-center border border-cyan-500/30">
@@ -336,30 +337,30 @@
     </div>
 
     <!-- Regisztrációs Modal -->
-    <div id="register-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-cyan-500/40 shadow-2xl">
+    <div id="register-modal" style="overflow-y:auto" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md max-h-[90dvh] overflow-y-auto rounded-3xl p-6 md:p-8 relative border border-cyan-500/40 shadow-2xl">
             <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-cyan-300 hover:text-pink-400 text-xl font-bold">&times;</button>
             <div class="text-center mb-6">
                 <span class="text-3xl">⚽</span>
                 <h3 class="text-xl font-extrabold mt-2 text-white">Fiók létrehozása</h3>
-                <p class="text-xs text-cyan-200 mt-1">A regisztráció után átirányítunk a 3 napos ingyenes próbához!</p>
+                <p class="text-xs text-cyan-200 mt-1">A Stripe-on bankkártya megadása kötelező. A 3 napos ingyenes próba a Stripe-lépés befejezésekor indul; utána 7 999 Ft/hó, automatikus megújulással. A próba vége előtt lemondhatod.</p>
             </div>
             <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs uppercase font-bold text-cyan-200 mb-1">Email cím</label>
                     <input type="email" id="reg-email" required class="w-full bg-black/30 border border-cyan-500/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="pelda@email.hu">
                 </div>
-                <div>
+                <div data-password-group>
                     <label class="block text-xs uppercase font-bold text-cyan-200 mb-1">Jelszó</label>
                     <div class="relative">
-                        <input type="password" id="reg-password" required class="w-full bg-black/30 border border-cyan-500/40 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="••••••••">
+                        <input type="password" id="reg-password" minlength="8" autocomplete="new-password" required class="w-full bg-black/30 border border-cyan-500/40 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="••••••••">
                         <button type="button" onclick="togglePassword('reg-password', 'eye-reg-1')" class="absolute right-3 top-2.5 text-gray-300 hover:text-white text-sm focus:outline-none" id="eye-reg-1">👁️</button>
                     </div>
                 </div>
-                <div>
+                <div data-password-group>
                     <label class="block text-xs uppercase font-bold text-cyan-200 mb-1">Jelszó mégegyszer</label>
                     <div class="relative">
-                        <input type="password" id="reg-password-confirm" required class="w-full bg-black/30 border border-cyan-500/40 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="••••••••">
+                        <input type="password" id="reg-password-confirm" minlength="8" autocomplete="new-password" required class="w-full bg-black/30 border border-cyan-500/40 rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="••••••••">
                         <button type="button" onclick="togglePassword('reg-password-confirm', 'eye-reg-2')" class="absolute right-3 top-2.5 text-gray-300 hover:text-white text-sm focus:outline-none" id="eye-reg-2">👁️</button>
                     </div>
                 </div>
@@ -379,13 +380,13 @@
                     Regisztráció és Tovább
                 </button>
             </form>
-            <div id="register-message" class="text-center text-xs mt-4"></div>
+            <div id="register-message" aria-live="polite" class="text-center text-xs mt-4"></div>
         </div>
     </div>
 
     <!-- Belépési / Fiókkezelési Modal -->
     <div id="login-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-cyan-500/40 shadow-2xl">
+        <div class="glass-panel w-full max-w-md max-h-[90dvh] overflow-y-auto rounded-3xl p-6 md:p-8 relative border border-cyan-500/40 shadow-2xl">
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-cyan-300 hover:text-pink-400 text-xl font-bold">&times;</button>
             <div class="text-center mb-6">
                 <span class="text-3xl">⚽</span>
@@ -429,16 +430,36 @@
             <div id="account-management-section" class="hidden space-y-4 pt-2">
                 <div class="bg-black/30 border border-pink-500/40 rounded-2xl p-4 text-center space-y-3 backdrop-blur-sm">
                     <h4 class="text-xs font-bold text-pink-300 uppercase tracking-wider">Előfizetés és Fiók Kezelése</h4>
-                    <button onclick="handleDeleteAccount()" class="w-full bg-pink-700 hover:bg-pink-600 text-white font-bold py-2.5 rounded-xl text-xs uppercase transition shadow tracking-wider">
-                        🗑️ Fiók és Előfizetés Végleges Törlése
+                    <p id="account-subscription-status" class="text-sm text-cyan-100" aria-live="polite"></p>
+                    <button id="continue-registration" onclick="closeLoginModal(); openRegisterModal()" class="hidden w-full bg-pink-600 text-white font-bold py-2.5 rounded-xl text-xs uppercase">Regisztráció folytatása a Stripe-on</button>
+                    <button onclick="handleManageSubscription()" class="w-full bg-pink-700 hover:bg-pink-600 text-white font-bold py-2.5 rounded-xl text-xs uppercase transition shadow tracking-wider">
+                        Előfizetés kezelése / lemondása
                     </button>
+                    <p class="text-xs text-gray-200">Fiókod törlését az <a href="mailto:info@focielemzesek.com" class="text-cyan-300 underline">info@focielemzesek.com</a> címen kérheted.</p>
                     <button onclick="handleLogout()" class="w-full bg-slate-900/50 hover:bg-slate-900 text-white font-bold py-2 rounded-xl text-xs uppercase transition border border-cyan-500/30">
                         Kijelentkezés
                     </button>
                 </div>
             </div>
 
-            <div id="login-message" class="text-center text-xs mt-4"></div>
+            <div id="login-message" aria-live="polite" class="text-center text-xs mt-4"></div>
+        </div>
+    </div>
+
+    <div id="password-recovery-modal" role="dialog" aria-modal="true" aria-labelledby="recovery-title" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 relative border border-cyan-500/40">
+            <button type="button" aria-label="Bezárás" onclick="document.getElementById('password-recovery-modal').classList.add('hidden')" class="absolute top-4 right-4 text-cyan-300 text-xl">&times;</button>
+            <h3 id="recovery-title" class="text-xl font-bold mb-6">Új jelszó megadása</h3>
+            <form id="password-recovery-form" onsubmit="handleResetPassword(event)" class="space-y-4">
+                <label class="block text-sm">Új jelszó (legalább 8 karakter)
+                    <input id="new-password" type="password" minlength="8" autocomplete="new-password" required class="w-full bg-black/30 border border-cyan-500/40 rounded-xl px-4 py-3 mt-1 text-white">
+                </label>
+                <label class="block text-sm">Új jelszó még egyszer
+                    <input id="new-password-confirm" type="password" minlength="8" autocomplete="new-password" required class="w-full bg-black/30 border border-cyan-500/40 rounded-xl px-4 py-3 mt-1 text-white">
+                </label>
+                <button type="submit" class="w-full bg-pink-600 text-white font-bold py-3 rounded-xl">Jelszó mentése</button>
+            </form>
+            <div id="recovery-message" aria-live="polite" class="text-sm mt-4"></div>
         </div>
     </div>
 
@@ -1002,24 +1023,8 @@ if (exactLeagueBadges[leagueConfig.key]) {
             }
         }
 
-        function openRegisterModal() { document.getElementById('register-modal').classList.remove('hidden'); }
         function closeRegisterModal() { document.getElementById('register-modal').classList.add('hidden'); }
 
-        async function openLoginModal() { 
-            showLoginForm();
-            if (supabaseClient) {
-                const { data: { session } } = await supabaseClient.auth.getSession();
-                if (session) {
-                    document.getElementById('login-form').classList.add('hidden');
-                    document.getElementById('forgot-form').classList.add('hidden');
-                    document.getElementById('account-management-section').classList.remove('hidden');
-                    document.getElementById('login-modal-title').innerText = `Fiók kezelése (${session.user.email})`;
-                } else {
-                    document.getElementById('account-management-section').classList.add('hidden');
-                }
-            }
-            document.getElementById('login-modal').classList.remove('hidden'); 
-        }
         function closeLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }
 
         function openImpressumModal() {
@@ -1072,104 +1077,289 @@ if (exactLeagueBadges[leagueConfig.key]) {
             }
         }
 
+        const BILLING_PORTAL_URL = 'https://billing.stripe.com/p/login/aFabJ17jUbw68hs5ls53O00';
+        let registrationBusy = false;
+        let recoveryReady = false;
+
+        function authMessage(id, text, isError = false) {
+            const el = document.getElementById(id);
+            el.textContent = text;
+            el.classList.toggle('text-red-400', isError);
+            el.classList.toggle('text-cyan-200', !isError);
+        }
+
+        function authErrorMessage(error) {
+            const code = error?.code || '';
+            if (code === 'weak_password') return 'Adj meg erősebb, legalább 8 karakteres jelszót.';
+            if (code === 'over_request_rate_limit' || code === 'over_email_send_rate_limit' || error?.status === 429)
+                return 'Túl sok próbálkozás történt. Kérjük, próbáld újra később.';
+            if (code === 'invalid_credentials') return 'Az emailcím vagy a jelszó nem megfelelő.';
+            return 'A művelet nem sikerült. Ellenőrizd az adatokat és az internetkapcsolatot, majd próbáld újra.';
+        }
+
+        async function currentSession() {
+            if (!supabaseClient) throw new Error('auth_unavailable');
+            const { data, error } = await supabaseClient.auth.getSession();
+            if (error) throw error;
+            return data.session;
+        }
+
+        function displaySignedIn(session) {
+            document.getElementById('user-status').textContent = session
+                ? `Bejelentkezve: ${session.user.email} (Fiók kezelése)` : '';
+        }
+
+        async function openRegisterModal() {
+            document.getElementById('register-modal').classList.remove('hidden');
+            authMessage('register-message', '');
+            try {
+                const session = await currentSession();
+                const emailInput = document.getElementById('reg-email');
+                emailInput.readOnly = !!session;
+                if (session) emailInput.value = session.user.email || '';
+                for (const id of ['reg-password', 'reg-password-confirm']) {
+                    const input = document.getElementById(id);
+                    input.disabled = !!session;
+                    input.closest('[data-password-group]').classList.toggle('hidden', !!session);
+                }
+                if (session) authMessage('register-message', 'Már be vagy jelentkezve. Az elfogadás után folytathatod a regisztrációt a Stripe-on.');
+            } catch {
+                authMessage('register-message', 'A bejelentkezési szolgáltatás most nem érhető el.', true);
+            }
+        }
+
+        async function accountSubscription(session) {
+            const { data, error } = await supabaseClient.from('subscriptions')
+                .select('status,trial_ends_at,current_period_end,stripe_subscription_id,cancel_at_period_end')
+                .eq('user_id', session.user.id).maybeSingle();
+            if (error) throw error;
+            return data;
+        }
+
+        async function openLoginModal() {
+            showLoginForm();
+            document.getElementById('account-management-section').classList.add('hidden');
+            document.getElementById('login-modal').classList.remove('hidden');
+            try {
+                const session = await currentSession();
+                if (!session) return;
+                document.getElementById('login-form').classList.add('hidden');
+                document.getElementById('forgot-form').classList.add('hidden');
+                document.getElementById('account-management-section').classList.remove('hidden');
+                document.getElementById('login-modal-title').textContent = 'Fiók kezelése';
+                document.getElementById('account-subscription-status').textContent = 'Előfizetés ellenőrzése…';
+                const row = await accountSubscription(session);
+                const labels = {pending:'A regisztráció Stripe-lépése még nincs befejezve.',trialing:'A próbaidőd folyamatban van.',active:'Az előfizetésed aktív.',past_due:'A fizetés rendezése szükséges.',unpaid:'A fizetés rendezése szükséges.',canceled:'Az előfizetésed megszűnt.',incomplete:'Az előfizetésed befejezése szükséges.',incomplete_expired:'A korábbi fizetési folyamat lejárt.',paused:'Az előfizetésed szünetel.',trial:'A korábbi regisztráció befejezése szükséges.'};
+                document.getElementById('account-subscription-status').textContent = labels[row?.status] || 'Az előfizetés állapota még nem érhető el.';
+                document.getElementById('continue-registration').classList.toggle('hidden', !!row?.stripe_subscription_id);
+            } catch {
+                authMessage('login-message', 'Az előfizetés állapotát most nem sikerült lekérni. Kérjük, próbáld újra.', true);
+            }
+        }
+
+        async function startCheckout(session) {
+            authMessage('register-message', 'A biztonságos Stripe-oldal előkészítése…');
+            const { data, error } = await supabaseClient.functions.invoke('create-checkout', {
+                body: { terms_accepted: true, privacy_accepted: true }
+            });
+            let response = data;
+            if (error?.context && typeof error.context.json === 'function') {
+                try { response = await error.context.json(); } catch {}
+            }
+            if (response?.result === 'subscription_already_exists') {
+                authMessage('register-message', 'Ehhez a fiókhoz már tartozik előfizetés. A Fiók kezelése menüben ellenőrizheted.');
+                return;
+            }
+            if (response?.result === 'checkout_completed') {
+                closeRegisterModal();
+                await showCheckoutResult('success');
+                return;
+            }
+            if (error || response?.result !== 'checkout_ready') {
+                const messages = {
+                    login_required: 'Kérjük, jelentkezz be újra, majd folytasd a regisztrációt.',
+                    checkout_requires_review: 'A korábbi regisztrációs folyamat ellenőrzésre vár. Kérjük, írj az info@focielemzesek.com címre.',
+                    retry_request: 'A folyamat időközben frissült. Kattints újra a folytatásra.',
+                    consent_required: 'A folytatáshoz fogadd el a feltételeket és az adatvédelmi tájékoztatót.'
+                };
+                throw new Error(messages[response?.result] || 'A Stripe-oldalt most nem sikerült előkészíteni. A fiókod megmaradt; később bejelentkezve folytathatod a regisztrációt.');
+            }
+            const url = new URL(response.url);
+            if (url.protocol !== 'https:' || url.hostname !== 'checkout.stripe.com')
+                throw new Error('Nem megfelelő átirányítási cím. Kérjük, jelezd nekünk.');
+            window.location.assign(url.href);
+        }
+
         async function handleRegister(event) {
             event.preventDefault();
-            const email = document.getElementById('reg-email').value;
-            const password = document.getElementById('reg-password').value;
-            const passwordConfirm = document.getElementById('reg-password-confirm').value;
-            const privacyChecked = document.getElementById('reg-privacy-check').checked;
-            const termsChecked = document.getElementById('reg-terms-check').checked;
-            const msgEl = document.getElementById('register-message');
-
-            if (!privacyChecked || !termsChecked) {
-                msgEl.innerHTML = '<span class="text-red-400 font-bold">Hiba: Az adatvédelmi nyilatkozat és a feltételek elfogadása kötelező!</span>';
+            if (registrationBusy) return;
+            if (!document.getElementById('reg-privacy-check').checked || !document.getElementById('reg-terms-check').checked) {
+                authMessage('register-message', 'A feltételek és az adatvédelmi tájékoztató elfogadása kötelező.', true);
                 return;
             }
-
-            if (password !== passwordConfirm) {
-                msgEl.innerHTML = '<span class="text-red-400 font-bold">Hiba: A két jelszó nem egyezik meg!</span>';
-                return;
-            }
-
-            msgEl.innerHTML = '<span class="text-gray-200">Fiók létrehozása folyamatban...</span>';
-
-            let { data, error } = await supabaseClient.auth.signUp({ email, password });
-            
-            if (error) {
-                msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${error.message}</span>`;
-            } else {
-                msgEl.innerHTML = '<span class="text-cyan-300 font-bold">Sikeres regisztráció! Átirányítás a fizetésre...</span>';
-                setTimeout(() => {
-                    const stripeUrl = `https://buy.stripe.com/test_6oUcN5cy23eg7EG4Y8ejK04?prefilled_email=${encodeURIComponent(email)}`;
-                    window.location.href = stripeUrl;
-                }, 1200);
+            registrationBusy = true;
+            const button = document.querySelector('#register-form button[type="submit"]');
+            button.disabled = true;
+            let creatingAccount = true;
+            try {
+                let session = await currentSession();
+                if (!session) {
+                    const email = document.getElementById('reg-email').value.trim();
+                    const password = document.getElementById('reg-password').value;
+                    if (password !== document.getElementById('reg-password-confirm').value) {
+                        authMessage('register-message', 'A két jelszó nem egyezik meg.', true); return;
+                    }
+                    if (password.length < 8) {
+                        authMessage('register-message', 'Legalább 8 karakteres jelszót adj meg.', true); return;
+                    }
+                    authMessage('register-message', 'Fiók létrehozása…');
+                    const signup = await supabaseClient.auth.signUp({ email, password });
+                    if (signup.error && !['user_already_exists','email_exists'].includes(signup.error.code)) throw signup.error;
+                    session = signup.data?.session;
+                    if (!session) {
+                        const login = await supabaseClient.auth.signInWithPassword({ email, password });
+                        if (login.error || !login.data.session) {
+                            authMessage('register-message', 'A fiókkal nem sikerült belépni. Ha már regisztráltál, használd a Bejelentkezés vagy az Elfelejtett jelszó lehetőséget.', true);
+                            return;
+                        }
+                        session = login.data.session;
+                    }
+                }
+                displaySignedIn(session);
+                creatingAccount = false;
+                await startCheckout(session);
+            } catch (error) {
+                authMessage('register-message', creatingAccount ? authErrorMessage(error) : error.message, true);
+            } finally {
+                registrationBusy = false;
+                button.disabled = false;
             }
         }
 
         async function handleLogin(event) {
             event.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            const msgEl = document.getElementById('login-message');
-            msgEl.innerHTML = '<span class="text-gray-200">Bejelentkezés...</span>';
-
-            let { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            
-            if (error) {
-                msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${error.message}</span>`;
-            } else {
-                msgEl.innerHTML = '<span class="text-cyan-300 font-bold">Sikeres bejelentkezés!</span>';
-                setTimeout(() => { closeLoginModal(); location.reload(); }, 1200);
-            }
+            const button = document.querySelector('#login-form button[type="submit"]');
+            button.disabled = true;
+            authMessage('login-message', 'Bejelentkezés…');
+            try {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({
+                    email: document.getElementById('login-email').value.trim(),
+                    password: document.getElementById('login-password').value
+                });
+                if (error) throw error;
+                displaySignedIn(data.session);
+                await openLoginModal();
+            } catch (error) { authMessage('login-message', authErrorMessage(error), true); }
+            finally { button.disabled = false; }
         }
 
         async function handleLogout() {
-            if (supabaseClient) {
-                await supabaseClient.auth.signOut();
-                location.reload();
-            }
+            try {
+                const { error } = await supabaseClient.auth.signOut();
+                if (error) throw error;
+                displaySignedIn(null);
+                closeLoginModal();
+            } catch { authMessage('login-message', 'A kijelentkezés nem sikerült. Próbáld újra.', true); }
         }
 
         async function handleForgotPassword(event) {
             event.preventDefault();
-            const email = document.getElementById('forgot-email').value;
-            const msgEl = document.getElementById('login-message');
-            msgEl.innerHTML = '<span class="text-gray-200">Email küldése folyamatban...</span>';
-
-            let { data, error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-                redirectTo: window.location.origin,
-            });
-
-            if (error) {
-                msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${error.message}</span>`;
-            } else {
-                msgEl.innerHTML = '<span class="text-cyan-300 font-bold">A jelszó-visszaállító emailt elküldtük!</span>';
-            }
+            const button = document.querySelector('#forgot-form button[type="submit"]');
+            button.disabled = true;
+            authMessage('login-message', 'Jelszó-visszaállító levél kérése…');
+            try {
+                const { error } = await supabaseClient.auth.resetPasswordForEmail(
+                    document.getElementById('forgot-email').value.trim(),
+                    { redirectTo: window.location.origin + '/' }
+                );
+                if (error) throw error;
+                authMessage('login-message', 'Ha ehhez a címhez tartozik fiók, megérkezik a jelszó-visszaállító levél.');
+            } catch (error) { authMessage('login-message', authErrorMessage(error), true); }
+            finally { button.disabled = false; }
         }
 
-        async function handleDeleteAccount() {
-            if (confirm("Biztosan végleg törölni szeretnéd a fiókodat? Az előfizetésed kezeléséhez és lemondásához átirányítunk a Stripe biztonságos portáljára.")) {
-                const msgEl = document.getElementById('login-message');
-                msgEl.innerHTML = '<span class="text-gray-200">Fiók törlése és átirányítás folyamatban...</span>';
-                
+        function handleManageSubscription() {
+            window.location.assign(BILLING_PORTAL_URL);
+        }
+
+        function openRecoveryModal() {
+            document.getElementById('password-recovery-modal').classList.remove('hidden');
+        }
+
+        async function handleResetPassword(event) {
+            event.preventDefault();
+            const password = document.getElementById('new-password').value;
+            if (password.length < 8 || password !== document.getElementById('new-password-confirm').value) {
+                authMessage('recovery-message', 'A két jelszó egyezzen meg, és legalább 8 karakteres legyen.', true); return;
+            }
+            const button = document.querySelector('#password-recovery-form button[type="submit"]');
+            button.disabled = true;
+            try {
+                if (!recoveryReady || !(await currentSession())) throw new Error('recovery_required');
+                const { error } = await supabaseClient.auth.updateUser({ password });
+                if (error) throw error;
+                recoveryReady = false;
+                await supabaseClient.auth.signOut();
+                displaySignedIn(null);
+                document.getElementById('password-recovery-form').classList.add('hidden');
+                authMessage('recovery-message', 'A jelszavad megváltozott. Jelentkezz be az új jelszóval.');
+            } catch {
+                authMessage('recovery-message', 'A jelszó mentése nem sikerült. Próbáld újra, vagy kérj új visszaállító levelet.', true);
+            } finally { button.disabled = false; }
+        }
+
+        async function showCheckoutResult(result) {
+            const banner = document.getElementById('checkout-result');
+            banner.classList.remove('hidden');
+            if (result === 'cancelled') {
+                banner.textContent = 'A Stripe-folyamatot megszakítottad. A fiókod megmaradt; a regisztrációt a Fiók kezelése menüben folytathatod.';
+                return;
+            }
+            banner.textContent = 'A Stripe-folyamat lezárult. Ellenőrizzük az előfizetésed állapotát…';
+            const session = await currentSession().catch(() => null);
+            if (!session) {
+                banner.textContent = 'A regisztráció állapotának ellenőrzéséhez jelentkezz be a fiókodba.'; return;
+            }
+            for (let i = 0; i < 8; i++) {
                 try {
-                    if (!supabaseClient) throw new Error("Supabase kliens nem elérhető.");
-
-                    const { error } = await supabaseClient.rpc('delete_user_self');
-                    if (error) throw new Error(error.message);
-
-                    await supabaseClient.auth.signOut();
-                    msgEl.innerHTML = '<span class="text-cyan-300 font-bold">A fiók törölve. Átirányítás a Stripe portálra...</span>';
-
-                    setTimeout(() => {
-                        window.location.href = "https://billing.stripe.com/p/login/test_aFa14n2Xsg125wy4Y8ejK00";
-                    }, 1500);
-
-                } catch (err) {
-                    msgEl.innerHTML = `<span class="text-red-400 font-bold">Hiba: ${err.message}</span>`;
-                }
+                    const row = await accountSubscription(session);
+                    if (row && ['trialing','active'].includes(row.status) && row.stripe_subscription_id) {
+                        banner.textContent = row.status === 'trialing'
+                            ? 'A regisztrációd elkészült, a próbaidőd elindult. Az üdvözlő leveledet külön küldjük.'
+                            : 'Az előfizetésed aktív.';
+                        return;
+                    }
+                } catch {}
+                await new Promise(resolve => setTimeout(resolve, 2000));
             }
+            banner.textContent = 'Az előfizetés visszaigazolása még folyamatban van. Később a Fiók kezelése menüben ellenőrizheted; ne indíts új előfizetést.';
         }
+
+        if (supabaseClient) {
+            supabaseClient.auth.onAuthStateChange((event, session) => {
+                // Az auth callbackből nem hívunk új Supabase-műveletet.
+                setTimeout(() => {
+                    displaySignedIn(session);
+                    if (event === 'PASSWORD_RECOVERY') {
+                        recoveryReady = true;
+                        openRecoveryModal();
+                    }
+                }, 0);
+            });
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            const result = new URL(window.location.href).searchParams.get('checkout');
+            if (result === 'success' || result === 'cancelled') {
+                showCheckoutResult(result).catch(() => {
+                    document.getElementById('checkout-result').textContent = 'Az előfizetés állapotát a Fiók kezelése menüben ellenőrizheted.';
+                });
+                const url = new URL(window.location.href);
+                url.searchParams.delete('checkout');
+                url.searchParams.delete('session_id');
+                window.history.replaceState({}, '', url.pathname + url.search + url.hash);
+            }
+        });
+
 
         function downloadPrivacyPDF() {
             const contentHTML = document.getElementById('privacy-pdf-content').innerHTML;
