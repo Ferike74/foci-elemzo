@@ -8,7 +8,7 @@
 </head>
 <body><main>
 <h1>Sandbox regisztrációs teszt</h1>
-<p>Kizárólag Stripe-tesztkörnyezet. Csak tesztkártyát használj. A próba 3 nap, utána szimulált 7 999 Ft/hó.</p>
+<p>Kizárólag Stripe-tesztkörnyezet. Csak tesztkártyát használj. Az első előfizetés próbája 3 nap. Megszűnt előfizetés újraindításakor nincs újabb próba: a szimulált díj azonnal 7 999 Ft, majd havonta ugyanennyi.</p>
 <form id="login">
 <label for="email">Tesztfiók emailcíme</label><input id="email" type="email" autocomplete="username" required value="suto.ferenc174+teszt1@gmail.com">
 <label for="password">Tesztfiók jelszava</label><input id="password" type="password" autocomplete="current-password" required>
@@ -61,7 +61,7 @@ el('checkout').addEventListener('submit',async e=>{
 });
 (async()=>{
  await showAccount();const url=new URL(location.href);const result=url.searchParams.get('checkout');
- if(result==='success')message('A Sandbox Checkoutból visszaérkeztél. Ez még nem igazolja a szinkront: a Supabase sandbox_subscriptions táblájában ellenőrizzük a próbaidőt.');
+ if(result==='success')message('A Sandbox Checkoutból visszaérkeztél. Ez még nem igazolja a szinkront: a Supabase sandbox_subscriptions táblájában ellenőrizzük az előfizetés állapotát.');
  if(result==='cancelled')message('A Sandbox Checkoutot megszakítottad. A tesztregisztráció folytatható.');
  if(result){url.searchParams.delete('checkout');url.searchParams.delete('session_id');history.replaceState({},'',url.pathname+url.search+url.hash)}
 })().catch(()=>message('A bejelentkezési állapot ellenőrzése nem sikerült.'));
