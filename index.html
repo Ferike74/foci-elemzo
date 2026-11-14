@@ -432,7 +432,7 @@
                     <h4 class="text-xs font-bold text-pink-300 uppercase tracking-wider">Előfizetés és Fiók Kezelése</h4>
                     <p id="account-subscription-status" class="text-sm text-cyan-100" aria-live="polite"></p>
                     <button id="continue-registration" onclick="closeLoginModal(); openRegisterModal()" class="hidden w-full bg-pink-600 text-white font-bold py-2.5 rounded-xl text-xs uppercase">Regisztráció folytatása a Stripe-on</button>
-                    <button onclick="handleManageSubscription()" class="w-full bg-pink-700 hover:bg-pink-600 text-white font-bold py-2.5 rounded-xl text-xs uppercase transition shadow tracking-wider">
+                    <button id="manage-subscription" onclick="handleManageSubscription()" class="hidden w-full bg-pink-700 hover:bg-pink-600 text-white font-bold py-2.5 rounded-xl text-xs uppercase transition shadow tracking-wider">
                         Előfizetés kezelése / lemondása
                     </button>
                     <p class="text-xs text-gray-200">Fiókod törlését az <a href="mailto:info@focielemzesek.com" class="text-cyan-300 underline">info@focielemzesek.com</a> címen kérheted.</p>
@@ -863,22 +863,26 @@ if (exactLeagueBadges[leagueConfig.key]) {
 
             countriesConfig.forEach((item, index) => {
                 let countryTotalMatches = 0;
-                let leaguesHtml = '';
+                const leagueRows = document.createDocumentFragment();
 
                 item.leagues.forEach(league => {
                     const leagueMatches = matches.filter(m => matchBelongsToLeague(m.league_name, league, item.country, m));
                     countryTotalMatches += leagueMatches.length;
 
-                    const leagueJsonStr = JSON.stringify(league).replace(/"/g, '&quot;');
-                    const matchesJsonStr = JSON.stringify(leagueMatches).replace(/"/g, '&quot;');
-
-                    leaguesHtml += `
-                        <div onclick="event.stopPropagation(); openLeagueModal(${leagueJsonStr}, ${matchesJsonStr})" 
-                             class="flex justify-between items-center py-2 px-3 hover:bg-pink-950/40 rounded-xl text-xs cursor-pointer transition border border-transparent hover:border-cyan-500/40">
-                            <span class="font-medium slightly-lighter-green">⚽ ${league.name}</span>
-                            <span class="bg-pink-600 text-white font-bold px-2 py-0.5 rounded shadow">${leagueMatches.length} meccs</span>
-                        </div>
-                    `;
+                    const row = document.createElement('div');
+                    row.className = 'flex justify-between items-center py-2 px-3 hover:bg-pink-950/40 rounded-xl text-xs cursor-pointer transition border border-transparent hover:border-cyan-500/40';
+                    const label = document.createElement('span');
+                    label.className = 'font-medium slightly-lighter-green';
+                    label.textContent = `⚽ ${league.name}`;
+                    const count = document.createElement('span');
+                    count.className = 'bg-pink-600 text-white font-bold px-2 py-0.5 rounded shadow';
+                    count.textContent = `${leagueMatches.length} meccs`;
+                    row.append(label, count);
+                    row.addEventListener('click', event => {
+                        event.stopPropagation();
+                        openLeagueModal(league, leagueMatches);
+                    });
+                    leagueRows.appendChild(row);
                 });
 
                 const contentId = `country-content-${index}`;
@@ -898,9 +902,9 @@ if (exactLeagueBadges[leagueConfig.key]) {
                         </div>
                     </div>
                     <div id="${contentId}" class="country-accordion-content hidden px-3 pb-3 pt-1 border-t border-cyan-500/20 bg-slate-900/60 space-y-1 backdrop-blur-md">
-                        ${leaguesHtml}
                     </div>
                 `;
+                countryCard.querySelector('.country-accordion-content').appendChild(leagueRows);
                 countryContainer.appendChild(countryCard);
             });
         }
@@ -945,7 +949,12 @@ if (exactLeagueBadges[leagueConfig.key]) {
                 leagueMatches.forEach(m => {
                     const mBtn = document.createElement('button');
                     mBtn.className = "w-full text-left px-4 py-3 text-sm text-white bg-slate-900/70 hover:bg-pink-950/60 border border-cyan-500/30 rounded-xl transition flex items-center justify-between cursor-pointer shadow backdrop-blur-sm";
-                    mBtn.innerHTML = `<span>⚽ ${m.match_title}</span> <span class="text-xs text-pink-300 font-bold">Megnyitás &rarr;</span>`;
+                    const title = document.createElement('span');
+                    title.textContent = `⚽ ${m.match_title}`;
+                    const action = document.createElement('span');
+                    action.className = 'text-xs text-pink-300 font-bold';
+                    action.textContent = 'Megnyitás →';
+                    mBtn.append(title, action);
                     
                     mBtn.onclick = () => {
                         currentActiveMatch = m;
@@ -965,6 +974,51 @@ if (exactLeagueBadges[leagueConfig.key]) {
         }
 
         function closeLeagueModal() { closeAllModalsAndAccordions(); }
+
+        function sanitizeAnalysisHtml(value) {
+            // Az AI által generált, adatbázisból érkező elemzés nem futtathat kódot.
+            const parsed = new DOMParser().parseFromString(String(value || ''), 'text/html');
+            const allowed = new Set(['DIV','SPAN','P','BR','HR','H2','H3','H4','H5','H6',
+                'STRONG','B','EM','I','U','S','UL','OL','LI','TABLE','THEAD','TBODY','TFOOT',
+                'TR','TH','TD','CAPTION','A','BLOCKQUOTE','PRE','CODE']);
+            const blocked = new Set(['SCRIPT','STYLE','IFRAME','OBJECT','EMBED','SVG','MATH',
+                'TEMPLATE','LINK','META','BASE','FORM','INPUT','BUTTON','TEXTAREA','SELECT']);
+            for (const el of [...parsed.body.querySelectorAll('*')]) {
+                if (blocked.has(el.tagName)) {
+                    el.remove();
+                    continue;
+                }
+                if (!allowed.has(el.tagName)) {
+                    el.replaceWith(...el.childNodes);
+                    continue;
+                }
+                for (const attr of [...el.attributes]) {
+                    const name = attr.name.toLowerCase();
+                    if (name === 'class') {
+                        const safeClasses = new Set(['analysis-body','analysis-container','analysis-title',
+                            'match-card','match-header','league','time','odds-table','analysis-box']);
+                        const classes = attr.value.split(/\s+/).filter(value => safeClasses.has(value));
+                        if (classes.length) el.setAttribute('class', classes.join(' '));
+                        else el.removeAttribute('class');
+                        continue;
+                    }
+                    if (['TD','TH'].includes(el.tagName) && ['colspan','rowspan'].includes(name)
+                        && /^[1-9]\d?$/.test(attr.value)) continue;
+                    if (el.tagName === 'A' && name === 'href') {
+                        try {
+                            const url = new URL(attr.value, window.location.origin);
+                            if (['https:', 'http:'].includes(url.protocol)) continue;
+                        } catch {}
+                    }
+                    el.removeAttribute(attr.name);
+                }
+                if (el.tagName === 'A' && el.hasAttribute('href')) {
+                    el.setAttribute('target', '_blank');
+                    el.setAttribute('rel', 'noopener noreferrer');
+                }
+            }
+            return parsed.body.innerHTML;
+        }
 
         function openFullAnalysisModal() {
             if (!currentActiveMatch) return;
@@ -1005,7 +1059,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
                 <div class="analysis-body">
                   <div class="analysis-container">
                     <div class="analysis-title">Napi Sportfogadási Elemzések</div>
-                    ${htmlContent}
+                    ${sanitizeAnalysisHtml(htmlContent)}
                   </div>
                 </div>
             `;
@@ -1090,6 +1144,9 @@ if (exactLeagueBadges[leagueConfig.key]) {
 
         function authErrorMessage(error) {
             const code = error?.code || '';
+            if (code === 'same_password') return 'Az új jelszó nem egyezhet meg a jelenlegivel. Adj meg egy másik jelszót.';
+            if (['session_not_found', 'session_expired', 'otp_expired'].includes(code))
+                return 'A munkamenet vagy a visszaállító link lejárt. Kérj új jelszó-visszaállító levelet.';
             if (code === 'weak_password') return 'Adj meg erősebb, legalább 8 karakteres jelszót.';
             if (code === 'over_request_rate_limit' || code === 'over_email_send_rate_limit' || error?.status === 429)
                 return 'Túl sok próbálkozás történt. Kérjük, próbáld újra később.';
@@ -1136,8 +1193,35 @@ if (exactLeagueBadges[leagueConfig.key]) {
             return data;
         }
 
+        function subscriptionDate(value) {
+            if (!value) return null;
+            const date = new Date(value);
+            if (!Number.isFinite(date.getTime())) return null;
+            return new Intl.DateTimeFormat('hu-HU', {
+                timeZone: 'Europe/Budapest', year: 'numeric', month: 'long',
+                day: 'numeric', hour: '2-digit', minute: '2-digit'
+            }).format(date);
+        }
+
+        function subscriptionSummary(row) {
+            const labels = {pending:'A regisztráció Stripe-lépése még nincs befejezve.',trialing:'A próbaidőd folyamatban van.',active:'Az előfizetésed aktív.',past_due:'A fizetés rendezése szükséges.',unpaid:'A fizetés rendezése szükséges.',canceled:'Az előfizetésed megszűnt.',incomplete:'Az előfizetésed befejezése szükséges.',incomplete_expired:'A korábbi fizetési folyamat lejárt.',paused:'Az előfizetésed szünetel.',trial:'A korábbi regisztráció befejezése szükséges.'};
+            let summary = labels[row?.status] || 'Az előfizetés állapota még nem érhető el.';
+            if (row?.cancel_at_period_end && ['active', 'trialing'].includes(row.status)) {
+                const end = subscriptionDate(row.current_period_end || row.trial_ends_at);
+                return end
+                    ? `Az előfizetésed lemondása rögzítve. A jelenlegi időszak vége: ${end} (magyar idő szerint). Az előfizetés nem újul meg.`
+                    : 'Az előfizetésed lemondása rögzítve, nem újul meg. A pontos lejáratot a Stripe ügyfélportálján ellenőrizheted.';
+            }
+            const trialEnd = row?.status === 'trialing' && subscriptionDate(row.trial_ends_at);
+            if (trialEnd) summary += ` A próbaidő vége: ${trialEnd} (magyar idő szerint).`;
+            return summary;
+        }
+
         async function openLoginModal() {
             showLoginForm();
+            authMessage('login-message', '');
+            document.getElementById('continue-registration').classList.add('hidden');
+            document.getElementById('manage-subscription').classList.add('hidden');
             document.getElementById('account-management-section').classList.add('hidden');
             document.getElementById('login-modal').classList.remove('hidden');
             try {
@@ -1149,9 +1233,10 @@ if (exactLeagueBadges[leagueConfig.key]) {
                 document.getElementById('login-modal-title').textContent = 'Fiók kezelése';
                 document.getElementById('account-subscription-status').textContent = 'Előfizetés ellenőrzése…';
                 const row = await accountSubscription(session);
-                const labels = {pending:'A regisztráció Stripe-lépése még nincs befejezve.',trialing:'A próbaidőd folyamatban van.',active:'Az előfizetésed aktív.',past_due:'A fizetés rendezése szükséges.',unpaid:'A fizetés rendezése szükséges.',canceled:'Az előfizetésed megszűnt.',incomplete:'Az előfizetésed befejezése szükséges.',incomplete_expired:'A korábbi fizetési folyamat lejárt.',paused:'Az előfizetésed szünetel.',trial:'A korábbi regisztráció befejezése szükséges.'};
-                document.getElementById('account-subscription-status').textContent = labels[row?.status] || 'Az előfizetés állapota még nem érhető el.';
-                document.getElementById('continue-registration').classList.toggle('hidden', !!row?.stripe_subscription_id);
+                document.getElementById('account-subscription-status').textContent = subscriptionSummary(row);
+                const canContinue = !!row && !row.stripe_subscription_id && ['pending', 'trial', 'incomplete_expired'].includes(row.status);
+                document.getElementById('continue-registration').classList.toggle('hidden', !canContinue);
+                document.getElementById('manage-subscription').classList.toggle('hidden', !row?.stripe_subscription_id);
             } catch {
                 authMessage('login-message', 'Az előfizetés állapotát most nem sikerült lekérni. Kérjük, próbáld újra.', true);
             }
@@ -1283,6 +1368,9 @@ if (exactLeagueBadges[leagueConfig.key]) {
         }
 
         function openRecoveryModal() {
+            document.getElementById('password-recovery-form').classList.remove('hidden');
+            document.getElementById('password-recovery-form').reset();
+            authMessage('recovery-message', '');
             document.getElementById('password-recovery-modal').classList.remove('hidden');
         }
 
@@ -1303,8 +1391,11 @@ if (exactLeagueBadges[leagueConfig.key]) {
                 displaySignedIn(null);
                 document.getElementById('password-recovery-form').classList.add('hidden');
                 authMessage('recovery-message', 'A jelszavad megváltozott. Jelentkezz be az új jelszóval.');
-            } catch {
-                authMessage('recovery-message', 'A jelszó mentése nem sikerült. Próbáld újra, vagy kérj új visszaállító levelet.', true);
+            } catch (error) {
+                const message = error?.message === 'recovery_required'
+                    ? 'A visszaállító link már nem használható. Kérj új jelszó-visszaállító levelet.'
+                    : authErrorMessage(error);
+                authMessage('recovery-message', message, true);
             } finally { button.disabled = false; }
         }
 
@@ -1340,6 +1431,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
                 // Az auth callbackből nem hívunk új Supabase-műveletet.
                 setTimeout(() => {
                     displaySignedIn(session);
+                    if (event === 'SIGNED_OUT') recoveryReady = false;
                     if (event === 'PASSWORD_RECOVERY') {
                         recoveryReady = true;
                         openRecoveryModal();
