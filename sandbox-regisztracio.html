@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Focielemzések – Sandbox teszt</title>
+<style>body{background:#080e1c;color:#edf5ff;font:16px system-ui;margin:0;padding:24px}main{max-width:580px;margin:40px auto;padding:28px;border:1px solid #16758b;border-radius:20px}label{display:block;margin:18px 0 8px}input:not([type=checkbox]),button{box-sizing:border-box;width:100%;padding:13px;border-radius:9px;border:1px solid #377188;background:#101e30;color:white;font:inherit}button{background:#ad1766;cursor:pointer;margin-top:16px}button:disabled{opacity:.5;cursor:wait}a{color:#60ddf5}#message{white-space:pre-wrap;line-height:1.6}small{line-height:1.6}.hidden{display:none}</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body><main>
+<h1>Sandbox regisztrációs teszt</h1>
+<p>Kizárólag Stripe-tesztkörnyezet. Csak tesztkártyát használj. A próba 3 nap, utána szimulált 7 999 Ft/hó.</p>
+<form id="login">
+<label for="email">Tesztfiók emailcíme</label><input id="email" type="email" autocomplete="username" required value="suto.ferenc174+teszt1@gmail.com">
+<label for="password">Tesztfiók jelszava</label><input id="password" type="password" autocomplete="current-password" required>
+<button type="submit">Belépés a tesztfiókkal</button>
+</form>
+<section id="account" class="hidden"><p id="identity"></p>
+<form id="checkout">
+<label><input id="terms" type="checkbox" required> Elfogadom az <a href="/" target="_blank" rel="noopener">oldalon elérhető feltételeket és adatvédelmi tájékoztatót</a> a teszteléshez.</label>
+<button type="submit">Sandbox Checkout megnyitása</button>
+</form>
+<button id="logout" type="button">Kijelentkezés</button></section>
+<p id="message" role="status" aria-live="polite"></p><p><a href="/">Vissza a főoldalra</a></p>
+</main>
+<script>
+const db=window.supabase.createClient('https://gyozibfurwsbdutwmgrl.supabase.co','sb_publishable_sz4cCjpwZ6pFNK8J-3d80Q_T8GfpSUy');
+const allowed='suto.ferenc174+teszt1@gmail.com';
+const el=id=>document.getElementById(id);
+const message=text=>{el('message').textContent=text};
+let busy=false;
+async function showAccount(){
+ const {data,error}=await db.auth.getSession();if(error)throw error;
+ const session=data.session;
+ const permitted=session?.user?.email?.toLowerCase()===allowed;
+ el('login').classList.toggle('hidden',!!permitted);el('account').classList.toggle('hidden',!permitted);
+ if(permitted)el('identity').textContent='Bejelentkezve: '+session.user.email;
+ else if(session)message('Másik fiókkal vagy belépve. A tesztfiók címével és jelszavával lépj be.');
+ return permitted;
+}
+el('login').addEventListener('submit',async e=>{
+ e.preventDefault();if(busy)return;busy=true;const button=e.submitter;button.disabled=true;
+ try{if(el('email').value.trim().toLowerCase()!==allowed){message('Ez az oldal csak a kijelölt tesztfiókkal használható.');return}
+ const {error}=await db.auth.signInWithPassword({email:el('email').value.trim(),password:el('password').value});
+ if(error){message('Nem sikerült belépni. Ellenőrizd a tesztfiók emailcímét és új jelszavát.');return}
+ el('password').value='';await showAccount();message('A tesztfiók készen áll. A következő gomb a Sandbox Checkoutot nyitja meg.');
+ }catch{message('A bejelentkezési szolgáltatás most nem érhető el.')}finally{busy=false;button.disabled=false}
+});
+el('logout').addEventListener('click',async()=>{const {error}=await db.auth.signOut();if(error){message('A kijelentkezés nem sikerült.');return}message('Kijelentkeztél.');await showAccount()});
+el('checkout').addEventListener('submit',async e=>{
+ e.preventDefault();if(busy)return;if(!el('terms').checked)return;busy=true;const button=e.submitter;button.disabled=true;
+ try{if(!await showAccount()){message('Előbb lépj be a tesztfiókkal.');return}message('Sandbox Checkout előkészítése…');
+ const {data,error}=await db.functions.invoke('create-checkout-sandbox',{body:{terms_accepted:true,privacy_accepted:true}});
+ let result=data;if(error?.context?.json){try{result=await error.context.json()}catch{}}
+ if(result?.result==='checkout_completed'||result?.result==='subscription_already_exists'){message('Ehhez a tesztfiókhoz már tartozik befejezett Sandbox Checkout. Az eredményt a Supabase teszttáblájában ellenőrizzük.');return}
+ if(error||result?.result!=='checkout_ready'){
+ const messages={sandbox_account_not_allowed:'Ez a fiók nem engedélyezett a Sandbox teszthez.',login_required:'Jelentkezz be újra a tesztfiókkal.',checkout_requires_review:'A tesztfolyamat ellenőrzésre vár. Ne indíts másik előfizetést.',retry_request:'Próbáld meg újra a folytatást.'};
+ message(messages[result?.result]||'A teszt-Checkout nem készült el. Ellenőrizzük a create-checkout-sandbox naplóját.');return}
+ const url=new URL(result.url);if(url.protocol!=='https:'||url.hostname!=='checkout.stripe.com'||!url.pathname.includes('cs_test_'))throw Error('invalid_checkout_url');
+ window.location.assign(url.href);
+ }catch{message('A teszt-Checkout megnyitása nem sikerült. Ellenőrizzük a funkció naplóját.')}finally{busy=false;button.disabled=false}
+});
+(async()=>{
+ await showAccount();const url=new URL(location.href);const result=url.searchParams.get('checkout');
+ if(result==='success')message('A Sandbox Checkoutból visszaérkeztél. Ez még nem igazolja a szinkront: a Supabase sandbox_subscriptions táblájában ellenőrizzük a próbaidőt.');
+ if(result==='cancelled')message('A Sandbox Checkoutot megszakítottad. A tesztregisztráció folytatható.');
+ if(result){url.searchParams.delete('checkout');url.searchParams.delete('session_id');history.replaceState({},'',url.pathname+url.search+url.hash)}
+})().catch(()=>message('A bejelentkezési állapot ellenőrzése nem sikerült.'));
+</script></body></html>
