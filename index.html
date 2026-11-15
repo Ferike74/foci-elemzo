@@ -101,7 +101,7 @@
                     Európai topligák és kupák professzionális elemzése!
                 </h1>
                 <p class="text-xs sm:text-sm md:text-base font-bold text-red-500 uppercase tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                    Az oldal még tesztelés alatt áll. Regisztráció nélkül használható!
+                    A ligák és a meccsszámok szabadon böngészhetők. Az elemzésekhez aktív próbaidő vagy előfizetés szükséges!
                 </p>
             </div>
 
@@ -137,6 +137,8 @@
         </header>
         <div id="checkout-result" role="status" aria-live="polite" class="hidden glass-panel rounded-2xl p-4 border border-cyan-500/40 text-sm text-cyan-100"></div>
 
+        <div id="catalog-load-message" role="status" class="hidden glass-panel rounded-2xl p-4 border border-cyan-500/40 text-sm text-cyan-100"></div>
+
         <!-- 2. INFORMÁCIÓS PANEL -->
         <section class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl space-y-4 text-center border border-cyan-500/30">
             <div class="inline-block bg-pink-600/20 backdrop-blur-md border border-pink-500/40 px-5 py-2.5 rounded-2xl shadow-xl">
@@ -146,7 +148,7 @@
             </div>
 
             <p class="text-sm md:text-base text-gray-100 font-medium leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-3">
-                Regisztráció után az első 
+                A jogosult új fiókoknál a Stripe-regisztráció befejezésétől az első 
                 <span class="bg-cyan-500/20 border border-cyan-400/50 text-cyan-200 font-black text-sm md:text-base px-4 py-2 rounded-xl shadow uppercase text-center inline-block backdrop-blur-sm">3 nap ingyenes</span>, 
                 majd 
                 <span class="bg-cyan-500/20 border border-cyan-400/50 text-cyan-200 font-black text-lg md:text-xl px-4 py-2 rounded-xl shadow-2xl uppercase text-center inline-block backdrop-blur-sm">7999 FT/HÓ</span> 
@@ -267,7 +269,7 @@
 
    
     <!-- ADATVÉDELMI NYILATKOZAT MODAL -->
-    <div id="privacy-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-2 md:p-4">
+    <div id="privacy-modal" style="z-index:80" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-2 md:p-4">
         <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-5xl h-[92vh] rounded-2xl p-3 md:p-6 relative flex flex-col shadow-2xl overflow-hidden">
 
             <div class="flex items-center justify-between gap-4 mb-3 flex-shrink-0">
@@ -305,7 +307,7 @@
 
 
     <!-- Felhasználási Feltételek Modal -->
-       <div id="terms-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-2 md:p-4">
+       <div id="terms-modal" style="z-index:80" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-2 md:p-4">
         <div class="glass-panel text-gray-200 border border-cyan-500/40 w-full max-w-5xl h-[92vh] rounded-2xl p-3 md:p-6 relative flex flex-col shadow-2xl overflow-hidden">
             <div class="flex items-center justify-between gap-4 mb-3 flex-shrink-0">
                 <h3 class="text-base md:text-xl font-black text-cyan-300">
@@ -336,6 +338,17 @@
         </div>
     </div>
 
+    <!-- Elemzési hozzáférés: külön tájékoztatás, nem indít fizetési folyamatot. -->
+    <div id="analysis-access-modal" role="dialog" aria-modal="true" aria-labelledby="analysis-access-title" style="z-index:70" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 relative border border-cyan-500/40 shadow-2xl text-center">
+            <button type="button" onclick="closeAnalysisAccessNotice()" class="absolute top-3 right-4 text-cyan-300 text-2xl" aria-label="Bezárás">&times;</button>
+            <h3 id="analysis-access-title" class="text-lg font-bold text-cyan-200 mb-4">Elemzések megtekintése</h3>
+            <p id="analysis-access-message" class="text-sm text-gray-100 mb-5" role="status"></p>
+            <button id="analysis-access-primary" type="button" onclick="handleAnalysisAccessPrimary()" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold px-6 py-3 rounded-xl">Regisztráció</button>
+            <button id="analysis-access-login" type="button" onclick="closeAnalysisAccessNotice(); openLoginModal()" class="mt-3 text-sm text-cyan-200 underline">Már van fiókom – Bejelentkezés</button>
+        </div>
+    </div>
+
     <!-- Regisztrációs Modal -->
     <div id="register-modal" style="overflow-y:auto" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md max-h-[90dvh] overflow-y-auto rounded-3xl p-6 md:p-8 relative border border-cyan-500/40 shadow-2xl">
@@ -344,6 +357,7 @@
                 <span class="text-3xl">⚽</span>
                 <h3 id="register-modal-title" class="text-xl font-extrabold mt-2 text-white">Fiók létrehozása</h3>
                 <p id="registration-pricing" class="text-xs text-cyan-200 mt-1">A Stripe-on bankkártya megadása kötelező. A 3 napos ingyenes próba a Stripe-lépés befejezésekor indul; utána 7 999 Ft/hó, automatikus megújulással. A próba vége előtt lemondhatod.</p>
+                <p class="text-xs text-gray-200 mt-2">A szolgáltatás kizárólag magánszemélyek számára érhető el.</p>
             </div>
             <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4">
                 <div>
@@ -375,6 +389,11 @@
                         <span>Elfogadom a <button type="button" onclick="openTermsModal()" class="text-cyan-300 underline">Felhasználási feltételeket</button>.</span>
                     </label>
                 </div>
+
+                <label class="flex items-start space-x-2 cursor-pointer text-xs text-gray-200">
+                    <input type="checkbox" id="reg-private-person-check" required class="mt-0.5 rounded border-cyan-500 bg-black/40 text-pink-600">
+                    <span>Magánszemélyként, saját részemre regisztrálok; céges számlát nem kérek.</span>
+                </label>
 
                 <button id="register-submit" type="submit" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 rounded-xl shadow transition text-sm uppercase tracking-wider border border-pink-400/50">
                     Regisztráció és Tovább
@@ -479,6 +498,171 @@
         let currentActiveMatch = null;
         let currentActiveLeague = null;     
         let currentActiveLeagueMatches = []; 
+
+
+        let analysisAccessUserId = null;
+        let analysisAccessEpoch = 0;
+        let analysisLoadToken = 0;
+        let analysisExpiryTimer = null;
+        let analysisGrant = null;
+        let analysisNoticeMode = 'guest';
+
+        function catalogMatchOnly(value) {
+            const row = value && typeof value === 'object' ? value : {};
+            const text = key => typeof row[key] === 'string' ? row[key] : '';
+            return {
+                id: Number.isSafeInteger(row.id) ? row.id : null,
+                fixture_id: Number.isSafeInteger(row.fixture_id) ? row.fixture_id : null,
+                league_name: text('league_name'), match_badge: text('match_badge'),
+                match_title: text('match_title'), match_time: text('match_time'),
+                created_at: text('created_at')
+            };
+        }
+
+        function clearProtectedAnalysisView() {
+            if (analysisExpiryTimer !== null) clearTimeout(analysisExpiryTimer);
+            analysisExpiryTimer = null;
+            analysisGrant = null;
+            currentActiveMatch = null;
+            const modal = document.getElementById('full-analysis-modal');
+            const wasOpen = modal && !modal.classList.contains('hidden');
+            if (modal) modal.classList.add('hidden');
+            const container = document.getElementById('modal-html-container');
+            if (container) container.replaceChildren();
+            if (wasOpen) document.body.style.overflow = 'auto';
+        }
+
+        function clearProtectedAnalysis() {
+            analysisAccessEpoch++;
+            analysisLoadToken++;
+            clearProtectedAnalysisView();
+        }
+
+        function handleAnalysisSessionChange(session) {
+            const nextUserId = typeof session?.user?.id === 'string' ? session.user.id : null;
+            if (!nextUserId || nextUserId !== analysisAccessUserId) {
+                analysisAccessUserId = nextUserId;
+                clearProtectedAnalysis();
+                document.getElementById('analysis-access-modal')?.classList.add('hidden');
+            }
+        }
+
+        function subscriptionAccessUntil(row, now = Date.now()) {
+            if (!row || typeof row.stripe_subscription_id !== 'string' || !row.stripe_subscription_id.trim()
+                || typeof row.stripe_customer_id !== 'string' || !row.stripe_customer_id.trim()) return 0;
+            const periodEnd = Date.parse(row.current_period_end);
+            if (!Number.isFinite(periodEnd) || periodEnd <= now) return 0;
+            if (row.status === 'active') return periodEnd;
+            if (row.status === 'trialing') {
+                const trialEnd = Date.parse(row.trial_ends_at);
+                if (Number.isFinite(trialEnd) && trialEnd > now) return Math.min(periodEnd, trialEnd);
+            }
+            return 0;
+        }
+
+        function showAnalysisAccessNotice(mode, message) {
+            analysisNoticeMode = mode;
+            document.getElementById('league-matches-modal').classList.add('hidden');
+            document.getElementById('analysis-access-message').textContent = message;
+            document.getElementById('analysis-access-primary').textContent = mode === 'guest' ? 'Regisztráció' : 'Fiók kezelése';
+            document.getElementById('analysis-access-login').classList.toggle('hidden', mode !== 'guest');
+            document.getElementById('analysis-access-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAnalysisAccessNotice() {
+            document.getElementById('analysis-access-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function handleAnalysisAccessPrimary() {
+            const mode = analysisNoticeMode;
+            closeAnalysisAccessNotice();
+            if (mode === 'guest') return openRegisterModal();
+            return openLoginModal();
+        }
+
+        function armAnalysisExpiry() {
+            if (analysisExpiryTimer !== null) clearTimeout(analysisExpiryTimer);
+            const grant = analysisGrant;
+            if (!grant) return;
+            const remaining = grant.expiresAt - Date.now();
+            if (remaining <= 0) { clearProtectedAnalysis(); return; }
+            analysisExpiryTimer = setTimeout(() => {
+                if (analysisGrant !== grant) return;
+                if (grant.expiresAt <= Date.now()) clearProtectedAnalysis();
+                else armAnalysisExpiry();
+            }, Math.min(remaining, 2147483647));
+        }
+
+        function checkVisibleAnalysisExpiry() {
+            if (analysisGrant && (analysisGrant.expiresAt <= Date.now()
+                || analysisGrant.userId !== analysisAccessUserId)) clearProtectedAnalysis();
+        }
+
+        async function openAnalysisForMatch(value) {
+            const metadata = catalogMatchOnly(value);
+            let requestToken = ++analysisLoadToken;
+            clearProtectedAnalysisView();
+            let epoch = analysisAccessEpoch;
+            const isCurrent = userId => requestToken === analysisLoadToken
+                && epoch === analysisAccessEpoch && userId === analysisAccessUserId;
+            try {
+                const session = await currentSession();
+                if (requestToken !== analysisLoadToken) return;
+                const userId = typeof session?.user?.id === 'string' ? session.user.id : null;
+                if (userId !== analysisAccessUserId) {
+                    handleAnalysisSessionChange(session);
+                    requestToken = ++analysisLoadToken;
+                }
+                epoch = analysisAccessEpoch;
+                if (!userId) {
+                    showAnalysisAccessNotice('guest', 'Az elemzések megtekintéséhez regisztráció szükséges!');
+                    return;
+                }
+                if (typeof session.access_token !== 'string' || !session.access_token
+                    || !Number.isSafeInteger(metadata.id) || metadata.id <= 0) {
+                    showAnalysisAccessNotice('account', 'A hozzáférésedet most nem sikerült igazolni. Jelentkezz be újra, és próbáld meg ismét.');
+                    return;
+                }
+                const subscription = await accountSubscription(session);
+                if (!isCurrent(userId)) return;
+                const accessUntil = subscriptionAccessUntil(subscription);
+                if (!accessUntil) {
+                    showAnalysisAccessNotice('account', 'Az elemzés megnyitásához aktív próbaidő vagy előfizetés szükséges. A fiókodban folytathatod a Stripe-regisztrációt, vagy kezelheted az előfizetésed.');
+                    return;
+                }
+                const { data, error } = await supabaseClient.from('match_analyses')
+                    .select('id,full_html').eq('id', metadata.id).maybeSingle();
+                if (!isCurrent(userId)) return;
+                const latestSession = await currentSession();
+                if (!isCurrent(userId)) return;
+                if (latestSession?.user?.id !== userId || !latestSession?.access_token) {
+                    handleAnalysisSessionChange(latestSession);
+                    return;
+                }
+                if (error || !data || Number(data.id) !== metadata.id
+                    || typeof data.full_html !== 'string' || !data.full_html.trim()
+                    || accessUntil <= Date.now()) {
+                    showAnalysisAccessNotice('account', 'A szerver most nem igazolta az elemzés megnyitását. Ellenőrizd az előfizetésedet a Fiók kezelése menüben, majd próbáld újra.');
+                    return;
+                }
+                currentActiveMatch = { ...metadata, full_html: data.full_html };
+                analysisGrant = { userId, expiresAt: accessUntil };
+                document.getElementById('league-matches-modal').classList.add('hidden');
+                closeAnalysisAccessNotice();
+                openFullAnalysisModal();
+                armAnalysisExpiry();
+            } catch {
+                if (requestToken !== analysisLoadToken || epoch !== analysisAccessEpoch) return;
+                clearProtectedAnalysisView();
+                showAnalysisAccessNotice('account', 'A hozzáférés ellenőrzése most nem sikerült. Kérjük, próbáld újra; az előfizetésed állapotát a Fiók kezelése menüben ellenőrizheted.');
+            }
+        }
+
+        window.addEventListener('pagehide', clearProtectedAnalysis);
+        window.addEventListener('focus', checkVisibleAnalysisExpiry);
+        document.addEventListener('visibilitychange', checkVisibleAnalysisExpiry);
 
         const countriesConfig = [
             {
@@ -713,23 +897,28 @@
 
             try {
                 if (supabaseClient) {
-                    const { data: { session } } = await supabaseClient.auth.getSession();
-                    if (session) {
-                        document.getElementById('user-status').innerText = `Bejelentkezve: ${session.user.email} (Fiók kezelése)`;
-                    }
+                    try {
+                        const { data, error } = await supabaseClient.auth.getSession();
+                        displaySignedIn(error ? null : data?.session);
+                    } catch { displaySignedIn(null); }
 
                     const { data: analyses, error } = await supabaseClient
-                        .from('match_analyses')
+                        .from('match_analysis_catalog')
                         .select('*')
                         .order('id', { ascending: true });
 
-                    if (!error && analyses && analyses.length > 0) {
-                        allMatches = analyses.filter(m => m.match_title && m.match_title.trim() !== "");
+                    if (error || !Array.isArray(analyses)) throw new Error('catalog_unavailable');
+                    if (Array.isArray(analyses)) {
+                        allMatches = analyses.map(catalogMatchOnly)
+                            .filter(m => Number.isSafeInteger(m.id) && m.id > 0 && m.match_title.trim() !== "");
                         buildDashboard(allMatches);
                     }
                 }
             } catch (err) {
-                console.error("Adatbetöltési hiba:", err);
+                const notice = document.getElementById('catalog-load-message');
+                notice.textContent = 'A meccslistát most nem sikerült betölteni. Kérjük, próbáld újra később.';
+                notice.classList.remove('hidden');
+                console.error("A meccslista betöltése nem sikerült.");
             }
         });
 
@@ -827,6 +1016,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
         }
 
         function buildDashboard(matches) {
+            matches = Array.isArray(matches) ? matches.map(catalogMatchOnly) : [];
             const intContainer = document.getElementById('international-cups-grid');
             const countryContainer = document.getElementById('countries-grid');
             
@@ -937,6 +1127,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
         }
 
         function openLeagueModal(league, leagueMatches) {
+            leagueMatches = Array.isArray(leagueMatches) ? leagueMatches.map(catalogMatchOnly) : [];
             currentActiveLeague = league;              
             currentActiveLeagueMatches = leagueMatches; 
             document.body.style.overflow = 'hidden';
@@ -956,11 +1147,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
                     action.textContent = 'Megnyitás →';
                     mBtn.append(title, action);
                     
-                    mBtn.onclick = () => {
-                        currentActiveMatch = m;
-                        document.getElementById('league-matches-modal').classList.add('hidden');
-                        openFullAnalysisModal();
-                    };
+                    mBtn.onclick = () => openAnalysisForMatch(m);
                     listEl.appendChild(mBtn);
                 });
             } else {
@@ -1069,6 +1256,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
         }
 
         function closeFullAnalysisModal() {
+            clearProtectedAnalysis();
             document.getElementById('full-analysis-modal').classList.add('hidden');
             if (currentActiveLeague) {
                 openLeagueModal(currentActiveLeague, currentActiveLeagueMatches);
@@ -1163,6 +1351,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
         }
 
         function displaySignedIn(session) {
+            if (typeof handleAnalysisSessionChange === 'function') handleAnalysisSessionChange(session);
             document.getElementById('user-status').textContent = session
                 ? `Bejelentkezve: ${session.user.email} (Fiók kezelése)` : '';
         }
@@ -1188,6 +1377,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
             authMessage('register-message', '');
             document.getElementById('reg-terms-check').checked = false;
             document.getElementById('reg-privacy-check').checked = false;
+            document.getElementById('reg-private-person-check').checked = false;
             setRegistrationOffer('unknown');
             try {
                 const session = await currentSession();
@@ -1214,7 +1404,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
 
         async function accountSubscription(session) {
             const { data, error } = await supabaseClient.from('subscriptions')
-                .select('status,trial_ends_at,current_period_end,stripe_subscription_id,cancel_at_period_end')
+                .select('status,trial_ends_at,current_period_end,stripe_subscription_id,stripe_customer_id,cancel_at_period_end')
                 .eq('user_id', session.user.id).maybeSingle();
             if (error) throw error;
             return data;
@@ -1272,9 +1462,13 @@ if (exactLeagueBadges[leagueConfig.key]) {
         }
 
         async function startCheckout(session) {
+            if (!document.getElementById('reg-private-person-check').checked || !document.getElementById('reg-terms-check').checked || !document.getElementById('reg-privacy-check').checked) {
+                authMessage('register-message', 'A szolgáltatás kizárólag magánszemélyeknek érhető el. A folytatáshoz jelöld be a magánszemélyi nyilatkozatot.', true);
+                return;
+            }
             authMessage('register-message', 'A biztonságos Stripe-oldal előkészítése…');
             const { data, error } = await supabaseClient.functions.invoke('create-checkout', {
-                body: { terms_accepted: true, privacy_accepted: true }
+                body: { terms_accepted: true, privacy_accepted: true, private_person_accepted: true }
             });
             let response = data;
             if (error?.context && typeof error.context.json === 'function') {
@@ -1288,6 +1482,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
                 setRegistrationOffer('renewal');
                 document.getElementById('reg-terms-check').checked = false;
                 document.getElementById('reg-privacy-check').checked = false;
+            document.getElementById('reg-private-person-check').checked = false;
                 authMessage('register-message', 'Ez újraelőfizetés, újabb ingyenes próba nélkül. Ellenőrizd a fenti díjazást, és az elfogadás után folytasd.');
                 return;
             }
@@ -1301,7 +1496,8 @@ if (exactLeagueBadges[leagueConfig.key]) {
                     login_required: 'Kérjük, jelentkezz be újra, majd folytasd a regisztrációt.',
                     checkout_requires_review: 'A korábbi regisztrációs folyamat ellenőrzésre vár. Kérjük, írj az info@focielemzesek.com címre.',
                     retry_request: 'A folyamat időközben frissült. Kattints újra a folytatásra.',
-                    consent_required: 'A folytatáshoz fogadd el a feltételeket és az adatvédelmi tájékoztatót.'
+                    consent_required: 'A folytatáshoz fogadd el a feltételeket és az adatvédelmi tájékoztatót.',
+                    private_person_required: 'A szolgáltatás kizárólag magánszemélyeknek érhető el. Jelöld be a magánszemélyi nyilatkozatot, majd próbáld újra.'
                 };
                 throw new Error(messages[response?.result] || 'A Stripe-oldalt most nem sikerült előkészíteni. A fiókod megmaradt; később bejelentkezve folytathatod a regisztrációt.');
             }
@@ -1314,8 +1510,8 @@ if (exactLeagueBadges[leagueConfig.key]) {
         async function handleRegister(event) {
             event.preventDefault();
             if (registrationBusy || ['unknown', 'existing'].includes(registrationOffer)) return;
-            if (!document.getElementById('reg-privacy-check').checked || !document.getElementById('reg-terms-check').checked) {
-                authMessage('register-message', 'A feltételek és az adatvédelmi tájékoztató elfogadása kötelező.', true);
+            if (!document.getElementById('reg-privacy-check').checked || !document.getElementById('reg-terms-check').checked || !document.getElementById('reg-private-person-check').checked) {
+                authMessage('register-message', 'A feltételek és az adatvédelmi tájékoztató elfogadása, valamint a magánszemélyi nyilatkozat kötelező.', true);
                 return;
             }
             registrationBusy = true;
@@ -1334,7 +1530,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
                         authMessage('register-message', 'Legalább 8 karakteres jelszót adj meg.', true); return;
                     }
                     authMessage('register-message', 'Fiók létrehozása…');
-                    const signup = await supabaseClient.auth.signUp({ email, password });
+                    const signup = await supabaseClient.auth.signUp({ email, password, options: { data: { private_person_accepted: true } } });
                     if (signup.error && !['user_already_exists','email_exists'].includes(signup.error.code)) throw signup.error;
                     session = signup.data?.session;
                     if (!session) {
@@ -1375,6 +1571,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
         }
 
         async function handleLogout() {
+            if (typeof clearProtectedAnalysis === 'function') clearProtectedAnalysis();
             try {
                 const { error } = await supabaseClient.auth.signOut();
                 if (error) throw error;
@@ -1464,6 +1661,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
 
         if (supabaseClient) {
             supabaseClient.auth.onAuthStateChange((event, session) => {
+                if (typeof handleAnalysisSessionChange === 'function') handleAnalysisSessionChange(session);
                 // Az auth callbackből nem hívunk új Supabase-műveletet.
                 setTimeout(() => {
                     displaySignedIn(session);
