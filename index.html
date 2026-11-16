@@ -186,6 +186,8 @@
                 <button onclick="openTermsModal()" class="hover:text-pink-300 underline transition">Felhasználási feltételek</button>
                 <span>|</span>
                 <button onclick="openContactModal()" class="hover:text-pink-300 underline transition">Kapcsolat</button>
+                <span>|</span>
+                <a id="owner-login-link" href="/?owner=1" onclick="event.preventDefault(); openOwnerLoginModal()" class="hover:text-pink-300 underline transition">Tulajdonosi belépés</a>
             </div>
         </footer>
     </div>
@@ -429,6 +431,16 @@
                 </button>
             </form>
 
+            <form id="owner-login-form" onsubmit="handleOwnerLogin(event)" class="space-y-4 hidden">
+                <p class="text-sm text-gray-200">A tulajdonosi hozzáféréshez nem kell előfizetés vagy bankkártya. Kérj egyszer használható belépőlinket a tulajdonosi emailcímedre.</p>
+                <div>
+                    <label for="owner-login-email" class="block text-xs uppercase font-bold text-cyan-200 mb-1">Tulajdonosi emailcím</label>
+                    <input type="email" id="owner-login-email" autocomplete="email" required class="w-full bg-black/30 border border-cyan-500/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 backdrop-blur-sm" placeholder="Emailcímed">
+                </div>
+                <button id="owner-login-submit" type="submit" class="w-full bg-slate-900/50 hover:bg-slate-900 text-cyan-200 font-bold py-3 rounded-xl shadow border border-cyan-500/40 transition text-sm uppercase tracking-wider">Belépőlink kérése</button>
+                <button type="button" onclick="showLoginForm()" class="text-xs text-cyan-300 underline">Bejelentkezés jelszóval</button>
+            </form>
+
             <form id="forgot-form" onsubmit="handleForgotPassword(event)" class="space-y-4 hidden">
                 <p class="text-xs text-gray-200 text-center mb-2">Add meg az email címed, és küldünk egy linket a jelszó visszaállításához.</p>
                 <div>
@@ -622,9 +634,18 @@
                     showAnalysisAccessNotice('account', 'A hozzáférésedet most nem sikerült igazolni. Jelentkezz be újra, és próbáld meg ismét.');
                     return;
                 }
-                const subscription = await accountSubscription(session);
+                const owner = await isSiteOwner(session);
                 if (!isCurrent(userId)) return;
-                const accessUntil = subscriptionAccessUntil(subscription);
+                let accessUntil;
+                if (owner) {
+                    const tokenExpiry = Number(session.expires_at) * 1000;
+                    accessUntil = Number.isFinite(tokenExpiry) && tokenExpiry > Date.now()
+                        ? tokenExpiry : Date.now() + 60 * 60 * 1000;
+                } else {
+                    const subscription = await accountSubscription(session);
+                    if (!isCurrent(userId)) return;
+                    accessUntil = subscriptionAccessUntil(subscription);
+                }
                 if (!accessUntil) {
                     showAnalysisAccessNotice('account', 'Az elemzés megnyitásához aktív próbaidő vagy előfizetés szükséges. A fiókodban folytathatod a Stripe-regisztrációt, vagy kezelheted az előfizetésed.');
                     return;
@@ -1291,6 +1312,8 @@ if (exactLeagueBadges[leagueConfig.key]) {
         function closeContactModal() { closeAllModalsAndAccordions(); }
 
         function showForgotPassword() {
+            document.getElementById('owner-login-form').classList.add('hidden');
+            document.getElementById('account-management-section').classList.add('hidden');
             document.getElementById('login-form').classList.add('hidden');
             document.getElementById('forgot-form').classList.remove('hidden');
             document.getElementById('login-modal-title').innerText = 'Jelszó visszaállítása';
@@ -1298,6 +1321,8 @@ if (exactLeagueBadges[leagueConfig.key]) {
         }
 
         function showLoginForm() {
+            document.getElementById('owner-login-form').classList.add('hidden');
+            document.getElementById('account-management-section').classList.add('hidden');
             document.getElementById('forgot-form').classList.add('hidden');
             document.getElementById('login-form').classList.remove('hidden');
             document.getElementById('login-modal-title').innerText = 'Bejelentkezés a fiókodba';
@@ -1320,6 +1345,66 @@ if (exactLeagueBadges[leagueConfig.key]) {
         let registrationBusy = false;
         let recoveryReady = false;
         let registrationOffer = 'initial';
+        let ownerLoginBusy = false;
+        let accountUiEpoch = 0;
+        let accountUiUserId = null;
+
+        function ownerEntryRequested() {
+            return new URL(window.location.href).searchParams.get('owner') === '1';
+        }
+
+        async function isSiteOwner(session) {
+            const userId = session?.user?.id;
+            if (typeof userId !== 'string' || !userId || !session?.access_token) return false;
+            const { data, error } = await supabaseClient.from('site_owners')
+                .select('user_id').eq('user_id', userId).maybeSingle();
+            if (error) throw error;
+            return data?.user_id === userId;
+        }
+
+        async function openOwnerLoginModal() {
+            const requestId = ++accountUiEpoch;
+            showLoginForm();
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('owner-login-form').classList.remove('hidden');
+            document.getElementById('login-modal-title').textContent = 'Tulajdonosi belépés';
+            document.getElementById('login-modal').classList.remove('hidden');
+            document.getElementById('continue-registration').classList.add('hidden');
+            document.getElementById('manage-subscription').classList.add('hidden');
+            authMessage('login-message', '');
+            try {
+                const session = await currentSession();
+                const stillShowingOwnerForm = !document.getElementById('owner-login-form').classList.contains('hidden');
+                if (requestId !== accountUiEpoch && !(stillShowingOwnerForm && session?.user?.id === accountUiUserId)) return;
+                if (session) return openLoginModal();
+            } catch {
+                if (requestId === accountUiEpoch) authMessage('login-message', 'A belépési szolgáltatás most nem érhető el. Próbáld újra később.', true);
+            }
+        }
+
+        async function handleOwnerLogin(event) {
+            event.preventDefault();
+            if (ownerLoginBusy) return;
+            const email = document.getElementById('owner-login-email').value.trim();
+            if (!email || !document.getElementById('owner-login-email').checkValidity()) return;
+            ownerLoginBusy = true;
+            const button = document.getElementById('owner-login-submit');
+            button.disabled = true;
+            authMessage('login-message', 'Belépőlink kérése…');
+            try {
+                const { error } = await supabaseClient.auth.signInWithOtp({
+                    email,
+                    options: { shouldCreateUser: false, emailRedirectTo: window.location.origin + '/?owner=1' }
+                });
+                if (error) throw error;
+                authMessage('login-message', 'Ha ehhez az emailcímhez tartozik fiók, megérkezik a belépőlink. Nyisd meg ugyanebben a böngészőben; a Spam mappát is ellenőrizd.');
+            } catch (error) {
+                authMessage('login-message', authErrorMessage(error), true);
+            } finally {
+                ownerLoginBusy = false;
+                button.disabled = false;
+            }
+        }
 
         function authMessage(id, text, isError = false) {
             const el = document.getElementById(id);
@@ -1348,6 +1433,11 @@ if (exactLeagueBadges[leagueConfig.key]) {
         }
 
         function displaySignedIn(session) {
+            const userId = typeof session?.user?.id === 'string' ? session.user.id : null;
+            if (userId !== accountUiUserId) {
+                accountUiUserId = userId;
+                accountUiEpoch++;
+            }
             if (typeof handleAnalysisSessionChange === 'function') handleAnalysisSessionChange(session);
             document.getElementById('user-status').textContent = session
                 ? `Bejelentkezve: ${session.user.email} (Fiók kezelése)` : '';
@@ -1387,6 +1477,10 @@ if (exactLeagueBadges[leagueConfig.key]) {
                     input.closest('[data-password-group]').classList.toggle('hidden', !!session);
                 }
                 if (session) {
+                    if (await isSiteOwner(session)) {
+                        closeRegisterModal();
+                        return openLoginModal();
+                    }
                     const row = await accountSubscription(session);
                     const ended = !!row?.stripe_subscription_id && ['canceled', 'incomplete_expired'].includes(row.status);
                     setRegistrationOffer(ended ? 'renewal' : row?.stripe_subscription_id ? 'existing' : 'initial');
@@ -1432,6 +1526,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
         }
 
         async function openLoginModal() {
+            const requestId = ++accountUiEpoch;
             showLoginForm();
             authMessage('login-message', '');
             document.getElementById('continue-registration').classList.add('hidden');
@@ -1440,13 +1535,25 @@ if (exactLeagueBadges[leagueConfig.key]) {
             document.getElementById('login-modal').classList.remove('hidden');
             try {
                 const session = await currentSession();
-                if (!session) return;
+                if (requestId !== accountUiEpoch || !session) return;
                 document.getElementById('login-form').classList.add('hidden');
                 document.getElementById('forgot-form').classList.add('hidden');
+                document.getElementById('owner-login-form').classList.add('hidden');
                 document.getElementById('account-management-section').classList.remove('hidden');
                 document.getElementById('login-modal-title').textContent = 'Fiók kezelése';
-                document.getElementById('account-subscription-status').textContent = 'Előfizetés ellenőrzése…';
+                document.getElementById('account-subscription-status').textContent = 'Hozzáférés ellenőrzése…';
+                const owner = await isSiteOwner(session);
+                if (requestId !== accountUiEpoch) return;
+                const latest = await currentSession();
+                if (requestId !== accountUiEpoch || latest?.user?.id !== session.user.id || !latest?.access_token) return;
+                if (owner) {
+                    document.getElementById('account-subscription-status').textContent = 'Tulajdonosi hozzáférés – díjmentes. Minden elemzést megnyithatsz előfizetés nélkül.';
+                    return;
+                }
                 const row = await accountSubscription(session);
+                if (requestId !== accountUiEpoch) return;
+                const current = await currentSession();
+                if (requestId !== accountUiEpoch || current?.user?.id !== session.user.id || !current?.access_token) return;
                 document.getElementById('account-subscription-status').textContent = subscriptionSummary(row);
                 const canRenew = !!row?.stripe_subscription_id && ['canceled', 'incomplete_expired'].includes(row.status);
                 const canContinue = canRenew || (!!row && !row.stripe_subscription_id && ['pending', 'trial', 'incomplete_expired'].includes(row.status));
@@ -1454,11 +1561,15 @@ if (exactLeagueBadges[leagueConfig.key]) {
                 document.getElementById('continue-registration').classList.toggle('hidden', !canContinue);
                 document.getElementById('manage-subscription').classList.toggle('hidden', !row?.stripe_subscription_id);
             } catch {
-                authMessage('login-message', 'Az előfizetés állapotát most nem sikerült lekérni. Kérjük, próbáld újra.', true);
+                if (requestId === accountUiEpoch) authMessage('login-message', 'A hozzáférés állapotát most nem sikerült lekérni. Kérjük, próbáld újra.', true);
             }
         }
 
         async function startCheckout(session) {
+            if (await isSiteOwner(session)) {
+                closeRegisterModal();
+                return openLoginModal();
+            }
             if (!document.getElementById('reg-private-person-check').checked || !document.getElementById('reg-terms-check').checked || !document.getElementById('reg-privacy-check').checked) {
                 authMessage('register-message', 'A szolgáltatás kizárólag magánszemélyeknek érhető el. A folytatáshoz jelöld be a magánszemélyi nyilatkozatot.', true);
                 return;
@@ -1663,6 +1774,9 @@ if (exactLeagueBadges[leagueConfig.key]) {
                 setTimeout(() => {
                     displaySignedIn(session);
                     if (event === 'SIGNED_OUT') recoveryReady = false;
+                    if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session && ownerEntryRequested()) {
+                        openLoginModal().catch(() => authMessage('login-message', 'A hozzáférés ellenőrzése nem sikerült. Próbáld újra.', true));
+                    }
                     if (event === 'PASSWORD_RECOVERY') {
                         recoveryReady = true;
                         openRecoveryModal();
@@ -1671,6 +1785,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
             });
         }
         window.addEventListener('DOMContentLoaded', () => {
+            if (ownerEntryRequested()) openOwnerLoginModal();
             const result = new URL(window.location.href).searchParams.get('checkout');
             if (result === 'success' || result === 'cancelled') {
                 showCheckoutResult(result).catch(() => {
