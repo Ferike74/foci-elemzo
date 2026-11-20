@@ -965,6 +965,11 @@ szloven: "slo1"
 
 };
 
+            // API-Football league badges used by the current analysis workflow.
+            // Keep German divisions distinct from Austria and from each other.
+            if (badge === "l78") return leagueConfig.key === "bundesliga";
+            if (badge === "l79") return leagueConfig.key === "bundesliga2";
+
 if (exactLeagueBadges[leagueConfig.key]) {
     return badge === exactLeagueBadges[leagueConfig.key];
 }
