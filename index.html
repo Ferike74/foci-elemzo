@@ -940,6 +940,8 @@
             }
         });
 
+        const apiFootballLeagueCardKeys = Object.freeze({"2":"ucl","3":"europaliga","5":"nemzetekligaja","39":"premier","40":"championship","41":"leagueone","42":"leaguetwo","45":"fakupa","48":"eflkupa","61":"ligue1","62":"ligue2","66":"franciakupa","78":"bundesliga","79":"bundesliga2","81":"nemetkupa","88":"holland","89":"eerstedivisie","90":"hollandkupa","94":"portugal","95":"portugal2","96":"portugalkupa","97":"portugalligakupa","103":"norvegia","104":"norvegia2","105":"norvegiakupa","106":"lengyel","107":"lengyel2","108":"lengyelkupa","113":"svedorszag","114":"svedorszag2","115":"svedországkupa","119":"dania","120":"dania2","121":"daniakupa","135":"seriea","136":"serieb","137":"olaszkupa","140":"laliga","141":"segunda","143":"spanyolkupa","144":"belga","145":"belga2","147":"belgakupa","179":"skocia","180":"skocia2","181":"skociakupa","185":"skocialigakupa","197":"gorog","199":"gorogkupa","203":"superlig","204":"tff1lig","206":"torokkupa","207":"svajc","208":"svajc2","209":"svajckupa","210":"horvat","211":"horvat2","212":"horvatkupa","218":"ausztria","219":"ausztria2","220":"ausztriakupa","271":"magyar","272":"magyar2","273":"magyarkupa","283":"romania","284":"romania2","285":"romaniakupa","286":"szerbia","287":"szerbia2","314":"boszniakupa","315":"bosznia","332":"szlovakia","345":"cseh","346":"cseh2","347":"csehkupa","373":"szloven","374":"szloven2","375":"szlovenkupa","494":"gorog2","506":"szlovakia2","519":"belgaszuperkupa","526":"franciaszuperkupa","528":"communityshield","529":"nemetszuperkupa","543":"hollandszuperkupa","547":"olaszszuperkupa","550":"portugalszuperkupa","551":"torokszuperkupa","555":"romaniaszuperkupa","556":"spanyolszuperkupa","680":"szlovakiakupa","732":"szerbiakupa","848":"konferencia","1210":"gorogszuperkupa"});
+
         function matchBelongsToLeague(dbLeagueName, leagueConfig, countryName, matchItem) {
             if (!dbLeagueName) return false;
             const lowerDb = dbLeagueName.toLowerCase().trim();
@@ -965,10 +967,11 @@ szloven: "slo1"
 
 };
 
-            // API-Football league badges used by the current analysis workflow.
-            // Keep German divisions distinct from Austria and from each other.
-            if (badge === "l78") return leagueConfig.key === "bundesliga";
-            if (badge === "l79") return leagueConfig.key === "bundesliga2";
+            // Match a supplied API-Football league identity before legacy labels.
+            const apiBadge = /^l([1-9][0-9]*)$/.exec(badge);
+            if (apiBadge && Object.prototype.hasOwnProperty.call(apiFootballLeagueCardKeys, apiBadge[1])) {
+                return leagueConfig.key === apiFootballLeagueCardKeys[apiBadge[1]];
+            }
 
 if (exactLeagueBadges[leagueConfig.key]) {
     return badge === exactLeagueBadges[leagueConfig.key];
