@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sportfogadás Elemző Agent | Cyberpunk Stadium Platform</title>
+    <link rel="stylesheet" href="/marketing-consent.css">
+    <script defer src="/marketing-consent.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- HTML-to-PDF Könyvtár -->
@@ -186,6 +188,8 @@
                 <button onclick="openTermsModal()" class="hover:text-pink-300 underline transition">Felhasználási feltételek</button>
                 <span>|</span>
                 <button onclick="openContactModal()" class="hover:text-pink-300 underline transition">Kapcsolat</button>
+                <span>|</span>
+                <button type="button" id="marketing-settings-button" class="hover:text-pink-300 underline transition">Sütibeállítások</button>
                 <span>|</span>
                 <a id="owner-login-link" href="/?owner=1" onclick="event.preventDefault(); openOwnerLoginModal()" class="hover:text-pink-300 underline transition">Tulajdonosi belépés</a>
             </div>
@@ -1620,6 +1624,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
             const url = new URL(response.url);
             if (url.protocol !== 'https:' || url.hostname !== 'checkout.stripe.com')
                 throw new Error('Nem megfelelő átirányítási cím. Kérjük, jelezd nekünk.');
+            try { window.FociMarketing?.trackCheckout(); } catch { /* A mérés nem akadályozhatja a regisztrációt. */ }
             window.location.assign(url.href);
         }
 
