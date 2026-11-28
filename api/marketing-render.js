@@ -60,14 +60,18 @@ async function POST(request){
   work=await fs.mkdtemp(path.join(os.tmpdir(),'rhm-'));
   const rendered=await renderVideo(bound.plan,audio,work,require('ffmpeg-static'));
   const storagePath='pipeline/'+p.job_id+'.mp4';
-  const upload=await fetch(DB+'/storage/v1/object/'+BUCKET+'/'+storagePath,{method:'POST',headers:{authorization,apikey,'content-type':'video/mp4','x-upsert':'false'},body:rendered.bytes,signal:AbortSignal.timeout(20000)});
+  const upload=await fetch(DB+'/storage/v1/object/'+BUCKET+'/'+storagePath,{method:'POST',headers:{...headers,'content-type':'video/mp4','x-upsert':'false'},body:rendered.bytes,signal:AbortSignal.timeout(20000)});
   if(!upload.ok)throw Error('PRIVATE_MEDIA_UPLOAD_FAILED');
-  const downloaded=await fetch(DB+'/storage/v1/object/authenticated/'+BUCKET+'/'+storagePath,{headers:{authorization,apikey},signal:AbortSignal.timeout(20000)});
+  const downloaded=await fetch(DB+'/storage/v1/object/authenticated/'+BUCKET+'/'+storagePath,{headers,signal:AbortSignal.timeout(20000)});
   if(!downloaded.ok)throw Error('PRIVATE_MEDIA_READBACK_FAILED');
   const readback=Buffer.from(await downloaded.arrayBuffer());if(crypto.createHash('sha256').update(readback).digest('hex')!==rendered.sha256)throw Error('MEDIA_READBACK_HASH_MISMATCH');
   const receipt={...rendered,bytes:undefined,size_bytes:rendered.bytes.length,storage_path:storagePath,storage_private:true,readback_verified:true,transcript_verified:true,platforms:bound.plan.platforms,publication_executed:false};
+  const signing=await fetch(DB+'/storage/v1/object/sign/'+BUCKET+'/'+storagePath,{method:'POST',headers,body:JSON.stringify({expiresIn:3600}),signal:AbortSignal.timeout(10000)});
+  if(!signing.ok)throw Error('PRIVATE_VIDEO_DOWNLOAD_LINK_FAILED');
+  const signed=await signing.json();if(typeof signed.signedURL!=='string'||!signed.signedURL.startsWith('/object/sign/'+BUCKET+'/pipeline/'))throw Error('INVALID_PRIVATE_DOWNLOAD_URL');
+  const downloadUrl=DB+'/storage/v1'+signed.signedURL+'&download='+encodeURIComponent('Focielemzesek-'+p.job_id+'.mp4');
   await rpc('media_complete',{...job,receipt});
-  return reply(200,{status:'complete',job_id:p.job_id,receipt});
+  return reply(200,{status:'complete',job_id:p.job_id,receipt,download_url:downloadUrl,download_expires_at:new Date(Date.now()+3600000).toISOString()});
  }catch(error){
   console.error('marketing-render',String(error?.message||'render_failed').slice(0,160));
   if(job&&headers)try{await fetch(DB+'/rest/v1/rpc/reklam_pipeline_run',{method:'POST',headers,body:JSON.stringify({p_action:'media_failed',p_payload:{...job,error:String(error?.message||'render_failed').slice(0,160)}}),signal:AbortSignal.timeout(5000)});}catch{}
