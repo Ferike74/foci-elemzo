@@ -84,6 +84,7 @@
         const wasInitialized = initialized;
         choice = allowed;
         saveChoice(allowed);
+        window.dispatchEvent(new CustomEvent("foci:marketing-consent", {detail:{allowed}}));
         panel.hidden = true;
         if (allowed) startPixel();
         else {
@@ -113,7 +114,7 @@
         panel.setAttribute('role', 'region');
         panel.setAttribute('aria-labelledby', 'foci-marketing-title');
         panel.innerHTML = '<h2 id="foci-marketing-title">Engedélyezed a hirdetések mérését?</h2>'
-            + '<p>Hozzájárulásoddal a Meta sütiket használhat, és adatot kaphat az oldal meglátogatásáról, illetve a regisztrációs folyamat elindításáról. Ezzel mérjük Facebook- és Instagram-hirdetéseink eredményét. Az oldal elutasítás esetén is használható.</p>'
+            + '<p>Hozzájárulásoddal a Meta sütiket használhat, és adatot kaphat az oldal meglátogatásáról, illetve a regisztrációs folyamat elindításáról. Saját kampánymérésünk legfeljebb 30 napig összekötheti a látogatást a regisztrációddal, a próba állapotával és az igazolt előfizetési fizetéssel. Ezzel mérjük közösségi kampányaink eredményét; a saját összerendelés adatait nem adjuk át a Metának. Az oldal elutasítás esetén is használható.</p>'
             + '<a href="/sutik.html" target="_blank" rel="noopener noreferrer">Részletek a sütikről és az adatkezelésről</a>'
             + '<div class="foci-marketing-actions"><button type="button" data-choice="reject">Elutasítom</button><button type="button" data-choice="accept">Elfogadom</button></div>';
         document.body.appendChild(panel);

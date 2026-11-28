@@ -1,0 +1,4 @@
+{
+  "functions": {"api/marketing-render.js": {"maxDuration": 120, "includeFiles": ["node_modules/ffmpeg-static/ffmpeg", "fonts/**"]}},
+  "headers": [{"source": "/api/marketing-render", "headers": [{"key": "Cache-Control", "value": "private, no-store"}]}]
+}
