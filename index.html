@@ -1654,7 +1654,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
                         authMessage('register-message', 'Legalább 8 karakteres jelszót adj meg.', true); return;
                     }
                     authMessage('register-message', 'Fiók létrehozása…');
-                    const signup = await supabaseClient.auth.signUp({ email, password, options: { data: { private_person_accepted: true } } });
+                    const signup = await supabaseClient.auth.signUp({ email, password, options: { data: { private_person_accepted: true, marketing_context: window.FociAttribution?.signupContext() || null } } });
                     if (signup.error && !['user_already_exists','email_exists'].includes(signup.error.code)) throw signup.error;
                     session = signup.data?.session;
                     if (!session) {
