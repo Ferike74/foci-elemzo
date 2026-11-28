@@ -6,6 +6,7 @@
     <title>Sportfogadás Elemző Agent | Cyberpunk Stadium Platform</title>
     <link rel="stylesheet" href="/marketing-consent.css">
     <script defer src="/marketing-consent.js"></script>
+    <script defer src="/marketing-attribution.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- HTML-to-PDF Könyvtár -->
@@ -503,6 +504,8 @@
         let supabaseClient = null;
         try {
             supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            window.addEventListener('foci:attribution-ready', () => window.FociAttribution?.bind(supabaseClient), {once:true});
+            window.FociAttribution?.bind(supabaseClient);
         } catch (e) {
             console.error("Supabase hiba:", e);
         }
@@ -1651,7 +1654,7 @@ if (exactLeagueBadges[leagueConfig.key]) {
                         authMessage('register-message', 'Legalább 8 karakteres jelszót adj meg.', true); return;
                     }
                     authMessage('register-message', 'Fiók létrehozása…');
-                    const signup = await supabaseClient.auth.signUp({ email, password, options: { data: { private_person_accepted: true } } });
+                    const signup = await supabaseClient.auth.signUp({ email, password, options: { data: { private_person_accepted: true, marketing_context: window.FociAttribution?.signupContext() || null } } });
                     if (signup.error && !['user_already_exists','email_exists'].includes(signup.error.code)) throw signup.error;
                     session = signup.data?.session;
                     if (!session) {
